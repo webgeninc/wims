@@ -1,108 +1,134 @@
 <template>
   <div
-    class="flex w-screen h-screen bg-white flex-grow xl:p-32 font-montserrat overflow-hidden"
+    class="flex w-screen h-screen bg-white flex-grow xl:p-32 font-montserrat overflow-hidden select-none"
   >
     <div
-      class="flex flex-col flex-grow h-full items-center justify-start xl:justify-center"
+      class="flex flex-col flex-grow h-full items-center justify-center xl:justify-center"
     >
       <div
-        class="bg-white w-full xl:w-1/2 2xl:w-1/2 3xl:w-2/5 xl:rounded-3xl xl:shadow-lg flex flex-col xl:border border-gray-100 h-full xl:h-auto"
+        class="bg-white w-full xl:w-1/2 2xl:w-1/2 3xl:w-2/5 flex flex-col h-full xl:h-auto"
       >
         <div
-          class="bg-gradient-to-tl from-gray-50 via-gray-50 to-gray-100 mb-7 xl:mb-2 rounded-none xl:rounded-t-3xl h-2/5 xl:h-36 2xl:h-40"
+          class="xl:rounded-t-3xl xl:shadow-lg flex flex-col xl:border border-gray-100"
         >
           <div
-            class="flex flex-col xl:flex-row justify-between h-full items-start xl:items-center"
+            class="bg-gradient-to-tl from-gray-50 via-gray-50 to-gray-200 mb-7 xl:mb-2 rounded-none xl:rounded-t-3xl h-2/5 xl:h-36 2xl:h-40"
           >
-            <img
-              src="../assets/systems.svg"
-              class="h-1/2 xl:h-full xl:w-auto overflow-hidden"
-            />
             <div
-              class="self-center h-1/2 w-full xl:h-full xl:w-1/3 flex-shrink-0 p-2.5 xl:pr-3 xl:p-0 flex flex-col justify-center items-end overflow-hidden"
+              class="flex flex-col xl:flex-row justify-between h-full items-start xl:items-center"
             >
-              <h2
-                class="text-right font-medium tracking-wider leading-5 text-sm xl:text-xs 2xl:text-sm 3xl:text-base"
+              <img
+                src="../assets/systems.svg"
+                draggable="false"
+                class="h-1/2 xl:h-full xl:w-auto overflow-hidden"
+              />
+              <div
+                class="self-center h-1/2 w-full xl:h-full xl:w-1/3 flex-shrink-0 p-2.5 xl:pr-3 xl:p-0 flex flex-col justify-center items-end overflow-hidden"
               >
-                <span
-                  class="tracking-wider font-semibold text-base xl:text-sm 2xl:text-base 3xl:text-lg"
-                  >WEBGENETICSS</span
+                <h2
+                  class="text-right font-medium tracking-wider leading-5 text-sm xl:text-xs 2xl:text-sm 3xl:text-base"
                 >
-                Interpolate
-              </h2>
-              <h2
-                class="text-right font-medium tracking-wider leading-5 text-sm xl:text-xs 2xl:text-sm 3xl:text-base"
-              >
-                Management System
-              </h2>
-              <h2
-                class="text-right text-2xs xl:text-3xs 2xl:text-2xs 3xl:text-xs font-medium tracking-wide leading-4"
-              >
-                1.0.00
-              </h2>
-              <p
-                class="text-gray-600 font-normal text-xs text-right tracking-wide"
-              >
-                ♻ CO2-FREE
-                <span
-                  class="font-medium tracking-widest text-2xs xl:text-3xs 2xl:text-2xs 3xl:text-xs"
-                  >for our planet</span
+                  <span
+                    class="tracking-wider font-semibold text-base xl:text-sm 2xl:text-base 3xl:text-lg"
+                    >WEBGENETICSS</span
+                  >
+                  Interpolate
+                </h2>
+                <h2
+                  class="text-right font-medium tracking-wider leading-5 text-sm xl:text-xs 2xl:text-sm 3xl:text-base"
                 >
-              </p>
+                  Management System
+                </h2>
+                <h2
+                  class="text-right text-2xs xl:text-3xs 2xl:text-2xs 3xl:text-xs font-medium tracking-wide leading-4"
+                >
+                  1.0.00
+                </h2>
+                <p
+                  class="text-gray-600 font-normal text-xs text-right tracking-wide"
+                >
+                  ♻ CO2-FREE
+                  <span
+                    class="font-medium tracking-widest text-2xs xl:text-3xs 2xl:text-2xs 3xl:text-xs"
+                    >for our planet</span
+                  >
+                </p>
+              </div>
+            </div>
+          </div>
+          <form
+            @submit.prevent="login"
+            class="flex flex-col justify-center items-center p-3 pt-5 xl:pr-10 xl:pl-10 3xl:pr-14 3xl:pl-14"
+          >
+            <input
+              required
+              id="email"
+              type="text"
+              placeholder="email / login"
+              v-model="email"
+              class="mr-2 ml-2 mt-3 p-3 border text-gray-900 border-gray-400 rounded-xl focus:border-webgencol focus:outline-none w-full"
+            />
+            <input
+              required
+              id="password"
+              type="password"
+              placeholder="hasło / password"
+              v-model="password"
+              class="mr-2 ml-2 mt-5 xl:mt-5 p-3 mb-3 border-gray-400 border rounded-xl focus:border-webgencol focus:outline-none w-full"
+            />
+            <button
+              type="submit"
+              class="self-center mt-3 mb-0 p-2.5 pr-12 pl-12 xl:p-2 xl:pr-8 xl:pl-8 bg-gray-100 rounded-xl transition hover:bg-gray-200"
+            >
+              Zaloguj się
+            </button>
+          </form>
+          <div class="flex justify-end items-center p-1 pt-0">
+            <div class="flex justify-center items-center">
+              <p class="text-xs">powered by</p>
+              <img
+                src="../assets/webgeneticss_logo.png"
+                draggable="false"
+                class="h-10 w-10 overflow-hidden"
+              />
+            </div>
+          </div>
+          <div class="h-px xl:h-2 w-full overflow-hidden">
+            <div class="h-full w-full flex justify-end items-center">
+              <img
+                draggable="false"
+                src="../assets/stress.jpg"
+                class="h-full w-full overflow-hidden opacity-40 xl:opacity-50 object-fill grayscale invert"
+              />
             </div>
           </div>
         </div>
-        <form
-          @submit.prevent="login"
-          class="flex flex-col justify-center items-center p-5 xl:pr-10 xl:pl-10 3xl:pr-14 3xl:pl-14"
-        >
-          <input
-            required
-            id="email"
-            type="text"
-            placeholder="email lub login"
-            v-model="email"
-            class="mr-2 ml-2 mt-3 p-3 border text-gray-900 border-gray-400 rounded-xl focus:border-webgencol focus:outline-none w-full"
-          />
-          <input
-            required
-            id="password"
-            type="password"
-            placeholder="hasło"
-            v-model="password"
-            class="mr-2 ml-2 mt-5 xl:mt-5 p-3 mb-3 border-gray-400 border rounded-xl focus:border-webgencol focus:outline-none w-full"
-          />
-          <button
-            type="submit"
-            class="self-center mt-3 mb-5 p-2.5 pr-12 pl-12 xl:p-2 xl:pr-8 xl:pl-8 bg-gray-200 rounded-xl transition hover:bg-webgencol hover:text-white"
-          >
-            Zaloguj się
-          </button>
-          <div
-            v-if="errorMsg"
-            class="flex justify-center items-center text-justify font-medium tracking-wider text-red-600 text-xs pr-14 pl-14 mb-2"
-          >
-            <p>{{ errorMsg }}</p>
-          </div>
-          <div
-            v-if="errorMsgEng"
-            class="flex justify-center items-center text-justify font-medium tracking-wider text-red-600 text-2xs pr-14 pl-14 mb-5"
-          >
-            <p>{{ errorMsgEng }}</p>
-          </div>
+        <div class="flex flex-col justify-around items-center mt-5 mb-5">
           <div
             v-if="niceMsg"
-            class="flex justify-center items-center text-justify font-medium tracking-wider text-webgencol text-sm xl:text-xs pr-14 pl-14 mb-2"
+            class="flex justify-center items-center text-justify font-medium tracking-wider text-green-700 text-sm xl:text-xs mb-1"
           >
             <p>{{ niceMsg }}</p>
           </div>
           <div
             v-if="niceMsgEng"
-            class="flex justify-center items-center text-justify font-medium tracking-wider text-webgencol text-xs xl:text-2xs pr-14 pl-14 mb-5"
+            class="flex justify-center items-center text-justify font-medium tracking-wider text-green-700 text-xs xl:text-2xs"
           >
             <p>{{ niceMsgEng }}</p>
           </div>
-        </form>
+          <div
+            v-if="errorMsg"
+            class="flex justify-center items-center text-justify font-medium tracking-wider text-red-700 text-xs mb-1"
+          >
+            <p>{{ errorMsg }}</p>
+          </div>
+          <div
+            v-if="errorMsgEng"
+            class="flex justify-center items-center text-justify font-medium tracking-wider text-red-700 text-2xs"
+          >
+            <p>{{ errorMsgEng }}</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -120,8 +146,8 @@ export default defineComponent({
     const password = ref<string>("");
     const errorMsg = ref<string>("");
     const errorMsgEng = ref<string>("");
-    let niceMsg = ref<string>("Miłego dnia :)");
-    let niceMsgEng = ref<string>("Have a nice day :)");
+    const niceMsg = ref<string>("Miłego dnia :)");
+    const niceMsgEng = ref<string>("Have a nice day :)");
     const router = useRouter();
 
     interface Error {
@@ -142,6 +168,8 @@ export default defineComponent({
         }, 500);
       } catch (error_description) {
         if (error_description != Error) {
+          niceMsg.value = "";
+          niceMsgEng.value = "";
           if (
             (error_description as Error).message === "Invalid login credentials"
           ) {
@@ -151,10 +179,10 @@ export default defineComponent({
             errorMsg.value = "Ups...";
             errorMsgEng.value = `${(error_description as Error).message}`;
           }
+          email.value = "";
+          password.value = "";
         }
 
-        niceMsg.value = "";
-        niceMsgEng.value = "";
         setTimeout(() => {
           errorMsg.value = "";
           errorMsgEng.value = "";
