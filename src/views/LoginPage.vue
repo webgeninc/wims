@@ -89,11 +89,11 @@
               <img
                 src="../assets/webgeneticss_logo.png"
                 draggable="false"
-                class="h-10 w-10 overflow-hidden"
+                class="h-9 w-9 overflow-hidden"
               />
             </div>
           </div>
-          <div class="h-px xl:h-2 w-full overflow-hidden">
+          <!-- <div class="h-px xl:h-1 w-full overflow-hidden">
             <div class="h-full w-full flex justify-end items-center">
               <img
                 draggable="false"
@@ -101,7 +101,7 @@
                 class="h-full w-full overflow-hidden opacity-40 xl:opacity-50 object-fill grayscale invert"
               />
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="flex flex-col justify-around items-center mt-5 mb-5">
           <div
