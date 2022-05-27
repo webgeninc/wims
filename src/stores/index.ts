@@ -8,6 +8,6 @@ export const useStore = defineStore({
   actions: {
     setUser(payload: any) {
       this.user = payload ? payload.user : null;
-  }
+    },
   },
 });

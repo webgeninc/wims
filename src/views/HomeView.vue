@@ -1,10 +1,14 @@
 <template>
   <div v-if="user" class="h-screen w-screen flex overflow-hidden">
-    <Headerplace />
-    <Workplace />
+    <div class="h-full w-5/6">
+      <Workplace />
+    </div>
+    <div class="w-1/6 h-full">
+      <Headerplace />
+    </div>
   </div>
   <div v-if="!user" class="h-screen w-screen flex overflow-hidden">
-    <p class="p-5">Not logged. Get back.</p>
+    <p class="p-5">Not logged in. Get back.</p>
   </div>
 </template>
 
@@ -14,8 +18,8 @@ import { supabase } from "../supabase/init.js";
 import { defineComponent } from "vue";
 import { computed } from "vue";
 import { useStore } from "../stores/index.js";
-import Headerplace from "../components/Header.vue";
-import Workplace from "../components/Workplace.vue";
+import Headerplace from "../components/HeaderPlace.vue";
+import Workplace from "../components/WorkPlace.vue";
 export default defineComponent({
   name: "HomeView",
   setup() {
@@ -69,6 +73,7 @@ export default defineComponent({
     };
     checkData();
     getData();
+
     return { getData, user, dataLoaded, dataNotes, dataTasks, dataTabs };
   },
   components: { Headerplace, Workplace },

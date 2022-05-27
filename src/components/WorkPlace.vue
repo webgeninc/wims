@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <div
+    class="bg-gray-100 h-full w-full p-2 pb-0 flex flex-nowrap overflow-x-auto font-montserrat"
+  >
     <p>Workplace</p>
   </div>
 </template>

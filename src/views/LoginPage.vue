@@ -40,7 +40,7 @@
                   Management System
                 </h2>
                 <h2
-                  class="text-right text-2xs xl:text-3xs 2xl:text-2xs 3xl:text-xs font-medium tracking-wide leading-4"
+                  class="text-right text-2xs xl:text-3xs 2xl:text-2xs 3xl:text-xs font-medium tracking-wide leading-4 mt-0.5"
                 >
                   1.0.00
                 </h2>
