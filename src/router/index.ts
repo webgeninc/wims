@@ -14,7 +14,7 @@ const routes = [
     // }
   },
   {
-    path: "/HomeView",
+    path: "/interpolatemanagementsystem",
     name: "HomeView",
     component: HomeView,
     meta: {

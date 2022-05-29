@@ -1,6 +1,9 @@
 module.exports = {
   content: ["./public/**/*.html", "./src/**/*.vue"],
   theme: {
+    minWidth: {
+      80: "20rem",
+    },
     screens: {
       xl: "1280px",
       "2xl": "1536px",

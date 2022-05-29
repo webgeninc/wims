@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-export const useStore = defineStore({
+export const userStore = defineStore({
     id: "userState",
     state: () => ({
         user: null,
@@ -7,6 +7,6 @@ export const useStore = defineStore({
     actions: {
         setUser(payload) {
             this.user = payload ? payload.user : null;
-        }
+        },
     },
 });

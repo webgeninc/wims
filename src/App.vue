@@ -7,7 +7,7 @@
 <script lang="ts">
 import { ref } from "vue";
 import { supabase } from "./supabase/init.js";
-import { useStore } from "./stores/index.js";
+import { userStore } from "./stores/user.js";
 export default {
   setup() {
     // Create data / vars
@@ -18,7 +18,7 @@ export default {
     if (!user) {
       appReady.value = true;
     }
-    const use = useStore()
+    const use = userStore()
     // Runs when there is a auth state change
     // if user is logged in, this will fire
     supabase.auth.onAuthStateChange((_, session) => {

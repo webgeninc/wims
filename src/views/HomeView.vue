@@ -1,9 +1,9 @@
 <template>
   <div v-if="user" class="h-screen w-screen flex overflow-hidden">
-    <div class="h-full w-5/6">
+    <div class="h-full flex flex-1 min-w-80">
       <Workplace />
     </div>
-    <div class="w-1/6 h-full">
+    <div class="w-80 h-full">
       <Headerplace />
     </div>
   </div>
@@ -17,18 +17,21 @@ import { ref } from "vue";
 import { supabase } from "../supabase/init.js";
 import { defineComponent } from "vue";
 import { computed } from "vue";
-import { useStore } from "../stores/index.js";
+import { userStore } from "../stores/user.js";
+import { dataStore } from "../stores/data.js";
 import Headerplace from "../components/HeaderPlace.vue";
 import Workplace from "../components/WorkPlace.vue";
 export default defineComponent({
   name: "HomeView",
   setup() {
     const dataLoaded = ref<boolean>(false);
-    const dataNotes = ref<unknown>([]);
-    const dataTasks = ref<unknown>([]);
-    const dataTabs = ref<unknown>([]);
+    const dataNotes = ref<unknown[] | null>([]);
+    const dataTasks = ref<unknown[] | null>([]);
+    const dataTabs = ref<unknown[] | null>([]);
 
-    const use = useStore();
+    const use = userStore();
+    const dat = dataStore();
+
     const user = computed(() => use.user);
 
     const checkData = () => {
@@ -64,6 +67,9 @@ export default defineComponent({
         dataTasks.value = tasks_table;
         if (error_tabs instanceof Error) throw error_tabs;
         dataTabs.value = tabs_table;
+        dat.dataNotes = dataNotes.value;
+        dat.dataTabs = dataTabs.value;
+        dat.dataTasks = dataTasks.value;
         dataLoaded.value = true;
       } catch (error) {
         if (error instanceof Error) {
