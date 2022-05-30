@@ -6,34 +6,237 @@
     <div class="h-full w-full flex flex-col">
       <div class="flex-1 w-full">
         <div class="flex flex-col justify-center items-center h-full w-full">
-          <div class="flex-1 flex w-full"></div>
-          <div
-            class="flex w-full flex-col justify-center items-end mb-0 mt-0 font-light bg-gray-600 text-gray-100 tracking-wide"
-          >
-            <div class="w-full pr-3 pl-3 pb-2">
-              <div class="flex flex-row justify-end items-center w-full mt-2">
-                <p
-                  class="text-2xs 2xl:text-2xs 3xl:text-sm text-center cursor-default select-none pr-5"
+          <div class="w-full">
+            <div
+              class="p-2 h-full w-full font-normal text-xs flex flex-col justify-start items-end text-gray-100 tracking-wider"
+            >
+              <p class="text-gray-300 p-1 pt-px pb-px tracking-widest">
+                {{ userStor.user.email }}
+              </p>
+              <p
+                class="underline tracking-widest cursor-pointer text-red-300 hover:text-red-200 transition p-1 pt-px pb-px"
+              >
+                log out
+              </p>
+            </div>
+          </div>
+          <div class="flex-1 flex w-full">
+            <!-- kalendarz -->
+
+            <div
+              class="flex flex-col justify-start items-center bg-gray-100 w-full 2xl:h-110 h-92 pt-1 pb-3"
+            >
+              <div class="w-full relative">
+                <div
+                  class="flex w-full h-14 flex-row justify-around items-center"
                 >
-                  poniedziałek
-                </p>
-                <p
-                  class="text-2xs 2xl:text-2xs 3xl:text-sm text-center cursor-default select-none"
-                >
-                  kwiecień
-                </p>
+                  <button
+                    @click="callPrevMonth"
+                    class="h-7 w-7 cursor-pointer hover:opacity-50 transition select-none text-lg font-medium flex-1"
+                  >
+                    &lt;
+                  </button>
+                  <p
+                    class="text-sm 2xl:text-base font-medium mt-1 w-3/5 text-center tracking-wider cursor-default select-none uppercase"
+                  >
+                    {{ calTitle }}
+                  </p>
+                  <button
+                    @click="callNextMonth"
+                    class="h-7 w-7 cursor-pointer hover:opacity-50 transition select-none text-lg flex-1 font-medium"
+                  >
+                    >
+                  </button>
+                </div>
               </div>
-              <div class="flex flex-row justify-end items-center w-full">
-                <p
-                  class="text-2xs 2xl:text-2xs 3xl:text-sm text-center cursor-default select-none pr-5"
+              <div class="bg-gray-500 w-10/12 h-px m-1 opacity-70"></div>
+              <div
+                class="flex p-2 mt-1 pb-2 pt-5 w-full text-2xs font-semibold 2xl:text-xs"
+              >
+                <div class="w-1/7 flex justify-center items-center">PON</div>
+                <div class="w-1/7 flex justify-center items-center">WT</div>
+                <div class="w-1/7 flex justify-center items-center">ŚR</div>
+                <div class="w-1/7 flex justify-center items-center">CZW</div>
+                <div class="w-1/7 flex justify-center items-center">PT</div>
+                <div class="w-1/7 flex justify-center items-center">SOB</div>
+                <div
+                  class="text-red-700 w-1/7 flex justify-center items-center"
                 >
-                  14:23
+                  NDZ
+                </div>
+              </div>
+              <div class="flex">
+                <div class="flex flex-wrap p-2 w-full text-xs 2xl:text-sm">
+                  <div
+                    v-for="(day, index) in calPrevDaysInMonth"
+                    :key="index"
+                    class="opacity-50 font-light w-1/7 2xl:h-12 h-8 flex justify-center items-center"
+                  >
+                    <div
+                      class="flex flex-col justify-center items-center cursor-pointer transition rounded-md hover:bg-gray-300 w-98/100 h-9/10"
+                    >
+                      <span class="mb-2">
+                        {{ day }}
+                      </span>
+                    </div>
+                  </div>
+                  <div
+                    
+                    v-for="(day, index) in calDaysInMonth"
+                    :key="index"
+                    class="w-1/7 2xl:h-12 h-8 flex justify-center items-center"
+                  >
+                    <div
+                      v-if="
+                        yearWithMonth === reallyNow &&
+                        day.charAt(8) + day.charAt(9) == reallyNowDay
+                      "
+                      class="flex justify-center items-center cursor-pointer transition flex-col rounded-md w-98/100 h-9/10 hover:text-gray-100 hover:bg-gray-300"
+                    >
+                      <div class="text-base">✔️</div>
+                      <div
+                        class="flex flex-row flex-wrap m-1.5 mb-2 mt-0 justify-start items-end overflow-hidden"
+                      >
+                        <div
+                          v-for="(taskd, inde) in dateStor.dataTasks"
+                          :key="inde"
+                          class="flex flex-row"
+                        >
+                          <div
+                            v-if="
+                              (taskd.task_date === day) &&
+                              (taskd.task_color === 1)
+                            "
+                            class="h-0.75 w-2.5 rounded-full bg-gray-400 m-px text-2xs"
+                          ></div>
+                          <div
+                            v-else-if="
+                              (taskd.task_date === day) &&
+                              (taskd.task_color === 2)
+                            "
+                            class="h-0.75 w-2.5 rounded-full bg-red-600 m-px text-2xs"
+                          ></div>
+                          <div
+                            v-else-if="
+                              (taskd.task_date === day) &&
+                              (taskd.task_color === 3)
+                            "
+                            class="h-0.75 w-2.5 rounded-full bg-yellow-600 m-px text-2xs"
+                          ></div>
+                          <div
+                            v-else-if="
+                              (taskd.task_date === day) &&
+                              (taskd.task_color === 4)
+                            "
+                            class="h-0.75 w-2.5 rounded-full bg-purple-600 m-px text-2xs"
+                          ></div>
+                          <div
+                            v-else-if="
+                              (taskd.task_date === day) &&
+                              (taskd.task_color === 5)
+                            "
+                            class="h-0.75 w-2.5 rounded-full bg-blue-600 m-px text-2xs"
+                          ></div>
+                          <div
+                            v-else-if="
+                              (taskd.task_date === day) &&
+                              (taskd.task_color === 6)
+                            "
+                            class="h-0.75 w-2.5 rounded-full bg-green-400 m-px text-2xs"
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      v-else
+                      class="flex justify-center items-center flex-col cursor-pointer transition rounded-md hover:bg-gray-300 w-98/100 h-9/10"
+                    >
+                      <div class>{{ day.charAt(8) + day.charAt(9) }}</div>
+                      <div
+                        class="flex flex-row flex-wrap m-0.5 mb-2 mt-0 justify-start items-end overflow-hidden"
+                      >
+                        <div
+                          v-for="(taskd, inde) in dateStor.dataTasks"
+                          :key="inde"
+                          class="flex flex-row overflow-hidden"
+                        >
+                          <div
+                            v-if="
+                              (taskd.task_date === day) &&
+                              (taskd.task_color === 1)
+                            "
+                            class="h-0.75 w-2.5 rounded-full bg-gray-400 m-px text-2xs"
+                          ></div>
+                          <div
+                            v-else-if="
+                              (taskd.task_date === day) &&
+                              (taskd.task_color === 2)
+                            "
+                            class="h-0.75 w-2.5 rounded-full bg-red-600 m-px text-2xs"
+                          ></div>
+                          <div
+                            v-else-if="
+                              (taskd.task_date === day) &&
+                              (taskd.task_color === 3)
+                            "
+                            class="h-0.75 w-2.5 rounded-full bg-yellow-600 m-px text-2xs"
+                          ></div>
+                          <div
+                            v-else-if="
+                              (taskd.task_date === day) &&
+                              (taskd.task_color === 4)
+                            "
+                            class="h-0.75 w-2.5 rounded-full bg-purple-600 m-px text-2xs"
+                          ></div>
+                          <div
+                            v-else-if="
+                              (taskd.task_date === day) &&
+                              (taskd.task_color === 5)
+                            "
+                            class="h-0.75 w-2.5 rounded-full bg-blue-600 m-px text-2xs"
+                          ></div>
+                          <div
+                            v-else-if="
+                              (taskd.task_date === day) &&
+                              (taskd.task_color === 6)
+                            "
+                            class="h-0.75 w-2.5 rounded-full bg-green-400 m-px text-2xs"
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    v-for="(day, index) in calNextDaysInMonth"
+                    :key="index"
+                    class="opacity-50 font-light w-1/7 2xl:h-12 h-8 flex justify-center items-center"
+                  >
+                    <div
+                      class="flex justify-center flex-col items-center cursor-pointer transition rounded-md hover:bg-gray-300 w-98/100 h-9/10"
+                    >
+                      <span class="mb-2">
+                        {{ day }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="flex w-full justify-center items-end mb-0 mt-0 font-light bg-gray-600 text-gray-100 tracking-wide"
+          >
+            <div class="h-full w-1/3"></div>
+            <div class="w-44 pr-2 3xl:pr-2 pl-7 pb-2 3xl:pl-2">
+              <div
+                class="flex flex-row justify-start items-center w-full mt-2 flex-wrap text-2xs 2xl:text-xs font-light tracking-wider"
+              >
+                <p class="w-2/3 cursor-default select-none">{{ day }}</p>
+                <p class="w-1/3 cursor-default select-none">
+                  {{ time }}
                 </p>
-                <p
-                  class="text-2xs 2xl:text-2xs 3xl:text-sm text-center cursor-default select-none"
-                >
-                  03.03.2022
-                </p>
+                <p class="w-3/5 cursor-default select-none">{{ month }}</p>
+                <p class="w-2/5 cursor-default select-none">{{ date }}</p>
               </div>
             </div>
           </div>
@@ -54,13 +257,16 @@
               class="cursor-default select-none h-full font-montserrat w-24 absolute"
             />
           </div>
-          <div class="pl-1 pr-2">
+          <div class="pl-3 3xl:pl-2 pr-5 3xl:pr-2">
             <p
               class="text-xs 2xl:text-sm 3xl:text-base 3xl:tracking-widest tracking-normal font-medium"
             >
               WEBGENETICSS
             </p>
-            <p class="text-xs 2xl:text-sm tracking-wider font-bold">WIMS</p>
+            <p class="text-xs 2xl:text-sm tracking-wider font-bold">
+              IM System <span class="text-2xs"></span>
+              <span class="text-2xs"> {{ dateStor.version }}</span>
+            </p>
           </div>
         </div>
       </div>
@@ -83,19 +289,283 @@
 </template>
 
 <script lang="ts">
-// import { ref } from "vue";
+import { ref } from "vue";
 // import { supabase } from "../supabase/init.js";
 import { defineComponent } from "vue";
 import { dataStore } from "@/stores/data.js";
+import { userStore } from "@/stores/user.js";
 
 export default defineComponent({
   name: "HeaderPlace",
   setup() {
-    const dat = dataStore();
+    const dateStor: any = dataStore();
+    const userStor: any = userStore();
+    const time = ref<string>("");
+    const date = ref<string>("");
+    const day = ref<string | number>("");
+    const month = ref<string | number>("");
+    const calTitle = ref<string>();
+    const now = ref<any>(new Date());
+    const lastDayofMonth = <any>ref(new Date(now.value.getUTCFullYear(), now.value.getMonth() + 1, 0).getDate());
+    const calTodaysMonth = ref([]);
+    const calPrevMonth = ref([]);
+    const calNextMonth = ref([]);
 
-    console.log(dat.dataTabs);
+    const months = [
+        "styczeń",
+        "luty",
+        "marzec",
+        "kwiecień",
+        "maj",
+        "czerwiec",
+        "lipiec",
+        "sierpień",
+        "wrzesień",
+        "październik",
+        "listopad",
+        "grudzień",
+      ];
 
-    return { dat };
+    const MonthOfYear = ref(null);
+    const reallyNow = ref(now.value.getFullYear() + "" + now.value.getMonth())
+    const reallyNowDay = ref(now.value.getDate())
+    const dayOfDate = ref(now.value.getDate());
+    const monthOfDate = ref(now.value.getMonth());
+    const yearNow = ref(now.value.getFullYear())
+
+    const prevLastDayofMonth = ref(<any>new Date(now.value.getUTCFullYear(), now.value.getMonth(), 0).getDate());
+    const calMonth = ref(months[monthOfDate.value])
+    const calDaysInMonth = ref(<any>[]);
+    const calPrevDaysInMonth = ref(<any>[]);
+    const calLastDayOfWeek = ref(new Date(now.value.getUTCFullYear(), now.value.getMonth() + 1, 0).getDay());
+
+    now.value.setDate(1);
+
+    const caldayOfWeek = ref(now.value.getUTCDay());
+    const calNextDaysInMonth = ref(<any>[]);
+    const yearWithMonth = ref(yearNow.value + "" + monthOfDate.value);
+
+    
+
+    const callPrevMonth = () => {
+      now.value.setUTCMonth(now.value.getMonth() - 1);
+      calTitle.value = months[now.value.getUTCMonth()]
+      monthOfDate.value = now.value.getUTCMonth();
+      lastDayofMonth.value = new Date(now.value.getUTCFullYear(), now.value.getMonth() + 1, 0).getDate()
+      yearNow.value= now.value.getUTCFullYear();
+      caldayOfWeek.value = now.value.getUTCDay();
+      prevLastDayofMonth.value = new Date(now.value.getUTCFullYear(), now.value.getMonth(), 0).getDate();
+      calLastDayOfWeek.value = new Date(now.value.getUTCFullYear(), now.value.getMonth() + 1, 0).getDay();
+      calDaysInMonth.value = [];
+      calPrevDaysInMonth.value = [];
+
+            yearWithMonth.value = yearNow.value + "" + monthOfDate.value;
+
+            if (caldayOfWeek.value == 0) {
+                caldayOfWeek.value = 7
+            }
+
+
+            for (let j: any  = caldayOfWeek.value - 2; j > -1; j--) {
+                calPrevDaysInMonth.value.push(prevLastDayofMonth.value - j);
+            }
+
+            if (caldayOfWeek.value == 1) {
+                for (let j = 8; j > 1; j--) {
+                    calPrevDaysInMonth.value.push(prevLastDayofMonth.value - j);
+                }
+            }
+
+
+
+            for (let i: any = 1; i <= lastDayofMonth.value; i++) {
+                if (i < 10) {
+                    i = "0" + i
+                }
+                calDaysInMonth.value.push(now.value.getFullYear() + "-" + (now.value.getMonth() < 9 ? ("0" + ((now.value.getMonth()) + 1)) : ((now.value.getMonth()) + 1)) + "-" + i);
+            }
+            calNextDaysInMonth.value = [];
+
+            if (calPrevDaysInMonth.value.length + calDaysInMonth.value.length < 35) {
+                for (let x: any  = 1; x <= 14 - (calLastDayOfWeek.value); x++) {
+                    calNextDaysInMonth.value.push(x);
+                }
+            }
+            else {
+                for (let x: any  = 1; x <= 7 - (calLastDayOfWeek.value); x++) {
+                    calNextDaysInMonth.value.push(x);
+
+                }
+
+            }
+
+
+      };
+      const callNextMonth = () => {
+            now.value.setUTCMonth(now.value.getMonth() + 1)
+            monthOfDate.value = now.value.getUTCMonth();
+            calTitle.value = months[now.value.getUTCMonth()]
+            lastDayofMonth.value = new Date(now.value.getUTCFullYear(), now.value.getMonth() + 1, 0).getDate()
+            yearNow.value = now.value.getUTCFullYear();
+            caldayOfWeek.value = now.value.getUTCDay();
+
+            prevLastDayofMonth.value = new Date(now.value.getUTCFullYear(), now.value.getMonth(), 0).getDate();
+            calLastDayOfWeek.value = new Date(now.value.getUTCFullYear(), now.value.getMonth() + 1, 0).getDay();
+            calDaysInMonth.value = [];
+            calPrevDaysInMonth.value = [];
+
+            yearWithMonth.value = yearNow.value + "" + monthOfDate.value;
+
+            if (caldayOfWeek.value == 0) {
+                caldayOfWeek.value = 7
+            }
+
+
+
+            for (let j:any = caldayOfWeek.value - 2; j > -1; j--) {
+                calPrevDaysInMonth.value.push(prevLastDayofMonth.value - j);
+            }
+
+            if (caldayOfWeek.value == 1) {
+                for (let j:any = 8; j > 1; j--) {
+                    calPrevDaysInMonth.value.push(prevLastDayofMonth.value - j);
+                }
+            }
+
+
+
+            for (let i:any = 1; i <= lastDayofMonth.value; i++) {
+                if (i < 10) {
+                    i = "0" + i
+                }
+                calDaysInMonth.value.push(now.value.getFullYear() + "-" + (now.value.getMonth() < 9 ? ("0" + ((now.value.getMonth()) + 1)) : ((now.value.getMonth()) + 1)) + "-" + i);
+            }
+
+            calNextDaysInMonth.value = [];
+
+            if (calPrevDaysInMonth.value.length + calDaysInMonth.value.length < 35) {
+                for (let x:any = 1; x <= 14 - (calLastDayOfWeek.value); x++) {
+                    calNextDaysInMonth.value.push(x);
+                }
+            }
+            else {
+                for (let x:any = 1; x <= 7 - (calLastDayOfWeek.value); x++) {
+                    calNextDaysInMonth.value.push(x);
+
+                }
+
+            }
+      }
+
+      const thisMonth = () => {
+            calDaysInMonth.value = [];
+            calPrevDaysInMonth.value = [];
+            calNextDaysInMonth.value = [];
+
+            lastDayofMonth.value = new Date(now.value.getUTCFullYear(), now.value.getMonth() + 1, 0).getDate();
+            prevLastDayofMonth.value = new Date(now.value.getUTCFullYear(), now.value.getMonth(), 0).getDate()
+            calTitle.value = months[monthOfDate.value]
+            calLastDayOfWeek.value = new Date(now.value.getUTCFullYear(), now.value.getMonth() + 1, 0).getDay();
+            caldayOfWeek.value = now.value.getUTCDay();
+
+            yearWithMonth.value = yearNow.value + "" + monthOfDate.value;
+
+            if (caldayOfWeek.value == 0) {
+                caldayOfWeek.value = 7
+            }
+
+
+
+            for (let j:any = caldayOfWeek.value - 2; j > -1; j--) {
+                calPrevDaysInMonth.value.push(prevLastDayofMonth.value - j);
+            }
+
+            if (caldayOfWeek.value == 1) {
+                for (let j:any  = 8; j > 1; j--) {
+                    calPrevDaysInMonth.value.push(prevLastDayofMonth.value - j);
+                }
+            }
+
+            for (let i:any  = 1; i <= lastDayofMonth.value; i++) {
+                if (i < 10) {
+                    i = "0" + i
+                }
+
+                calDaysInMonth.value.push(now.value.getFullYear() + "-" + (now.value.getMonth() < 9 ? ("0" + ((now.value.getMonth()) + 1)) : ((now.value.getMonth()) + 1)) + "-" + i);
+
+
+            }
+
+            if (calPrevDaysInMonth.value.length + calDaysInMonth.value.length < 35) {
+                for (let x:any  = 1; x <= 14 - (calLastDayOfWeek.value); x++) {
+                    calNextDaysInMonth.value.push(x);
+                }
+            }
+            else {
+                for (let x:any  = 1; x <= 7 - (calLastDayOfWeek.value); x++) {
+                    calNextDaysInMonth.value.push(x);
+
+                }
+
+            }
+      }
+
+      thisMonth();
+
+    const timeCalculator = () => {
+      let now = new Date();
+      let timeNow =
+        (now.getHours() < 10 ? "0" + now.getHours() : now.getHours()) +
+        ":" +
+        (now.getMinutes() < 10 ? "0" + now.getMinutes() : now.getMinutes()) +
+        ":" +
+        (now.getSeconds() < 10 ? "0" + now.getSeconds() : now.getSeconds());
+      let dateNow =
+        (now.getDate() < 10 ? "0" + now.getDate() : now.getDate()) +
+        "." +
+        (now.getMonth() + 1 < 10
+          ? "0" + (now.getMonth() + 1)
+          : now.getMonth() + 1) +
+        "." +
+        now.getFullYear();
+      time.value = timeNow;
+      date.value = dateNow;
+      const weekDays = [
+        "niedziela",
+        "poniedziałek",
+        "wtorek",
+        "środa",
+        "czwartek",
+        "piątek",
+        "sobota",
+      ];
+      day.value = weekDays[now.getDay()];
+      month.value = months[now.getMonth()];
+    };
+
+    setInterval(() => {
+      timeCalculator();
+    }, 1000);
+
+
+    return {
+      dateStor,
+      userStor,
+      time,
+      date,
+      day,
+      month,
+      calTitle,
+      timeCalculator,
+      callPrevMonth,
+      callNextMonth,
+      calDaysInMonth,
+      calPrevDaysInMonth,
+      calNextDaysInMonth,
+      yearWithMonth, 
+      reallyNow,
+      reallyNowDay,
+    };
   },
 });
 </script>

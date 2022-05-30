@@ -5,5 +5,6 @@ export const dataStore = defineStore({
         dataNotes: [],
         dataTabs: [],
         dataTasks: [],
+        version: "1.0.00",
     }),
 });
