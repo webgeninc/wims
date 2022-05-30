@@ -8,7 +8,7 @@
         <div class="flex flex-col justify-center items-center h-full w-full">
           <div class="w-full">
             <div
-              class="p-2 h-full w-full font-normal text-xs flex flex-col justify-start items-end text-gray-100 tracking-wider mt-1 mb-1"
+              class="p-2 h-full w-full font-normal text-xs flex flex-col justify-start items-end text-gray-100 tracking-wider"
             >
               <p class="text-gray-300 p-1 pt-px pb-px tracking-widest">
                 {{ userStor.user.email }}
@@ -23,34 +23,33 @@
           <div class="flex-1 flex w-full">
           </div>
           <div
-              class="flex flex-col justify-start items-center bg-gray-100 w-full 2xl:h-110 h-92 pt-1 pb-3"
+              class="flex flex-col justify-start items-center bg-gray-100 w-full 2xl:h-auto h-auto pt-0 pb-0"
             >
-              <div class="w-full relative">
+              <div class="w-full relative pt-3 pb-3 bg-gray-200">
                 <div
-                  class="flex w-full h-14 flex-row justify-around items-center"
+                  class="flex w-full flex-row justify-around items-center "
                 >
                   <button
                     @click="callPrevMonth"
-                    class="h-7 w-7 cursor-pointer hover:opacity-50 transition select-none text-lg font-medium flex-1"
+                    class="h-7 w-7 cursor-pointer opacity-90 hover:opacity-70 transition select-none text-lg font-medium flex-1 grayscale inv"
                   >
-                    &lt;
+                    ◀️
                   </button>
                   <p
-                    class="text-xs 2xl:text-sm font-medium mt-1 w-3/5 text-center tracking-wider cursor-default select-none uppercase"
+                    class="text-xs 2xl:text-sm font-medium  mt-1 w-3/5 text-center tracking-wider cursor-default select-none uppercase"
                   >
                     {{ calTitle }}
                   </p>
                   <button
                     @click="callNextMonth"
-                    class="h-7 w-7 cursor-pointer hover:opacity-50 transition select-none text-lg flex-1 font-medium"
+                    class="h-7 w-7 cursor-pointer opacity-90 hover:opacity-70 transition select-none text-lg flex-1 font-medium grayscale"
                   >
-                    >
+                    ▶️
                   </button>
                 </div>
               </div>
-              <div class="bg-gray-500 w-10/12 h-px m-1 opacity-70"></div>
               <div
-                class="flex p-2 mt-1 pb-2 pt-5 w-full text-2xs font-semibold 2xl:text-xs"
+                class="flex p-2 mt-0 pb-3 pt-4 w-full text-2xs font-semibold 2xl:text-xs "
               >
                 <div class="w-1/7 flex justify-center items-center">PON</div>
                 <div class="w-1/7 flex justify-center items-center">WT</div>
@@ -72,9 +71,9 @@
                     class="opacity-50 font-light w-1/7 2xl:h-12 h-8 flex justify-center items-center"
                   >
                     <div
-                      class="flex flex-col justify-center items-center cursor-pointer transition rounded-md hover:bg-gray-300 w-98/100 h-9/10"
+                      class="flex flex-col justify-center items-center cursor-pointer transition rounded-sm hover:bg-gray-300 w-98/100 h-9/10"
                     >
-                      <span class="mb-2">
+                      <span class="mb-3">
                         {{ day }}
                       </span>
                     </div>
@@ -90,16 +89,16 @@
                         yearWithMonth === reallyNow &&
                         day.charAt(8) + day.charAt(9) == reallyNowDay
                       "
-                      class="flex justify-center items-center cursor-pointer transition flex-col rounded-md w-98/100 h-9/10 hover:text-gray-100 hover:bg-gray-300"
+                      class="flex justify-center items-center cursor-pointer transition flex-col rounded-sm w-98/100 h-9/10 hover:text-gray-100 hover:bg-gray-300"
                     >
-                      <div class="text-base">✔️</div>
+                      <div class="text-lg opacity-70 invert">✖️</div>
                       <div
-                        class="flex flex-row flex-wrap m-1.5 mb-2 mt-0 justify-start items-end overflow-hidden"
+                        class="flex flex-row flex-wrap m-1.5 mb-1 mt-0 justify-start items-end overflow-hidden"
                       >
                         <div
                           v-for="(taskd, inde) in dateStor.dataTasks"
                           :key="inde"
-                          class="flex flex-row"
+                          class="flex flex-row h-2"
                         >
                           <div
                             v-if="
@@ -148,16 +147,16 @@
                     </div>
                     <div
                       v-else
-                      class="flex justify-center items-center flex-col cursor-pointer transition rounded-md hover:bg-gray-300 w-98/100 h-9/10"
+                      class="flex justify-center items-center flex-col cursor-pointer transition rounded-sm hover:bg-gray-300 w-98/100 h-9/10"
                     >
                       <div class>{{ day.charAt(8) + day.charAt(9) }}</div>
                       <div
-                        class="flex flex-row flex-wrap m-0.5 mb-2 mt-0 justify-start items-end overflow-hidden"
+                        class="flex flex-row flex-wrap m-0.5 mb-1 mt-0 justify-start items-end overflow-hidden"
                       >
                         <div
                           v-for="(taskd, inde) in dateStor.dataTasks"
                           :key="inde"
-                          class="flex flex-row overflow-hidden"
+                          class="flex flex-row overflow-hidden h-2"
                         >
                           <div
                             v-if="
@@ -211,9 +210,9 @@
                     class="opacity-50 font-light w-1/7 2xl:h-12 h-8 flex justify-center items-center"
                   >
                     <div
-                      class="flex justify-center flex-col items-center cursor-pointer transition rounded-md hover:bg-gray-300 w-98/100 h-9/10"
+                      class="flex justify-center flex-col items-center cursor-pointer transition rounded-sm hover:bg-gray-300 w-98/100 h-9/10"
                     >
-                      <span class="mb-2">
+                      <span class="mb-3">
                         {{ day }}
                       </span>
                     </div>
@@ -222,19 +221,23 @@
               </div>
             </div>
           <div
-            class="flex w-full justify-center items-end mb-0 mt-0 font-light bg-gray-600 text-gray-100 tracking-wide"
+            class="flex w-full justify-center items-end mb-0 mt-0 font-light bg-gray-600 text-gray-50 tracking-wide"
           >
             <div class="h-full w-1/3"></div>
-            <div class="w-44 pr-2 3xl:pr-2 pl-7 pb-2 3xl:pl-2">
+            <div class="w-2/3 pr-3 pl-5 2xl:pl-2 pb-2">
               <div
-                class="flex flex-row justify-start items-center w-full mt-2 flex-wrap text-2xs 2xl:text-xs font-light tracking-wider"
+                class="flex flex-col justify-start items-center w-full mt-2 text-2xs 2xl:text-2sm tracking-wider "
               >
-                <p class="w-2/3 cursor-default select-none">{{ day }}</p>
-                <p class="w-1/3 cursor-default select-none">
-                  {{ time }}
+              <div class="flex justify-between items-center w-full h-full">
+                <p class="cursor-default select-none">{{ infoDay }}</p>
+                <p class="cursor-default select-none w-14">
+                  {{ infoTime }}
                 </p>
-                <p class="w-3/5 cursor-default select-none">{{ month }}</p>
-                <p class="w-2/5 cursor-default select-none">{{ date }}</p>
+              </div>
+                <div class="flex justify-between items-center w-full h-full pl-5">
+                <p class="cursor-default select-none">{{ infoMonth }}</p>
+                <p class="cursor-default select-none">{{ infoDate }}</p>
+                </div>
               </div>
             </div>
           </div>
@@ -247,10 +250,11 @@
           class="flex justify-center items-center rounded-full w-full h-full"
         >
           <div
-            class="h-32 w-32 relative bg-gradient-to-r from-gray-100 to-gray-200 rounded-full flex justify-center items-center"
+            class="h-32 w-32 relative bg-gradient-to-r from-gray-100 to-gray-200 rounded-full flex justify-center items-center animate-spin-slow"
           >
             <img
               src="../assets/logo_circle.svg"
+              draggable="false"
               alt="WIMS"
               class="cursor-default select-none h-full font-montserrat w-24 absolute"
             />
@@ -269,7 +273,7 @@
         </div>
       </div>
       <div
-        class="w-full h-8 bg-webgencol bg-opacity-80 flex justify-end items-center pr-2"
+        class="w-full h-8 bg-webgencol bg-opacity-90 flex justify-end items-center pr-2"
       >
         <div class="h-full w-12 p-1.5">
           <div
@@ -298,10 +302,10 @@ export default defineComponent({
   setup() {
     const dateStor: any = dataStore();
     const userStor: any = userStore();
-    const time = ref<string>("");
-    const date = ref<string>("");
-    const day = ref<string | number>("");
-    const month = ref<string | number>("");
+    const infoTime = ref<string>("");
+    const infoDate = ref<string>("");
+    const infoDay = ref<string | number>("");
+    const infoMonth = ref<string | number>("");
     const calTitle = ref<string>();
     const now = ref<any>(new Date());
     const lastDayofMonth = <any>ref(new Date(now.value.getUTCFullYear(), now.value.getMonth() + 1, 0).getDate());
@@ -521,8 +525,8 @@ export default defineComponent({
           : now.getMonth() + 1) +
         "." +
         now.getFullYear();
-      time.value = timeNow;
-      date.value = dateNow;
+      infoTime.value = timeNow;
+      infoDate.value = dateNow;
       const weekDays = [
         "niedziela",
         "poniedziałek",
@@ -532,8 +536,8 @@ export default defineComponent({
         "piątek",
         "sobota",
       ];
-      day.value = weekDays[now.getDay()];
-      month.value = months[now.getMonth()];
+      infoDay.value = weekDays[now.getDay()];
+      infoMonth.value = months[now.getMonth()];
     };
 
     setInterval(() => {
@@ -544,10 +548,10 @@ export default defineComponent({
     return {
       dateStor,
       userStor,
-      time,
-      date,
-      day,
-      month,
+      infoTime,
+      infoDate,
+      infoDay,
+      infoMonth,
       calTitle,
       timeCalculator,
       callPrevMonth,

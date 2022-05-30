@@ -14,6 +14,7 @@ module.exports = {
         system: "url('../assets/systems.svg')",
       },
       spacing: {
+        13: "3.25rem",
         30: "7.5rem",
         76: "19rem",
         86: "22rem",
@@ -37,9 +38,10 @@ module.exports = {
       fontSize: {
         "2xs": "10px",
         "3xs": "8px",
+        "2sm": "13px",
       },
       animation: {
-        "spin-slow": "spin 15s linear infinite",
+        "spin-slow": "spin 25s linear infinite",
         "spin-slow-twice": "spin 1s linear infinite",
         "spin-reverse": "spin-slow-reverse 2s linear infinite",
         "spin-reverse-twice": "spin-slow-reverse-twice 3s linear infinite",
