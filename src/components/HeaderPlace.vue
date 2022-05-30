@@ -8,7 +8,7 @@
         <div class="flex flex-col justify-center items-center h-full w-full">
           <div class="w-full">
             <div
-              class="p-2 h-full w-full font-normal text-xs flex flex-col justify-start items-end text-gray-100 tracking-wider"
+              class="p-2 h-full w-full font-normal text-xs flex flex-col justify-start items-end text-gray-100 tracking-wider mt-1 mb-1"
             >
               <p class="text-gray-300 p-1 pt-px pb-px tracking-widest">
                 {{ userStor.user.email }}
@@ -21,9 +21,8 @@
             </div>
           </div>
           <div class="flex-1 flex w-full">
-            <!-- kalendarz -->
-
-            <div
+          </div>
+          <div
               class="flex flex-col justify-start items-center bg-gray-100 w-full 2xl:h-110 h-92 pt-1 pb-3"
             >
               <div class="w-full relative">
@@ -37,7 +36,7 @@
                     &lt;
                   </button>
                   <p
-                    class="text-sm 2xl:text-base font-medium mt-1 w-3/5 text-center tracking-wider cursor-default select-none uppercase"
+                    class="text-xs 2xl:text-sm font-medium mt-1 w-3/5 text-center tracking-wider cursor-default select-none uppercase"
                   >
                     {{ calTitle }}
                   </p>
@@ -222,7 +221,6 @@
                 </div>
               </div>
             </div>
-          </div>
           <div
             class="flex w-full justify-center items-end mb-0 mt-0 font-light bg-gray-600 text-gray-100 tracking-wide"
           >
@@ -349,21 +347,18 @@ export default defineComponent({
 
     const callPrevMonth = () => {
       now.value.setUTCMonth(now.value.getMonth() - 1);
-      calTitle.value = months[now.value.getUTCMonth()]
       monthOfDate.value = now.value.getUTCMonth();
       lastDayofMonth.value = new Date(now.value.getUTCFullYear(), now.value.getMonth() + 1, 0).getDate()
       yearNow.value= now.value.getUTCFullYear();
+      calTitle.value = months[now.value.getUTCMonth()] + " " + yearNow.value
       caldayOfWeek.value = now.value.getUTCDay();
       prevLastDayofMonth.value = new Date(now.value.getUTCFullYear(), now.value.getMonth(), 0).getDate();
       calLastDayOfWeek.value = new Date(now.value.getUTCFullYear(), now.value.getMonth() + 1, 0).getDay();
       calDaysInMonth.value = [];
       calPrevDaysInMonth.value = [];
+      yearWithMonth.value = yearNow.value + "" + monthOfDate.value;
 
-            yearWithMonth.value = yearNow.value + "" + monthOfDate.value;
-
-            if (caldayOfWeek.value == 0) {
-                caldayOfWeek.value = 7
-            }
+      caldayOfWeek.value == 0 ? caldayOfWeek.value = 7 : caldayOfWeek.value
 
 
             for (let j: any  = caldayOfWeek.value - 2; j > -1; j--) {
@@ -404,11 +399,10 @@ export default defineComponent({
       const callNextMonth = () => {
             now.value.setUTCMonth(now.value.getMonth() + 1)
             monthOfDate.value = now.value.getUTCMonth();
-            calTitle.value = months[now.value.getUTCMonth()]
             lastDayofMonth.value = new Date(now.value.getUTCFullYear(), now.value.getMonth() + 1, 0).getDate()
             yearNow.value = now.value.getUTCFullYear();
             caldayOfWeek.value = now.value.getUTCDay();
-
+            calTitle.value = months[now.value.getUTCMonth()] + " " + yearNow.value
             prevLastDayofMonth.value = new Date(now.value.getUTCFullYear(), now.value.getMonth(), 0).getDate();
             calLastDayOfWeek.value = new Date(now.value.getUTCFullYear(), now.value.getMonth() + 1, 0).getDay();
             calDaysInMonth.value = [];
@@ -461,10 +455,9 @@ export default defineComponent({
             calDaysInMonth.value = [];
             calPrevDaysInMonth.value = [];
             calNextDaysInMonth.value = [];
-
             lastDayofMonth.value = new Date(now.value.getUTCFullYear(), now.value.getMonth() + 1, 0).getDate();
             prevLastDayofMonth.value = new Date(now.value.getUTCFullYear(), now.value.getMonth(), 0).getDate()
-            calTitle.value = months[monthOfDate.value]
+            calTitle.value = months[now.value.getUTCMonth()] + " " + yearNow.value
             calLastDayOfWeek.value = new Date(now.value.getUTCFullYear(), now.value.getMonth() + 1, 0).getDay();
             caldayOfWeek.value = now.value.getUTCDay();
 
