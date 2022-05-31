@@ -3,23 +3,9 @@
     oncontextmenu="return false"
     class="bg-gradient-to-b from-gray-700 via-gray-700 to-gray-800 w-full h-full shadow-2xl flex flex-row justify-center font-montserrat"
   >
-    <div class="h-full w-full flex flex-col">
-      <div class="flex-1 w-full">
+    <div class="h-full w-full flex flex-col justify-end">
+      <div v-if="tab === 0" class="flex-1 w-full">
         <div class="flex flex-col justify-center items-center h-full w-full">
-          <div class="w-full">
-            <div
-              class="p-2 h-full w-full font-normal text-xs flex flex-col justify-start items-end text-gray-100 tracking-wider"
-            >
-              <p class="text-gray-300 p-1 pt-px pb-px tracking-widest">
-                {{ userStor.user.email }}
-              </p>
-              <p
-                class="underline tracking-widest cursor-pointer text-red-300 hover:text-red-200 transition p-1 pt-px pb-px"
-              >
-                log out
-              </p>
-            </div>
-          </div>
           <div class="flex-1 flex w-full">
           </div>
           <div
@@ -79,7 +65,6 @@
                     </div>
                   </div>
                   <div
-                    
                     v-for="(day, index) in calDaysInMonth"
                     :key="index"
                     class="w-1/7 2xl:h-12 h-8 flex justify-center items-center"
@@ -91,7 +76,7 @@
                       "
                       class="flex justify-center items-center cursor-pointer transition flex-col rounded-sm w-98/100 h-9/10 hover:text-gray-100 hover:bg-gray-300"
                     >
-                      <div class="text-lg opacity-70 invert">✖️</div>
+                      <div class="text-lg opacity-90 invert hue-rotate-180">📌</div>
                       <div
                         class="flex flex-row flex-wrap m-1.5 mb-1 mt-0 justify-start items-end overflow-hidden"
                       >
@@ -212,13 +197,21 @@
                     <div
                       class="flex justify-center flex-col items-center cursor-pointer transition rounded-sm hover:bg-gray-300 w-98/100 h-9/10"
                     >
-                      <span class="mb-3">
+                      <span class="mb-1">
                         {{ day }}
                       </span>
                     </div>
                   </div>
                 </div>
               </div>
+              <div class="h-px w-full bg-gray-300"></div>
+              <div class="flex justify-between items-center">
+                <div class="h-3/4 w-2 bg-red-600 m-2 mr-0 rounded-xl"></div>
+<div class="w-full p-4 pr-5 pl-3">
+                <p class="text-start text-sm">Jest <span class="underline pl-0.5 pr-0.5">{{ infoDay }}</span>. Przypomnienie o ZUS i podatkach do 20-ego.</p>
+              </div>
+              </div>
+              
             </div>
           <div
             class="flex w-full justify-center items-end mb-0 mt-0 font-light bg-gray-600 text-gray-50 tracking-wide"
@@ -230,11 +223,11 @@
               >
               <div class="flex justify-between items-center w-full h-full">
                 <p class="cursor-default select-none">{{ infoDay }}</p>
-                <p class="cursor-default select-none w-14">
+                <p class="cursor-default select-none w-12 mr-2">
                   {{ infoTime }}
                 </p>
               </div>
-                <div class="flex justify-between items-center w-full h-full pl-5">
+                <div class="flex justify-between items-center w-full h-full pl-6">
                 <p class="cursor-default select-none">{{ infoMonth }}</p>
                 <p class="cursor-default select-none">{{ infoDate }}</p>
                 </div>
@@ -243,6 +236,75 @@
           </div>
         </div>
       </div>
+      <div v-if="tab === 1"
+                class="transition flex flex-col justify-start items-end flex-grow w-full p-2 cursor-default select-none">
+                <div class="w-full">
+            <div
+              class="h-full w-full font-normal text-xs flex flex-col justify-start items-end text-gray-100 tracking-wider mb-2"
+            >
+              <p class="text-gray-300 p-1 pt-px pb-px tracking-widest">
+                {{ userStor.user.email }}
+              </p>
+              <p
+                class="underline tracking-widest cursor-pointer text-red-300 hover:text-red-200 transition p-1 pt-px pb-px"
+              >
+                log out
+              </p>
+            </div>
+          </div>
+                <div class="text-gray-300 font-light text-2xs 2xl:text-xs 3xl:text-sm text-center tracking-wide mb-1">
+                    <div class="flex flex-col justify-evenly items-start flex-wrap m-0.5 mb-2">
+                        <div class="flex m-0.5 2xl:m-1">
+                            <div class="p-1 bg-gray-400 rounded-full ml-0.5 mr-0.5 hover:opacity-70"></div>
+                            <p class="text-justify ml-2 text-2xs 2xl:text-xs 3xl:text-xs tracking-normal">
+                                <span class="font-medium tracking-wider">ZADANIE</span> Tą etykiete posiadają zwykłe
+                                zadania, nie posiadające cech unikalnych.
+                            </p>
+                        </div>
+                        <div class="flex m-0.5 2xl:m-1">
+                            <div class="p-1 bg-red-600 rounded-full ml-0.5 mr-0.5 hover:opacity-70"></div>
+                            <p class="text-justify ml-2 text-2xs 2xl:text-xs 3xl:text-xs tracking-normal">
+                                <span class="font-medium tracking-wider">STOP</span> Dodajemy tą etykiete do zadania,
+                                które posiada błąd, lub problem, którego nie możemy rozwiązać.
+                            </p>
+                        </div>
+                        <div class="flex m-0.5 2xl:m-1">
+                            <div class="p-1 bg-yellow-600 rounded-full ml-0.5 mr-0.5 hover:opacity-70"></div>
+                            <p class="text-justify ml-2 text-2xs 2xl:text-xs 3xl:text-xs tracking-normal">
+                                <span class="font-medium tracking-wider">WERYFIKACJA</span> Dodajemy tą etykiete, kiedy
+                                prosimy o sprawdzenie błędów, czy zgody w decyzyjności wspólnej.
+                            </p>
+                        </div>
+                        <div class="flex m-0.5 2xl:m-1">
+                            <div class="p-1 bg-purple-500 rounded-full ml-0.5 mr-0.5 hover:opacity-70"></div>
+                            <p class="text-justify ml-2 text-2xs 2xl:text-xs 3xl:text-xs tracking-normal">
+                                <span class="font-medium tracking-wider">AKTUALIZACJA</span> Dodajemy tą etykiete, gdy
+                                chcemy, by reszta grupy zapoznała się z tą zmianą.
+                            </p>
+                        </div>
+                        <div class="flex m-0.5 2xl:m-1">
+                            <div class="p-1 bg-blue-500 rounded-full ml-0.5 mr-0.5 hover:opacity-70"></div>
+                            <p class="text-justify ml-2 text-2xs 2xl:text-xs 3xl:text-xs tracking-normal">
+                                <span class="font-medium tracking-wider">ROZPOCZĘTO</span> Tą etykietą oznaczamy
+                                zadania, które mają status aktywny.
+                            </p>
+                        </div>
+                        <div class="flex m-0.5 2xl:m-1">
+                            <div class="p-1 bg-green-500 rounded-full ml-0.5 mr-0.5 hover:opacity-70"></div>
+                            <p class="text-justify ml-2 text-2xs 2xl:text-xs 3xl:text-xs tracking-normal">
+                                <span class="font-medium tracking-wider">ZROBIONE</span>
+                                Tą etykiete dodajemy na koniec, by oznaczyć zadanie jako zrobione lub zrobione i
+                                sprawdzone.
+                            </p>
+                        </div>
+                    </div>
+                    <p class="p-1 pb-0 text-3xs 2xl:text-xs 3xl:text-sm">
+                        <span class="border-gray-200 font-semibold p-1 text-2xs">shift + scroll myszką</span> lub
+                        <span class="border-gray-200 font-semibold p-1 text-2xs">drag nagłówka karty</span>
+                        scrollowanie okna pracy
+                    </p>
+                </div>
+            </div>
       <div
         class="w-full h-20 bg-gradient-to-r from-gray-100 via-gray-200 to-gray-200"
       >
@@ -275,15 +337,21 @@
       <div
         class="w-full h-8 bg-webgencol bg-opacity-90 flex justify-end items-center pr-2"
       >
-        <div class="h-full w-12 p-1.5">
-          <div
-            class="h-full w-full bg-gray-300 opacity-60 rounded-2xl hover:opacity-80 cursor-pointer transition"
-          ></div>
+        <div class="h-full w-12 p-1">
+          <div v-if="tab === 1" @click="tabHandler(1)"
+            class="h-full w-full bg-gray-200 rounded-2xl flex justify-center items-center transition text-sm opacity-80"
+          >🔍</div>
+          <div v-else @click="tabHandler(1)"
+            class="h-full w-full bg-gray-300 opacity-60 rounded-2xl hover:opacity-80 cursor-pointer flex justify-center items-center transition text-sm"
+          >🔍</div>
         </div>
-        <div class="h-full w-12 p-1.5">
-          <div
-            class="h-full w-full bg-gray-300 rounded-2xl transition flex justify-center items-center text-lg font-semibold"
-          ></div>
+        <div class="h-full w-12 p-1">
+          <div v-if="tab === 0" @click="tabHandler(0)"
+            class="h-full w-full bg-gray-200 rounded-2xl transition flex justify-center items-center font-semibold text-sm opacity-80"
+          >📆</div>
+          <div v-else @click="tabHandler(0)"
+            class="h-full w-full bg-gray-300 opacity-60 rounded-2xl transition hover:opacity-80 flex justify-center items-center font-semibold cursor-pointer text-sm"
+          >📆</div>
         </div>
       </div>
     </div>
@@ -302,6 +370,7 @@ export default defineComponent({
   setup() {
     const dateStor: any = dataStore();
     const userStor: any = userStore();
+    const tab = ref<number>(0);
     const infoTime = ref<string>("");
     const infoDate = ref<string>("");
     const infoDay = ref<string | number>("");
@@ -328,6 +397,10 @@ export default defineComponent({
         "grudzień",
       ];
 
+    const tabHandler = (num: number) => {
+      tab.value = num;
+    };
+    
     const MonthOfYear = ref(null);
     const reallyNow = ref(now.value.getFullYear() + "" + now.value.getMonth())
     const reallyNowDay = ref(now.value.getDate())
@@ -548,6 +621,8 @@ export default defineComponent({
     return {
       dateStor,
       userStor,
+      tab,
+      tabHandler,
       infoTime,
       infoDate,
       infoDay,
