@@ -7,7 +7,7 @@
       <div v-if="tab === 0" class="flex-1 w-full">
         <div class="flex flex-col justify-start items-center h-full w-full">
           <div
-            class="flex flex-col justify-start items-center bg-gray-100 w-full 2xl:h-auto h-auto pt-0 pb-0 mt-5"
+            class="flex flex-col justify-start items-center bg-gray-100 w-full 2xl:h-full h-auto pt-0 pb-0 mt-5"
           >
             <div class="w-full relative pt-3 pb-3 bg-gray-200">
               <div class="flex w-full flex-row justify-around items-center">
@@ -71,7 +71,7 @@
                     class="flex justify-center items-center cursor-pointer transition flex-col rounded-sm w-98/100 h-9/10 hover:text-gray-100 hover:bg-gray-300"
                   >
                     <div class="text-webgencol text-xl font-bold">
-                      {{ infoTerm }}
+                    {{ infoTerm! < 10 ? "0" + infoTerm : infoTerm}}
                     </div>
                     <div
                       class="flex flex-row flex-wrap m-1.5 mb-1 mt-0 justify-start items-end overflow-hidden"
@@ -188,8 +188,8 @@
                 </div>
               </div>
             </div>
-            <div class="h-px w-full bg-gray-300"></div>
-            <div class="flex justify-between items-center w-full">
+            <!-- <div class="h-px w-full bg-gray-300"></div> -->
+            <!-- <div class="flex justify-between items-center w-full">
               <div class="h-3/4 w-2 bg-red-400 m-2 mr-0 rounded-xl"></div>
               <div class="w-full p-4 pr-1 pl-2">
                 <p class="text-start text-sm flex-1">
@@ -198,12 +198,14 @@
                 </p>
               </div>
               <div class="h-full flex justify-center items-start pt-1 pr-2 invert hue-rotate-180 text-lg">📌</div>
-            </div>
-            <div class="h-px w-full bg-gray-300"></div>
+            </div> -->
+            <div class="h-px w-full bg-gray-400 bg-opacity-60"></div>
             <div class="w-full text-sm ">
-              <p class="font-medium mb-1 p-3 pb-0">NA DZISIAJ:</p>
-              <p v-if="infoToday!.length == 0" class="p-3 pt-0">Nie ma żadnych zadań</p>
-              <div v-else v-for="(task, ij) in infoToday" class="w-full mb-3 p-2"> 
+              <div class="w-full p-1 flex justify-center items-center bg-gray-200 mb-1">
+                  <p class="font-medium p-2 tracking-wider">ZADANIA NA DZISIAJ</p>
+              </div>
+              <p v-if="infoToday!.length == 0" class="p-3 pt-2">Nie ma żadnych zadań</p>
+              <div v-else v-for="(task, ij) in infoToday" class="w-full mb-3 p-2 pr-3 pl-3"> 
                 <div class="w-full bg-gray-200 border border-gray-400">
                   <div class="flex flex-col w-full">
                     <div class="flex flex-row w-full">
@@ -423,21 +425,24 @@
           </p>
         </div>
       </div>
+      <div class="h-px w-full bg-gray-300"></div>
       <div
-            class="flex w-full justify-center items-end mb-0 mt-0 font-light bg-gray-600 text-gray-50 tracking-wide"
+            class="flex flex-col w-full justify-center items-end mb-0 mt-0 font-normal bg-gray-600 text-gray-50 tracking-wide"
           >
-            <div class="h-full w-1/3"></div>
-            <div class="w-2/3 pr-3 pl-7 2xl:pl-5 pb-2">
+          <div class="flex justify-between items-center w-full bg-gray-100 text-gray-900">
+              <div class="h-3/4 w-2 bg-red-400 m-2 mr-0 rounded-xl"></div>
+              <div class="w-full p-4 pr-1 pl-2">
+                <p class="text-start text-sm flex-1">
+                  Jest <span class="underline underline-offset-2 pl-0.5 pr-0.5"> {{ infoTerm }}</span
+                  > . {{ noti }}
+                </p>
+              </div>
+              <div class="h-full flex justify-center items-start pt-1 pr-2 invert hue-rotate-180 text-lg">📌</div>
+            </div>
+            <div class="w-full pr-5 pl-7 2xl:pl-5 pb-2">
               <div
                 class="flex flex-col justify-start items-center w-full mt-2 text-2xs 2xl:text-2sm tracking-wider"
               >
-                <div class="flex justify-end items-center w-full h-full">
-                  <p class="cursor-default select-none w-13">
-                    {{ infoTime }}
-                  </p>
-                  <p class="cursor-default select-none ml-3">{{ infoDay }}</p>
-                  
-                </div>
                 <div
                   class="flex justify-end items-center w-full h-full pl-6"
                 >
@@ -445,17 +450,23 @@
                   <p class="cursor-default select-none ml-1">{{ infoMonth }}</p>
                   <p class="cursor-default select-none ml-1">{{ infoYear }}</p>
                 </div>
+                <div class="flex justify-end items-center w-full h-full">
+                  <p class="cursor-default select-none mr-2">{{ infoDay }}</p>
+                  <p class="cursor-default select-none w-13">
+                    {{ infoTime }}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
       <div
-        class="w-full h-20 bg-gradient-to-r from-gray-100 via-gray-200 to-gray-200"
+        class="w-full h-20 bg-gray-100"
       >
         <div
           class="flex justify-center items-center rounded-full w-full h-full"
         >
           <div
-            class="h-32 w-32 relative bg-gradient-to-r from-gray-100 to-gray-200 rounded-full flex justify-center items-center animate-spin-slow"
+            class="h-32 w-32 relative bg-gray-100 rounded-full flex justify-center items-center animate-spin-slow"
           >
             <img
               src="../assets/logo_circle.svg"
