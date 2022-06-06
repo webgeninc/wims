@@ -7,8 +7,12 @@
       :key="index"
       class="flex flex-shrink-0 w-80 flex-col m-1"
     >
-      <div class="flex flex-row justify-end text-xs cursor-grab">
+      <div
+        v-if="tabNameId != tab.id"
+        class="flex flex-row justify-end text-xs cursor-grab"
+      >
         <p
+          @click="tabNameChange(tab.id)"
           class="ml-2 mr-2 text-2xs tracking-wider font-semibold text-gray-600 text-opacity-50 hover:text-opacity-100 transition cursor-pointer"
         >
           edytuj tytuł karty
@@ -20,28 +24,36 @@
         </p>
       </div>
       <div
-        data-dragscroll
-        class="flex flex-row justify-between w-full text-xs mr-1 ml-1 cursor-grab"
+        v-if="tabNameId === tab.id && dateStor.processing == null"
+        class="flex flex-row justify-between w-full text-xs mr-0.5 ml-0.5 cursor-grab"
       >
         <input
-          ref="tabka"
+          ref="tabNameInput"
           autocomplete="off"
           maxlength="45"
           required
           type="text"
+          v-model="tabName"
+          placeholder="tabName"
           class="p-1.5 flex-1 m-1 border-gray-300 border focus:outline-none resize-none rounded-xl"
         />
         <button
+          @click="tabNamePush(tab.id)"
           class="bg-gray-300 text-white rounded-full font-medium transition hover:bg-gray-200 m-1 p-0.5 pr-4 pl-4"
         >
           <span class="text-base grayscale opacity-50">👌</span>
         </button>
       </div>
       <div
+        v-if="dateStor.processing == tab.id"
+        class="flex justify-center item-center text-sm font-medium"
+      >
+        <p class="p-1 mt-1">🔔 GOTOWE</p>
+      </div>
+      <div
         class="p-1 pt-1 text-center flex flex-row justify-center items-center cursor-grab h-16"
       >
         <h3
-          data-dragscroll
           class="font-semibold text-left text-base text-gray-700 tracking-wide p-2 pt-0 pb-0 flex-1"
         >
           {{ tab.tab_name }}
@@ -49,7 +61,7 @@
         <button
           class="bg-gray-300 text-white rounded-full font-medium transition hover:bg-gray-200 p-0.5 pr-3 pl-3"
         >
-          <span class="text-base grayscale opacity-50">✏️</span>
+          <span class="text-base grayscale opacity-50">📝</span>
         </button>
       </div>
       <div
@@ -786,28 +798,63 @@
       >
         <div class="text-red-500 font-medium transition flex-1 pt-2 pb-2 m-1">
           Error: {{ errorMsg }}
-        </div>
+        </div>  
       </div> -->
     </div>
   </div>
 </template>
 
 <script lang="ts">
-// import { ref } from "vue";
+import { ref } from "vue";
 // import { supabase } from "../supabase/init.js";
 import { defineComponent } from "vue";
 import { dataStore } from "@/stores/data.js";
 import { userStore } from "@/stores/user.js";
+import { supabase } from "@/supabase/init";
 
 export default defineComponent({
   name: "WorkPlace",
   setup() {
     const dateStor: any = dataStore();
     const userStor: any = userStore();
+    const tabNameId = ref<number | null>(null);
+    const tabName = ref<string | null>(null);
 
-    // const showTasks = async () => {},
+    const tabNameChange = (tabID: number) => {
+      dateStor.dataTabs.forEach((item: any) => {
+        item.id === tabID ? (tabName.value = item.tab_name) : false;
+      });
+      tabNameId.value = tabID;
+    };
 
-    return { dateStor, userStor };
+    const tabNamePush = async (tabID: number) => {
+      try {
+        const { error } = await supabase
+          .from("tabs_table")
+          .update({ tab_name: tabName.value })
+          .eq("id", tabID);
+        tabName.value = "";
+        dateStor.processing = tabID;
+        if (error instanceof Error) throw error;
+      } catch (error) {
+        if (error instanceof Error) {
+          console.warn(error.message);
+        }
+      }
+      setTimeout(() => {
+        dateStor.processing = null;
+        tabNameId.value = null;
+      }, 1000);
+    };
+
+    return {
+      dateStor,
+      userStor,
+      tabNameChange,
+      tabNamePush,
+      tabNameId,
+      tabName,
+    };
   },
 });
 </script>

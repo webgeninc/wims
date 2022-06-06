@@ -456,6 +456,7 @@
             </div>
             <div class="h-0.5 w-full bg-gray-300"></div>
             <div
+              v-if="dateStor.processing == null"
               class="flex justify-between items-center w-full bg-gray-100 text-gray-900"
             >
               <div class="h-3/4 w-2 bg-red-400 m-2 mr-0 rounded-xl"></div>

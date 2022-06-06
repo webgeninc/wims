@@ -13,10 +13,4 @@
       "path": "./tsconfig.vite-config.json"
     }
   ],
-  "parserOptions": {
-    "parser": "@typescript-eslint/parser",
-    "ecmaFeatures" : {
-      "jsx" : false
-    }
-  },
 }
