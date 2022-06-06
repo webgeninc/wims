@@ -1,6 +1,5 @@
 <template>
   <div
-    oncontextmenu="return false"
     @mouseleave="todayInfoTasks"
     class="bg-gradient-to-b from-gray-700 via-gray-700 to-gray-800 w-full h-full max-h-full shadow-2xl flex flex-row justify-center font-montserrat"
   >
@@ -740,7 +739,7 @@ export default defineComponent({
       "grudzień",
     ];
 
-    const tabHandler = (num: number) => {
+    const tabHandler = (num: number): void => {
       tab.value = num;
     };
 
@@ -990,10 +989,7 @@ export default defineComponent({
       }
 
       infoTasks.value = [];
-
-      setTimeout(() => {
-        todayInfoTasks();
-      }, 1000);
+      todayInfoTasks();
     };
 
     const timeCalculator = () => {
@@ -1039,7 +1035,7 @@ export default defineComponent({
       infoTerm.value = now.getDate();
     };
 
-    const showInfoTasks = (date: string) => {
+    const showInfoTasks = async (date: string) => {
       infoTasksToday.value = false;
       if (date === infoDateUS.value) {
         todayInfoTasks();
@@ -1057,9 +1053,9 @@ export default defineComponent({
           date.charAt(6);
       }
     };
-    const todayInfoTasks = () => {
+    const todayInfoTasks = async () => {
       infoTasksToday.value = true;
-      infoTasks.value = dateStor.dataTasks.filter(
+      infoTasks.value = await dateStor.dataTasks.filter(
         (item: any) => item.task_date === infoDateUS.value
       );
       infoTasksTitle.value = "ZADANIA NA DZISIAJ";
