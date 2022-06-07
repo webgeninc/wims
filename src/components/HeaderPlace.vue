@@ -475,6 +475,22 @@
                 📌
               </div>
             </div>
+            <div
+              v-if="dateStor.processing != null"
+              class="flex justify-between items-center w-full bg-gray-100 text-gray-900"
+            >
+              <div class="h-3/4 w-2 bg-yellow-400 m-2 mr-0 rounded-xl"></div>
+              <div class="w-full p-5 pr-1 pl-2">
+                <p class="text-start text-sm flex-1">
+                  Dane są w tej chwili pobierane...
+                </p>
+              </div>
+              <div
+                class="h-full flex justify-center items-start pt-1 pr-2 text-lg"
+              >
+                🔔
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -624,6 +640,7 @@
           >
             <div
               class="h-32 w-32 relative bg-gray-100 rounded-full flex justify-center items-center animate-spin-slow"
+              :class="{ 'anim-pause': dateStor.processing }"
             >
               <img
                 src="../assets/logo_circle.svg"
@@ -648,6 +665,13 @@
         <div
           class="w-full h-8 bg-webgencol bg-opacity-90 flex justify-end items-center pr-2"
         >
+          <div class="h-full w-12 p-1">
+            <div
+              class="h-full w-full bg-gray-300 rounded-2xl flex justify-center items-center transition text-sm opacity-60 cursor-not-allowed"
+            >
+              📃
+            </div>
+          </div>
           <div class="h-full w-12 p-1">
             <div
               v-if="tab === 1"

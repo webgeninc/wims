@@ -3,3 +3,12 @@
 @tailwind components;
 
 @tailwind utilities;
+
+@layer utilities {
+    .anim-pause {
+      animation-play-state: paused;
+    },
+    .anim-run {
+        animation-play-state: running;
+      }
+ }

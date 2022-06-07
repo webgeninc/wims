@@ -18,6 +18,7 @@
           edytuj tytuł karty
         </p>
         <p
+          @click="tabDelete(tab.id)"
           class="ml-2 mr-2 text-2xs tracking-tighter font-semibold text-red-600 text-opacity-50 hover:text-opacity-100 transition cursor-pointer"
         >
           usuń kartę
@@ -59,9 +60,9 @@
           {{ tab.tab_name }}
         </h3>
         <button
-          class="bg-gray-300 text-white rounded-full font-medium transition hover:bg-gray-200 p-0.5 pr-3 pl-3"
+          class="bg-gray-300 text-white rounded-full font-medium transition hover:bg-gray-200 p-0.5 pr-3 pl-4"
         >
-          <span class="text-base grayscale opacity-50">📝</span>
+          <span class="text-sm grayscale opacity-50">📝</span>
         </button>
       </div>
       <div
@@ -742,22 +743,28 @@
             Zamknij
           </button>
         </div>
-      </div>
+      </div> -->
     </div>
-    <div class="h-10 text-xs m-2">
+    <div class="flex justify-center items-start h-20">
       <div
-        v-if="createTab == null"
-        class="flex h-full justify-center items-center p-2"
+        v-if="!tabCreateForm"
+        class="flex h-12 w-10 justify-start items-center p-2 pl-4 pr-4"
       >
         <button
-          @click="addCreateTab"
-          class="h-8 w-12 p-1 rounded-full bg-gray-600 text-white transition hover:bg-gray-500 font-medium text-base shadow-inner"
+          @click="tabCreateHandler(true)"
+          class="h-full rounded-xl bg-gray-300 text-white transition hover:bg-gray-200 font-medium text-base shadow-inner flex justify-center items-center"
         >
-          +
+          <span class="text-lg p-4">📁</span>
         </button>
       </div>
-      <div v-if="createTab" class="p-1">
-        <form @submit.prevent="pushTab" action class="flex flex-col p-1">
+      <div
+        v-if="tabCreateForm"
+        class="pl-4 p-1.5 text-sm flex flex-col justify-center items-center"
+      >
+        <form
+          @submit.prevent="tabCreatePush"
+          class="flex flex-col justify-center items-center"
+        >
           <input
             autocomplete="off"
             maxlength="50"
@@ -766,25 +773,25 @@
             id="tabName"
             type="text"
             placeholder="Nazwa nowej tabeli"
-            class="p-2 pr-3 pl-3 border-gray-300 border focus:outline-none resize-none rounded-full"
+            class="p-1.5 pr-2 pl-2 border-gray-300 border focus:outline-none resize-none rounded-lg"
           />
-          <div class="flex flex-row justify-around items-center w-full">
+          <div class="flex flex-row justify-start items-center w-full mt-1">
             <button
               type="submit"
-              class="rounded-full mt-1 flex-1 mr-1 bg-gray-600 text-white transition hover:bg-gray-500 font-medium text-base shadow-inner"
+              class="rounded-lg p-1 mt-1 w-1/4 mr-1 bg-gray-300 text-white transition hover:bg-gray-200 font-medium text-sm shadow-inner"
             >
-              +
+              ✔️
             </button>
             <button
-              @click="removeCreateTab"
-              class="rounded-full mt-1 h w-1/4 ml-1 bg-gray-600 text-white transition hover:bg-gray-500 font-medium text-base shadow-inner"
+              @click="tabCreateHandler(false)"
+              class="rounded-lg mt-1 p-1 h w-1/4 ml-1 bg-gray-300 text-white transition hover:bg-gray-200 font-medium text-sm shadow-inner"
             >
-              -
+              ✖️
             </button>
           </div>
         </form>
       </div>
-      <div
+      <!-- <div
         v-if="statusMsg"
         class="flex flex-row justify-evenly text-xs flex-wrap"
       >
@@ -798,7 +805,7 @@
       >
         <div class="text-red-500 font-medium transition flex-1 pt-2 pb-2 m-1">
           Error: {{ errorMsg }}
-        </div>  
+        </div>
       </div> -->
     </div>
   </div>
@@ -819,6 +826,35 @@ export default defineComponent({
     const userStor: any = userStore();
     const tabNameId = ref<number | null>(null);
     const tabName = ref<string | null>(null);
+    const tabCreateForm = ref<boolean>(false);
+
+    const tabDelete = async (tabID: number) => {
+      dateStor.processing = true;
+      let question = window.confirm(
+        "Na pewno? Danych nie będzie można odzyskać..."
+      );
+      if (question) {
+        try {
+          const err1 = await supabase
+            .from("tabs_table")
+            .delete()
+            .eq("id", tabID);
+          if (err1 instanceof Error) throw err1;
+          const err2 = await supabase
+            .from("tasks_table")
+            .delete()
+            .eq("task_tabid", tabID);
+          if (err2 instanceof Error) throw err2;
+        } catch (error) {
+          if (error instanceof Error) {
+            console.warn(error.message);
+          }
+        }
+        setTimeout(() => {
+          dateStor.processing = null;
+        }, 500);
+      } else return;
+    };
 
     const tabNameChange = (tabID: number) => {
       dateStor.dataTabs.forEach((item: any) => {
@@ -844,7 +880,40 @@ export default defineComponent({
       setTimeout(() => {
         dateStor.processing = null;
         tabNameId.value = null;
-      }, 1000);
+      }, 1500);
+    };
+
+    const tabCreateHandler = (handler: boolean) => {
+      // seeMore.value = null;
+      // editTask.value = null;
+      // createTask.value = null;
+      handler === true
+        ? ((tabCreateForm.value = true), (tabName.value = ""))
+        : (tabCreateForm.value = false);
+    };
+
+    const tabCreatePush = async () => {
+      // editTask.value = null;
+      // createTask.value = null;
+      // tasks.value = [];
+      dateStor.processing = true;
+      try {
+        const { error } = await supabase.from("tabs_table").insert([
+          {
+            tab_name: tabName.value,
+          },
+        ]);
+        if (error instanceof Error) throw error;
+        tabCreateForm.value = false;
+        tabName.value = null;
+      } catch (error) {
+        if (error instanceof Error) {
+          console.warn(error.message);
+        }
+      }
+      setTimeout(() => {
+        dateStor.processing = null;
+      }, 1500);
     };
 
     return {
@@ -852,8 +921,12 @@ export default defineComponent({
       userStor,
       tabNameChange,
       tabNamePush,
+      tabCreateHandler,
+      tabCreatePush,
+      tabDelete,
       tabNameId,
       tabName,
+      tabCreateForm,
     };
   },
 });
