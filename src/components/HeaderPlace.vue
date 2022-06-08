@@ -482,7 +482,7 @@
               <div class="h-3/4 w-2 bg-yellow-400 m-2 mr-0 rounded-xl"></div>
               <div class="w-full p-5 pr-1 pl-2">
                 <p class="text-start text-sm flex-1">
-                  Dane są w tej chwili pobierane...
+                  Pobieranie danych w toku...
                 </p>
               </div>
               <div
@@ -627,7 +627,7 @@
               </div>
               <div class="flex justify-end items-center w-full h-full pl-5">
                 <p class="cursor-default select-none mr-2">{{ infoDay }}</p>
-                <p class="cursor-default select-none w-13">
+                <p class="cursor-default select-none w-13 mr-1">
                   {{ infoTime }}
                 </p>
               </div>
@@ -712,7 +712,6 @@
 
 <script lang="ts">
 import { ref } from "vue";
-// import { supabase } from "../supabase/init.js";
 import { defineComponent } from "vue";
 import { dataStore } from "@/stores/data.js";
 import { userStore } from "@/stores/user.js";
@@ -745,9 +744,6 @@ export default defineComponent({
         ).getDate()
       )
     );
-    const calTodaysMonth = ref([]);
-    const calPrevMonth = ref([]);
-    const calNextMonth = ref([]);
 
     const months = [
       "styczeń",
@@ -764,11 +760,6 @@ export default defineComponent({
       "grudzień",
     ];
 
-    const tabHandler = (num: number): void => {
-      tab.value = num;
-    };
-
-    const MonthOfYear = ref(null);
     const reallyNow = ref(now.value.getFullYear() + "" + now.value.getMonth());
     const reallyNowDay = ref(now.value.getDate());
     const dayOfDate = ref(now.value.getDate());
@@ -780,7 +771,6 @@ export default defineComponent({
         new Date(now.value.getUTCFullYear(), now.value.getMonth(), 0).getDate()
       )
     );
-    const calMonth = ref(months[monthOfDate.value]);
     const calDaysInMonth = ref(<any>[]);
     const calPrevDaysInMonth = ref(<any>[]);
     const calLastDayOfWeek = ref(
@@ -792,6 +782,10 @@ export default defineComponent({
     const caldayOfWeek = ref(now.value.getUTCDay());
     const calNextDaysInMonth = ref(<any>[]);
     const yearWithMonth = ref(yearNow.value + "" + monthOfDate.value);
+
+    const tabHandler = (num: number): void => {
+      tab.value = num;
+    };
 
     const callPrevMonth = () => {
       now.value.setUTCMonth(now.value.getMonth() - 1);

@@ -29,10 +29,10 @@ export default defineComponent({
     const dataTasks = ref<unknown[] | null>([]);
     const dataTabs = ref<unknown[] | null>([]);
 
-    const use = userStore();
-    const dat = dataStore();
+    const dateStor: any = dataStore();
+    const userStor: any = userStore();
 
-    const user = computed(() => use.user);
+    const user = computed(() => userStor.user);
 
     const checkData = () => {
       const subs = supabase
@@ -47,6 +47,7 @@ export default defineComponent({
     };
 
     const getData = async () => {
+      dateStor.processing = true;
       dataLoaded.value = false;
       try {
         const { data: notes_table, error: error_notes } = await supabase
@@ -67,10 +68,14 @@ export default defineComponent({
         dataTasks.value = tasks_table;
         if (error_tabs instanceof Error) throw error_tabs;
         dataTabs.value = tabs_table;
-        dat.dataNotes = dataNotes.value;
-        dat.dataTabs = dataTabs.value;
-        dat.dataTasks = dataTasks.value;
+        dateStor.dataNotes = dataNotes.value;
+        dateStor.dataTabs = dataTabs.value;
+        dateStor.dataTasks = dataTasks.value;
         dataLoaded.value = true;
+
+        setTimeout(() => {
+          dateStor.processing = null;
+        }, 1500);
       } catch (error) {
         if (error instanceof Error) {
           console.warn(error.message);

@@ -60,17 +60,29 @@
           {{ tab.tab_name }}
         </h3>
         <button
+          @click="taskCreateHandler(tab.id)"
           class="bg-gray-300 text-white rounded-full font-medium transition hover:bg-gray-200 p-0.5 pr-3 pl-4"
         >
           <span class="text-sm grayscale opacity-50">📝</span>
         </button>
       </div>
       <div
+        v-if="taskCreateForm === tab.id"
         class="w-full bg-gray-200 mt-2 p-2 scrollbar-none !scrollbar-thumb-indigo-500"
       >
         <form
-          v-for="(item, index) in dateStor.tasks"
+          v-for="(item, index) in tasks"
           :key="index"
+          @submit.prevent="
+            taskCreatePush(
+              item.task_name,
+              item.task_worker,
+              item.task_desc,
+              item.task_date,
+              item.task_color,
+              tab.id
+            )
+          "
           class="flex flex-col justify-center text-xs items-center"
         >
           <div class="w-full flex justify-between items-center pl-1 m-1">
@@ -78,6 +90,7 @@
               Nowe zadanie
             </h4>
             <button
+              @click="taskCreateHandler(null)"
               class="bg-gray-400 text-gray-50 rounded-2xl text-2xs font-medium transition hover:bg-gray-500 p-0.5 pr-3 pl-3 mr-0.5 ml-0.5"
             >
               Zamknij okno
@@ -139,13 +152,13 @@
             <div
               class="flex flex-row w-full justify-around items-center mt-2 text-2xs"
             >
-              <input
+              <!-- <input
                 ref="imageUpload"
                 id="imageUpload"
                 type="file"
                 accept="image/*"
                 class="w-full text-2xs p-0 m-1 flex justify-start items-center"
-              />
+              /> -->
               <button
                 type="submit"
                 class="bg-gray-400 text-gray-50 rounded-2xl font-medium transition hover:bg-gray-500 p-0.5 pr-3 pl-3 mr-0.5 ml-0.5"
@@ -156,14 +169,13 @@
           </div>
         </form>
       </div>
-      <!-- <div
-        v-if="dataLoaded"
+      <div
         class="h-full flex-nowrap overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full pr-2"
       >
-        <div v-for="(task, index) in dataTasks" :key="index">
+        <div v-for="(task, index) in dateStor.dataTasks" :key="index">
           <div
-            v-if="editTask != task.id && tab.id === task.task_tabid"
-            @mouseleave="hoverTaskLeave"
+            v-if="taskEditForm != task.id && tab.id === task.task_tabid"
+            @mouseleave="taskHoverHandler(null)"
             class="overflow-hidden flex bg-gray-50 shadow-md mb-1 mt-1 pt-1"
           >
             <div v-if="task.task_color === 3" class="bg-yellow-600 w-1.5"></div>
@@ -189,21 +201,21 @@
             ></div>
             <div class="m-0.5 ml-1.5 flex flex-col flex-1">
               <div
-                v-if="editTask != task.id"
+                v-if="taskEditForm != task.id"
                 class="flex flex-row w-full items-baseline overflow-hidden"
               >
                 <div
-                  v-if="hoverTask === task.id"
+                  v-if="taskHover === task.id"
                   class="pt-0.5 flex flex-row w-full justify-end items-center flex-shrink-0 transition duration-200"
                 >
                   <p
-                    @click="ChangeEditTask(task.id)"
+                    @click="taskEditChange(task.id)"
                     class="text-2xs ml-2 mr-2 font-semibold tracking-wider text-gray-600 text-opacity-50 hover:text-opacity-100 cursor-pointer"
                   >
                     EDYTUJ
                   </p>
                   <p
-                    @click="deleteTask(task.id)"
+                    @click="taskDelete(task.id)"
                     class="text-2xs ml-2 mr-2 font-semibold tracking-wider text-red-600 text-opacity-50 hover:text-opacity-100 cursor-pointer"
                   >
                     USUŃ
@@ -216,7 +228,7 @@
                 >
                   {{ task.task_name }}
                 </p>
-                <button
+                <!-- <button
                   v-if="
                     task.task_image !== '' &&
                     task.task_image !== null &&
@@ -233,9 +245,9 @@
                   class="bg-gray-400 text-gray-50 rounded-2xl text-2xs font-medium transition hover:bg-gray-500 p-0.5 pr-3 pl-3 mr-0.5 ml-0.5"
                 >
                   Zamknij
-                </button>
+                </button> -->
               </div>
-              <div v-if="task.task_image !== '' && task.task_image !== null">
+              <!-- <div v-if="task.task_image !== '' && task.task_image !== null">
                 <div class="flex justify-center items-center">
                   <div
                     v-if="imageStatus === task.id && imageDataLoaded !== true"
@@ -250,30 +262,30 @@
                   ref="imagerPreview"
                   class="w-full mt-1 mb-2 cursor-pointer hover:opacity-80 hover:bg-gray-400"
                 />
-              </div>
+              </div> -->
               <div
-                v-if="(task.task_desc.length > 140) & (seeMore != task.id)"
+                v-if="task.task_desc.length > 140 && taskExtend != task.id"
                 class="w-full"
               >
                 <p class="text-sm m-1 font-normal overflow-hidden h-16">
                   {{ task.task_desc }}
                 </p>
                 <p
-                  @click="seeMoreHandler(task.id)"
+                  @click="taskExtendHandler(task.id)"
                   class="p-1 text-2xs text-gray-400 hover:text-gray-700 cursor-pointer m-0"
                 >
                   zobacz wiecej
                 </p>
               </div>
               <div
-                v-if="(task.task_desc.length > 140) & (seeMore == task.id)"
+                v-if="task.task_desc.length > 140 && taskExtend == task.id"
                 class="w-full"
               >
                 <p class="text-sm m-1 font-normal overflow-hidden">
                   {{ task.task_desc }}
                 </p>
                 <p
-                  @click="seeMoreHandler(task.id)"
+                  @click="taskExtendHandler(task.id)"
                   class="p-1 text-2xs text-gray-400 hover:text-gray-700 cursor-pointer m-0"
                 >
                   zobacz mniej
@@ -288,7 +300,7 @@
               <div class="mt-1 flex flex-row justify-between">
                 <div v-if="task.task_date !== ''" class="flex flex-row">
                   <p class="text-xs m-1 font-semibold">
-                    {{ viewDate(task.task_date) }}
+                    {{ taskDateChanger(task.task_date) }}
                   </p>
                   <p
                     v-if="
@@ -403,7 +415,7 @@
                   <p class="text-xs m-1 font-semibold">Bez daty</p>
                 </div>
                 <p
-                  @click="hoverTaskEnter(task.id)"
+                  @click="taskHoverHandler(task.id)"
                   class="text-xs m-1 font-bold hover:text-gray-400 transition cursor-pointer"
                 >
                   {{ task.task_worker }}
@@ -412,13 +424,13 @@
             </div>
           </div>
           <div
-            v-if="editTask == task.id && tab.id === task.task_tabid"
+            v-if="taskEditForm == task.id && tab.id === task.task_tabid"
             class="flex justify-center items-center bg-gray-200 p-px pt-1 pb-1 w-full"
           >
             <form
-              v-for="(item, index) in editedTask"
+              v-for="(item, index) in taskEdited"
               :key="index"
-              @submit.prevent="pushEditTask(task.id)"
+              @submit.prevent="taskEditPush(task.id)"
               class="flex flex-col justify-center text-xs items-center"
             >
               <div class="w-full flex justify-between items-center pl-1 m-1">
@@ -426,7 +438,7 @@
                   Edycja zadanie
                 </h4>
                 <button
-                  @click="removeEditTask"
+                  @click="taskEditClose"
                   class="bg-gray-400 text-gray-50 rounded-2xl text-2xs font-medium transition hover:bg-gray-500 p-0.5 pr-3 pl-3 mr-0.5 ml-0.5"
                 >
                   Zamknij okno
@@ -489,14 +501,14 @@
                 <div
                   class="flex flex-row w-full justify-around items-center mt-2 text-2xs"
                 >
-                  <input
+                  <!-- <input
                     v-on:change="imageHandler"
                     ref="imageUpload"
                     id="imageUpload"
                     type="file"
                     accept="image/*"
                     class="w-full text-2xs p-0 m-1 flex justify-start items-center"
-                  />
+                  /> -->
                   <button
                     type="submit"
                     class="bg-gray-400 text-gray-50 rounded-2xl font-medium transition hover:bg-gray-500 p-0.5 pr-3 pl-3 mr-0.5 ml-0.5"
@@ -510,11 +522,11 @@
         </div>
       </div>
     </div>
-    <div
+    <!--<div
       v-if="socialPost !== null"
       class="absolute top-0 bottom-0 left-0 right-1/6 bg-white bg-opacity-80 pointer-events-auto"
-    ></div>
-    <div
+    ></div> -->
+    <!--<div
       v-if="socialPost !== null"
       class="bg-fbbackground absolute top-30 left-30 right-110 bottom-30 rounded-xl shadow-2xl border border-gray-300 flex justify-start items-center overflow-hidden"
     >
@@ -743,8 +755,8 @@
             Zamknij
           </button>
         </div>
-      </div> -->
-    </div>
+      </div>
+    </div> -->
     <div class="flex justify-center items-start h-20">
       <div
         v-if="!tabCreateForm"
@@ -813,11 +825,10 @@
 
 <script lang="ts">
 import { ref } from "vue";
-// import { supabase } from "../supabase/init.js";
 import { defineComponent } from "vue";
 import { dataStore } from "@/stores/data.js";
 import { userStore } from "@/stores/user.js";
-import { supabase } from "@/supabase/init";
+import { supabase } from "@/supabase/init.js";
 
 export default defineComponent({
   name: "WorkPlace",
@@ -827,6 +838,16 @@ export default defineComponent({
     const tabNameId = ref<number | null>(null);
     const tabName = ref<string | null>(null);
     const tabCreateForm = ref<boolean>(false);
+    const taskCreateForm = ref<number | null>(null);
+    const taskEditForm = ref<number | null>(null);
+    const tasks = ref<any[]>();
+    const taskEdited = ref<any[]>([]);
+    const taskHover = ref<number | null>(null);
+    const taskExtend = ref<number | null>(null);
+    // const imageStatus = ref<number | null>(null);
+    // const ImageLoaded = ref<boolean>(false);
+
+    //TABS
 
     const tabDelete = async (tabID: number) => {
       dateStor.processing = true;
@@ -884,18 +905,19 @@ export default defineComponent({
     };
 
     const tabCreateHandler = (handler: boolean) => {
+      taskEditForm.value = null;
       // seeMore.value = null;
-      // editTask.value = null;
       // createTask.value = null;
+      tasks.value = [];
       handler === true
         ? ((tabCreateForm.value = true), (tabName.value = ""))
         : (tabCreateForm.value = false);
     };
 
     const tabCreatePush = async () => {
-      // editTask.value = null;
+      taskEditForm.value = null;
       // createTask.value = null;
-      // tasks.value = [];
+      tasks.value = [];
       dateStor.processing = true;
       try {
         const { error } = await supabase.from("tabs_table").insert([
@@ -916,6 +938,227 @@ export default defineComponent({
       }, 1500);
     };
 
+    // TASKS
+
+    const taskCreatePush = async (
+      task: string,
+      worker: string,
+      desc: string,
+      date: Date,
+      color: number,
+      tabID: number
+    ) => {
+      dateStor.processing = true;
+      taskCreateForm.value = null;
+      try {
+        const { error } = await supabase.from("tasks_table").insert([
+          {
+            task_worker: worker,
+            task_color: color,
+            task_name: task,
+            task_desc: desc,
+            task_date: date,
+            // "task_image": fileDataTask.value === null ? null : fileDataTask.value.name,
+            task_tabid: tabID,
+          },
+        ]);
+        if (error instanceof Error) throw error;
+      } catch (error) {
+        if (error instanceof Error) {
+          console.warn(error.message);
+        }
+      }
+      // if (fileDataTask.value !== null) {
+      //   try {
+      //     const { errorr } = await supabase.storage
+      //       .from("images")
+      //       .upload(fileDataTask.value.name, fileDataTask.value);
+
+      //     if (errorr) throw errorr;
+      //   } catch (errorr) {
+      //     console.log(errorr.message);
+      //   }
+      //   fileDataTask.value = null;
+      // }
+      setTimeout(() => {
+        dateStor.processing = null;
+      }, 1500);
+    };
+
+    const taskCreateHandler = (tabID: number | null) => {
+      taskExtend.value = null;
+      if (tabID == null) {
+        taskCreateForm.value = null;
+      }
+      if (taskCreateForm.value === tabID) {
+        taskCreateForm.value = null;
+      } else {
+        taskCreateForm.value = tabID;
+        tasks.value = [];
+        tabCreateForm.value = false;
+        if (taskCreateForm.value != null) {
+          tasks.value.push({
+            id: null,
+            task_name: "",
+            task_desc: "",
+            task_date: "",
+            task_worker: "",
+            task_image: null,
+            task_color: null,
+          });
+        }
+      }
+    };
+
+    const taskDateChanger = (date: string) => {
+      if (date !== null) {
+        let dy = date.charAt(8) + date.charAt(9);
+        let mon = date.charAt(5) + date.charAt(6);
+        let yrr =
+          date.charAt(0) + date.charAt(1) + date.charAt(2) + date.charAt(3);
+        return dy + "." + mon + "." + yrr;
+      } else return "Bez daty";
+    };
+
+    const taskExtendHandler = (taskID: number) => {
+      taskExtend.value != taskID
+        ? (taskExtend.value = taskID)
+        : (taskExtend.value = null);
+    };
+
+    const taskHoverHandler = (opt: number | null) => {
+      taskHover.value = opt;
+    };
+
+    const taskEditClose = () => {
+      taskEditForm.value = null;
+      taskEdited.value = [];
+    };
+
+    const taskEditChange = (taskID: number) => {
+      // seeMore.value = null;
+      // createTab.value = null;
+      // createTask.value = null;
+      taskHover.value = null;
+      taskEdited.value = [];
+      if (taskEditForm.value === taskID) {
+        taskEditForm.value = null;
+      } else {
+        taskEditForm.value = taskID;
+        tasks.value = [];
+        dateStor.dataTasks.forEach((item: any) => {
+          if (item.id === taskID) {
+            taskEdited.value.push(item);
+            // fileDataTask.value =
+            // item.task_image === null ? null : item.task_image;
+          }
+        });
+      }
+    };
+
+    const taskEditPush = async (taskID: number) => {
+      dateStor.processing = true;
+      try {
+        const { error } = await supabase
+          .from("tasks_table")
+          .update({
+            task_worker: taskEdited.value[0].task_worker,
+            task_color: taskEdited.value[0].task_color,
+            task_name: taskEdited.value[0].task_name,
+            task_desc: taskEdited.value[0].task_desc,
+            // "task_image": fileDataTask.value === null ? null : fileDataTask.value.name,
+            task_date: taskEdited.value[0].task_date,
+          })
+          .eq("id", taskID);
+        taskExtend.value = null;
+        tabCreateForm.value = false;
+        // taskCreate.value = false;
+        taskHover.value = null;
+        taskEditForm.value = null;
+        if (error instanceof Error) throw error;
+      } catch (error) {
+        if (error instanceof Error) {
+          console.warn(error.message);
+        }
+      }
+      // if (fileDataTask.value !== null) {
+      //   try {
+      //     const { errorr } = await supabase.storage
+      //       .from("images")
+      //       .upload(fileDataTask.value.name, fileDataTask.value);
+
+      //     if (errorr) throw errorr;
+      //   } catch (errorr) {
+      //     console.log(errorr.message);
+      //   }
+      //   fileDataTask.value = null;
+      // }
+      setTimeout(() => {
+        dateStor.processing = null;
+      }, 1500);
+    };
+
+    const taskDelete = async (taskID: number) => {
+      dateStor.processing = true;
+      let imageToRemove: any = null;
+      imageToRemove = dateStor.dataTasks
+        .filter((item: any) => item.id === taskID)
+        .map((item: any) => item.task_image)[0];
+
+      if (imageToRemove !== null) {
+        try {
+          const { error } = await supabase.storage
+            .from("images")
+            .remove([imageToRemove]);
+          if (error instanceof Error) throw error;
+        } catch (error) {
+          if (error instanceof Error) {
+            console.warn(error.message);
+          }
+        }
+      }
+      try {
+        const { error } = await supabase
+          .from("tasks_table")
+          .delete()
+          .eq("id", taskID);
+        if (error instanceof Error) throw error;
+      } catch (error) {
+        if (error instanceof Error) {
+          console.warn(error.message);
+        }
+      }
+      setTimeout(() => {
+        dateStor.processing = null;
+      }, 1500);
+    };
+
+    // IMAGES
+
+    // const imageOpen = async (taskID: number) => {
+    //   ImageLoaded.value = false;
+    //   imageStatus.value = taskID;
+    //   let imageName: string | null = null;
+    //   imageName = dateStor.dataTasks
+    //     .filter((item: any) => item.id === taskID)
+    //     .map((item: any) => item.task_image)[0];
+    //   try {
+    //     const { data: data_images, error } = await supabase.storage
+    //       .from("images")
+    //       .download(imageName!);
+    //     if (error instanceof Error) throw error;
+    //     dateStor.dataImages = URL.createObjectURL(
+    //       new Blob([data_images!], { type: "image/jpeg" })
+    //     );
+    //     // previewImage
+    //     ImageLoaded.value = true;
+    //   } catch (error) {
+    //     if (error instanceof Error) {
+    //       console.warn(error.message);
+    //     }
+    //   }
+    // };
+
     return {
       dateStor,
       userStor,
@@ -927,6 +1170,21 @@ export default defineComponent({
       tabNameId,
       tabName,
       tabCreateForm,
+      taskCreateHandler,
+      taskCreateForm,
+      taskCreatePush,
+      taskEditForm,
+      taskEditChange,
+      taskEditPush,
+      taskEdited,
+      taskEditClose,
+      taskHoverHandler,
+      taskHover,
+      taskDelete,
+      taskExtendHandler,
+      taskExtend,
+      taskDateChanger,
+      tasks,
     };
   },
 });
