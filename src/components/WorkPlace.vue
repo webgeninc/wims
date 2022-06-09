@@ -67,11 +67,11 @@
         </button>
       </div>
       <div
-        class="h-full flex-nowrap overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full pr-2"
+        class="h-full flex-nowrap overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-200 pr-2"
       >
-        <div v-if="taskCreateForm === tab.id" class="w-full mt-1">
+        <div v-if="taskCreateForm === tab.id" class="w-full mt-1 mb-2">
           <div
-            class="w-full bg-gray-200 p-2 scrollbar-none !scrollbar-thumb-indigo-500"
+            class="w-full bg-gray-50 p-2 scrollbar-none !scrollbar-thumb-indigo-500"
           >
             <form
               v-for="(item, index) in tasks"
@@ -89,15 +89,25 @@
               class="flex flex-col justify-center text-xs items-center"
             >
               <div class="w-full flex justify-between items-center pl-1 m-1">
-                <h4 class="text-xs m-0.5 pl-1 pr-3 font-semibold uppercase">
+                <h4
+                  class="text-xs m-0.5 pl-1 pr-3 font-semibold uppercase text-gray-800"
+                >
                   Nowe zadanie
                 </h4>
-                <button
-                  @click="taskCreateHandler(null)"
-                  class="bg-gray-400 text-gray-50 rounded-2xl text-2xs font-medium transition hover:bg-gray-500 p-0.5 pr-3 pl-3 mr-0.5 ml-0.5"
-                >
-                  Zamknij okno
-                </button>
+                <div class="h-full mr-1">
+                  <button
+                    @click="taskCreateHandler(null)"
+                    class="rounded-lg p-0.5 pr-4 pl-4 mr-1 bg-white bg-opacity-90 text-white transition hover:bg-gray-200 font-medium text-sm"
+                  >
+                    <span class="opacity-60">❌</span>
+                  </button>
+                  <button
+                    type="submit"
+                    class="rounded-lg p-0.5 pr-4 pl-4 ml-1 bg-white bg-opacity-90 text-white transition hover:bg-gray-200 font-medium text-sm"
+                  >
+                    <span class="opacity-60">✔️</span>
+                  </button>
+                </div>
               </div>
               <div class="flex w-full flex-col justify-center items-center p-1">
                 <div class="flex w-full justify-between items-center m-1 h-6">
@@ -129,7 +139,7 @@
                   id="taskDesc"
                   type="text"
                   placeholder="Opis"
-                  class="w-full h-16 m-1 p-1 text-xs focus:border-gray-400 border-gray-200 border focus:outline-none resize-none"
+                  class="w-full h-16 m-1 p-1 text-xs focus:border-gray-400 border-gray-200 border focus:outline-none resize-none overflow-y-scroll scrollbar-thin scrollbar-thumb-webgencol scrollbar-track-gray-200"
                 />
                 <div
                   class="flex flex-row w-full justify-between items-center mt-1 mb-1 text-xs"
@@ -156,18 +166,12 @@
                   class="flex flex-row w-full justify-around items-center mt-2 text-2xs"
                 >
                   <!-- <input
-                ref="imageUpload"
-                id="imageUpload"
-                type="file"
-                accept="image/*"
-                class="w-full text-2xs p-0 m-1 flex justify-start items-center"
-              /> -->
-                  <button
-                    type="submit"
-                    class="bg-gray-400 text-gray-50 rounded-2xl font-medium transition hover:bg-gray-500 p-0.5 pr-3 pl-3 mr-0.5 ml-0.5"
-                  >
-                    Dodaj
-                  </button>
+                    ref="imageUpload"
+                    id="imageUpload"
+                    type="file"
+                    accept="image/*"
+                    class="w-full text-2xs p-0 m-1 flex justify-start items-center"
+                  /> -->
                 </div>
               </div>
             </form>
@@ -426,7 +430,7 @@
           </div>
           <div
             v-if="taskEditForm == task.id && tab.id === task.task_tabid"
-            class="flex justify-center items-center bg-gray-200 p-2 w-full"
+            class="flex justify-center items-center bg-gray-50 p-2 w-full mb-2"
           >
             <form
               v-for="(item, index) in taskEdited"
@@ -436,14 +440,22 @@
             >
               <div class="w-full flex justify-between items-center pl-1 m-1">
                 <h4 class="text-xs m-0.5 pl-1 pr-3 font-semibold uppercase">
-                  Edycja zadanie
+                  Edycja zadania
                 </h4>
-                <button
-                  @click="taskEditClose"
-                  class="bg-gray-400 text-gray-50 rounded-2xl text-2xs font-medium transition hover:bg-gray-500 p-0.5 pr-3 pl-3 mr-0.5 ml-0.5"
-                >
-                  Zamknij okno
-                </button>
+                <div class="h-full mr-1">
+                  <button
+                    @click="taskEditClose"
+                    class="rounded-lg p-0.5 pr-4 pl-4 mr-1 bg-white bg-opacity-90 text-white transition hover:bg-gray-200 font-medium text-sm"
+                  >
+                    <span class="opacity-60">❌</span>
+                  </button>
+                  <button
+                    type="submit"
+                    class="rounded-lg p-0.5 pr-4 pl-4 ml-1 bg-white bg-opacity-90 text-white transition hover:bg-gray-200 font-medium text-sm"
+                  >
+                    <span class="opacity-60">✔️</span>
+                  </button>
+                </div>
               </div>
               <div class="flex w-full flex-col justify-center items-center p-1">
                 <div class="flex w-full justify-between items-center m-1 h-6">
@@ -475,7 +487,7 @@
                   id="taskDesc"
                   type="text"
                   placeholder="Opis"
-                  class="w-full h-16 m-1 p-1 text-xs border-gray-200 border focus:border-gray-400 focus:outline-none resize-none"
+                  class="w-full h-16 m-1 p-1 text-xs border-gray-200 border focus:border-gray-400 focus:outline-none resize-none overflow-y-scroll scrollbar-thin scrollbar-thumb-webgencol scrollbar-track-gray-200"
                 />
                 <div
                   class="flex flex-row w-full justify-between items-center mt-1 mb-1 text-xs"
@@ -510,12 +522,6 @@
                     accept="image/*"
                     class="w-full text-2xs p-0 m-1 flex justify-start items-center"
                   /> -->
-                  <button
-                    type="submit"
-                    class="bg-gray-400 text-gray-50 rounded-2xl font-medium transition hover:bg-gray-500 p-0.5 pr-3 pl-3 mr-0.5 ml-0.5"
-                  >
-                    Dodaj
-                  </button>
                 </div>
               </div>
             </form>

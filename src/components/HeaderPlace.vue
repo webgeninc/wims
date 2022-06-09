@@ -18,7 +18,7 @@
               <div
                 class="w-full p-1 flex justify-center items-center bg-gray-300"
               >
-                <p class="font-medium p-1.5 tracking-wider text-gray-800">
+                <p class="font-medium p-1.5 tracking-wider text-gray-700">
                   {{ infoTasksTitle }}
                 </p>
               </div>
