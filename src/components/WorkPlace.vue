@@ -52,7 +52,7 @@
         <p class="p-1 mt-1">🔔 GOTOWE</p>
       </div>
       <div
-        class="p-1 pt-1 text-center flex flex-row justify-center items-center cursor-grab h-16"
+        class="p-1 pt-1 text-center flex flex-row justify-center items-center cursor-grab h-18"
       >
         <h3
           class="font-semibold text-left text-base text-gray-700 tracking-wide p-2 pt-0 pb-0 flex-1"
@@ -67,111 +67,112 @@
         </button>
       </div>
       <div
-        v-if="taskCreateForm === tab.id"
-        class="w-full bg-gray-200 mt-2 p-2 scrollbar-none !scrollbar-thumb-indigo-500"
+        class="h-full flex-nowrap overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full pr-2"
       >
-        <form
-          v-for="(item, index) in tasks"
-          :key="index"
-          @submit.prevent="
-            taskCreatePush(
-              item.task_name,
-              item.task_worker,
-              item.task_desc,
-              item.task_date,
-              item.task_color,
-              tab.id
-            )
-          "
-          class="flex flex-col justify-center text-xs items-center"
-        >
-          <div class="w-full flex justify-between items-center pl-1 m-1">
-            <h4 class="text-xs m-0.5 pl-1 pr-3 font-semibold uppercase">
-              Nowe zadanie
-            </h4>
-            <button
-              @click="taskCreateHandler(null)"
-              class="bg-gray-400 text-gray-50 rounded-2xl text-2xs font-medium transition hover:bg-gray-500 p-0.5 pr-3 pl-3 mr-0.5 ml-0.5"
+        <div v-if="taskCreateForm === tab.id" class="w-full mt-1">
+          <div
+            class="w-full bg-gray-200 p-2 scrollbar-none !scrollbar-thumb-indigo-500"
+          >
+            <form
+              v-for="(item, index) in tasks"
+              :key="index"
+              @submit.prevent="
+                taskCreatePush(
+                  item.task_name,
+                  item.task_worker,
+                  item.task_desc,
+                  item.task_date,
+                  item.task_color,
+                  tab.id
+                )
+              "
+              class="flex flex-col justify-center text-xs items-center"
             >
-              Zamknij okno
-            </button>
-          </div>
-          <div class="flex w-full flex-col justify-center items-center p-1">
-            <div class="flex w-full justify-between items-center m-1 h-6">
-              <input
-                v-model="item.task_name"
-                autocomplete="off"
-                maxlength="50"
-                minlength="5"
-                required
-                id="taskName"
-                type="text"
-                placeholder="Nazwa zadania"
-                class="p-1 w-3/5 text-xs focus:border-gray-400 border-gray-200 border focus:outline-none resize-none"
-              />
-              <select
-                required
-                v-model="item.task_worker"
-                class="p-1 w-2/6 text-xs focus:border-gray-400 border-gray-200 border focus:outline-none"
-              >
-                <option value="Ozi">Ozito</option>
-                <option value="Mati">Matito</option>
-                <option value="Wszyscy">Wszyscy</option>
-              </select>
-            </div>
-            <textarea
-              v-model="item.task_desc"
-              autocomplete="off"
-              maxlength="500"
-              id="taskDesc"
-              type="text"
-              placeholder="Opis"
-              class="w-full h-16 m-1 p-1 text-xs focus:border-gray-400 border-gray-200 border focus:outline-none resize-none"
-            />
-            <div
-              class="flex flex-row w-full justify-between items-center mt-1 mb-1 text-xs"
-            >
-              <input
-                v-model="item.task_date"
-                type="date"
-                class="w-1/2 h-6 p-1 focus:border-gray-400 border-gray-200 border focus:outline-none"
-              />
-              <select
-                required
-                v-model="item.task_color"
-                class="p-1 w-2/5 h-6 focus:border-gray-400 border-gray-200 border focus:outline-none"
-              >
-                <option value="1">Zadanie</option>
-                <option value="2">Stop</option>
-                <option value="3">Weryfikacja</option>
-                <option value="4">Aktualizacja</option>
-                <option value="5">Rozpoczęto</option>
-                <option value="6">Zrobione</option>
-              </select>
-            </div>
-            <div
-              class="flex flex-row w-full justify-around items-center mt-2 text-2xs"
-            >
-              <!-- <input
+              <div class="w-full flex justify-between items-center pl-1 m-1">
+                <h4 class="text-xs m-0.5 pl-1 pr-3 font-semibold uppercase">
+                  Nowe zadanie
+                </h4>
+                <button
+                  @click="taskCreateHandler(null)"
+                  class="bg-gray-400 text-gray-50 rounded-2xl text-2xs font-medium transition hover:bg-gray-500 p-0.5 pr-3 pl-3 mr-0.5 ml-0.5"
+                >
+                  Zamknij okno
+                </button>
+              </div>
+              <div class="flex w-full flex-col justify-center items-center p-1">
+                <div class="flex w-full justify-between items-center m-1 h-6">
+                  <input
+                    v-model="item.task_name"
+                    autocomplete="off"
+                    maxlength="50"
+                    minlength="5"
+                    required
+                    id="taskName"
+                    type="text"
+                    placeholder="Nazwa zadania"
+                    class="p-1 w-3/5 text-xs focus:border-gray-400 border-gray-200 border focus:outline-none resize-none"
+                  />
+                  <select
+                    required
+                    v-model="item.task_worker"
+                    class="p-1 w-2/6 text-xs focus:border-gray-400 border-gray-200 border focus:outline-none"
+                  >
+                    <option value="Ozi">Ozito</option>
+                    <option value="Mati">Matito</option>
+                    <option value="Wszyscy">Wszyscy</option>
+                  </select>
+                </div>
+                <textarea
+                  v-model="item.task_desc"
+                  autocomplete="off"
+                  maxlength="500"
+                  id="taskDesc"
+                  type="text"
+                  placeholder="Opis"
+                  class="w-full h-16 m-1 p-1 text-xs focus:border-gray-400 border-gray-200 border focus:outline-none resize-none"
+                />
+                <div
+                  class="flex flex-row w-full justify-between items-center mt-1 mb-1 text-xs"
+                >
+                  <input
+                    v-model="item.task_date"
+                    type="date"
+                    class="w-1/2 h-6 p-1 focus:border-gray-400 border-gray-200 border focus:outline-none"
+                  />
+                  <select
+                    required
+                    v-model="item.task_color"
+                    class="p-1 w-2/5 h-6 focus:border-gray-400 border-gray-200 border focus:outline-none"
+                  >
+                    <option value="1">Zadanie</option>
+                    <option value="2">Stop</option>
+                    <option value="3">Weryfikacja</option>
+                    <option value="4">Aktualizacja</option>
+                    <option value="5">Rozpoczęto</option>
+                    <option value="6">Zrobione</option>
+                  </select>
+                </div>
+                <div
+                  class="flex flex-row w-full justify-around items-center mt-2 text-2xs"
+                >
+                  <!-- <input
                 ref="imageUpload"
                 id="imageUpload"
                 type="file"
                 accept="image/*"
                 class="w-full text-2xs p-0 m-1 flex justify-start items-center"
               /> -->
-              <button
-                type="submit"
-                class="bg-gray-400 text-gray-50 rounded-2xl font-medium transition hover:bg-gray-500 p-0.5 pr-3 pl-3 mr-0.5 ml-0.5"
-              >
-                Dodaj
-              </button>
-            </div>
+                  <button
+                    type="submit"
+                    class="bg-gray-400 text-gray-50 rounded-2xl font-medium transition hover:bg-gray-500 p-0.5 pr-3 pl-3 mr-0.5 ml-0.5"
+                  >
+                    Dodaj
+                  </button>
+                </div>
+              </div>
+            </form>
           </div>
-        </form>
-      </div>
-      <div
-        class="h-full flex-nowrap overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full pr-2"
-      >
+        </div>
         <div v-for="(task, index) in dateStor.dataTasks" :key="index">
           <div
             v-if="taskEditForm != task.id && tab.id === task.task_tabid"
@@ -425,13 +426,13 @@
           </div>
           <div
             v-if="taskEditForm == task.id && tab.id === task.task_tabid"
-            class="flex justify-center items-center bg-gray-200 p-px pt-1 pb-1 w-full"
+            class="flex justify-center items-center bg-gray-200 p-2 w-full"
           >
             <form
               v-for="(item, index) in taskEdited"
               :key="index"
               @submit.prevent="taskEditPush(task.id)"
-              class="flex flex-col justify-center text-xs items-center"
+              class="flex flex-col justify-center text-xs items-center w-full"
             >
               <div class="w-full flex justify-between items-center pl-1 m-1">
                 <h4 class="text-xs m-0.5 pl-1 pr-3 font-semibold uppercase">
@@ -906,8 +907,8 @@ export default defineComponent({
 
     const tabCreateHandler = (handler: boolean) => {
       taskEditForm.value = null;
-      // seeMore.value = null;
-      // createTask.value = null;
+      taskExtend.value = null;
+      taskCreateForm.value = null;
       tasks.value = [];
       handler === true
         ? ((tabCreateForm.value = true), (tabName.value = ""))
@@ -916,7 +917,7 @@ export default defineComponent({
 
     const tabCreatePush = async () => {
       taskEditForm.value = null;
-      // createTask.value = null;
+      taskCreateForm.value = null;
       tasks.value = [];
       dateStor.processing = true;
       try {
@@ -986,6 +987,7 @@ export default defineComponent({
     };
 
     const taskCreateHandler = (tabID: number | null) => {
+      taskEditForm.value = null;
       taskExtend.value = null;
       if (tabID == null) {
         taskCreateForm.value = null;
@@ -1036,9 +1038,9 @@ export default defineComponent({
     };
 
     const taskEditChange = (taskID: number) => {
-      // seeMore.value = null;
-      // createTab.value = null;
-      // createTask.value = null;
+      taskExtend.value = null;
+      tabCreateForm.value = false;
+      taskCreateForm.value = null;
       taskHover.value = null;
       taskEdited.value = [];
       if (taskEditForm.value === taskID) {
