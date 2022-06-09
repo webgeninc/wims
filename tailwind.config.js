@@ -1,6 +1,9 @@
 module.exports = {
   content: ["./public/**/*.html", "./src/**/*.vue"],
   theme: {
+    letterSpacing: {
+      widewide: ".015em",
+    },
     minWidth: {
       80: "20rem",
     },

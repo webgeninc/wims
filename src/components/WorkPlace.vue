@@ -61,9 +61,9 @@
         </h3>
         <button
           @click="taskCreateHandler(tab.id)"
-          class="bg-gray-300 text-white rounded-full font-medium transition hover:bg-gray-200 p-0.5 pr-3 pl-4"
+          class="bg-gray-200 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-3 pl-4"
         >
-          <span class="text-sm grayscale opacity-50">📝</span>
+          <span class="text-sm grayscale opacity-70">📝</span>
         </button>
       </div>
       <div
@@ -71,7 +71,7 @@
       >
         <div v-if="taskCreateForm === tab.id" class="w-full mt-1 mb-2">
           <div
-            class="w-full bg-gray-50 p-2 scrollbar-none !scrollbar-thumb-indigo-500"
+            class="w-full bg-gray-300 bg-opacity-50 p-2 scrollbar-none !scrollbar-thumb-indigo-500"
           >
             <form
               v-for="(item, index) in tasks"
@@ -89,21 +89,19 @@
               class="flex flex-col justify-center text-xs items-center"
             >
               <div class="w-full flex justify-between items-center pl-1 m-1">
-                <h4
-                  class="text-xs m-0.5 pl-1 pr-3 font-semibold uppercase text-gray-800"
-                >
+                <h4 class="text-xs m-0.5 pr-3 font-semibold uppercase">
                   Nowe zadanie
                 </h4>
                 <div class="h-full mr-1">
                   <button
                     @click="taskCreateHandler(null)"
-                    class="rounded-lg p-0.5 pr-4 pl-4 mr-1 bg-white bg-opacity-90 text-white transition hover:bg-gray-200 font-medium text-sm"
+                    class="rounded-lg p-0.5 pr-4 pl-4 mr-1 bg-white bg-opacity-70 transition hover:bg-opacity-100 font-medium text-sm"
                   >
                     <span class="opacity-60">❌</span>
                   </button>
                   <button
                     type="submit"
-                    class="rounded-lg p-0.5 pr-4 pl-4 ml-1 bg-white bg-opacity-90 text-white transition hover:bg-gray-200 font-medium text-sm"
+                    class="rounded-lg p-0.5 pr-4 pl-4 ml-1 bg-white bg-opacity-70 transition hover:bg-opacity-100 font-medium text-sm"
                   >
                     <span class="opacity-60">✔️</span>
                   </button>
@@ -120,12 +118,12 @@
                     id="taskName"
                     type="text"
                     placeholder="Nazwa zadania"
-                    class="p-1 w-3/5 text-xs focus:border-gray-400 border-gray-200 border focus:outline-none resize-none"
+                    class="p-1 w-3/5 text-xs bg-white bg-opacity-70 rounded-md focus:outline-offset-1 border border-gray-50 focus:border-gray-300 focus:outline-none resize-none"
                   />
                   <select
                     required
                     v-model="item.task_worker"
-                    class="p-1 w-2/6 text-xs focus:border-gray-400 border-gray-200 border focus:outline-none"
+                    class="p-1 w-2/6 text-xs bg-white bg-opacity-70 rounded-md focus:border-gray-300 border-gray-50 border focus:outline-none"
                   >
                     <option value="Ozi">Ozito</option>
                     <option value="Mati">Matito</option>
@@ -139,7 +137,7 @@
                   id="taskDesc"
                   type="text"
                   placeholder="Opis"
-                  class="w-full h-16 m-1 p-1 text-xs focus:border-gray-400 border-gray-200 border focus:outline-none resize-none overflow-y-scroll scrollbar-thin scrollbar-thumb-webgencol scrollbar-track-gray-200"
+                  class="w-full h-16 m-1 p-1 text-xs rounded-md bg-white bg-opacity-70 focus:border-gray-200 border-gray-50 border focus:outline-none resize-none overflow-y-scroll scrollbar-thin scrollbar-thumb-webgencol scrollbar-track-gray-200"
                 />
                 <div
                   class="flex flex-row w-full justify-between items-center mt-1 mb-1 text-xs"
@@ -147,12 +145,12 @@
                   <input
                     v-model="item.task_date"
                     type="date"
-                    class="w-1/2 h-6 p-1 focus:border-gray-400 border-gray-200 border focus:outline-none"
+                    class="w-1/2 h-6 p-1 bg-white bg-opacity-70 focus:border-gray-300 border-gray-200 border rounded-md focus:outline-none"
                   />
                   <select
                     required
                     v-model="item.task_color"
-                    class="p-1 w-2/5 h-6 focus:border-gray-400 border-gray-200 border focus:outline-none"
+                    class="p-1 w-2/5 h-6 bg-white bg-opacity-70 focus:border-gray-300 border-gray-200 border rounded-md focus:outline-none"
                   >
                     <option value="1">Zadanie</option>
                     <option value="2">Stop</option>
@@ -163,15 +161,55 @@
                   </select>
                 </div>
                 <div
-                  class="flex flex-row w-full justify-around items-center mt-2 text-2xs"
+                  class="flex flex-row w-full justify-between items-center mt-1 text-2xs h-8"
                 >
-                  <!-- <input
-                    ref="imageUpload"
-                    id="imageUpload"
-                    type="file"
-                    accept="image/*"
-                    class="w-full text-2xs p-0 m-1 flex justify-start items-center"
-                  /> -->
+                  <div
+                    class="w-14 h-full relative rounded-lg bg-white bg-opacity-70 pointer-events-auto cursor-pointer hover:bg-opacity-90 overflow-hidden flex justify-center items-center p-px"
+                  >
+                    <span
+                      class="h-full w-full flex justify-center items-center text-lg"
+                      >💾</span
+                    >
+                    <input
+                      @change="taskCreateImageInfoHandler"
+                      @mouseleave="taskCreateImageInfoHandler"
+                      ref="taskCreateImage"
+                      id="taskCreateImage"
+                      type="file"
+                      accept="image/*"
+                      class="opacity-0 absolute cursor-pointer p-0 top-0 bottom-0 text-xs"
+                    />
+                  </div>
+                  <div
+                    v-if="taskCreateImageInfo"
+                    class="text-xs flex flex-1 flex-col justify-center items-end tracking-widewide"
+                  >
+                    <div class="flex justify-end items-center p-px">
+                      <p>{{ taskCreateImage[0].files[0].name }}</p>
+                      <p>&nbsp; - nazwa</p>
+                    </div>
+                    <div class="flex justify-end items-center p-px">
+                      <p>
+                        {{
+                          taskCreateImage[0].files[0].size / 1024 > 999
+                            ? (
+                                taskCreateImage[0].files[0].size /
+                                1024 /
+                                1024
+                              ).toFixed(2) + " mb"
+                            : (
+                                taskCreateImage[0].files[0].size / 1024
+                              ).toFixed() + " kb"
+                        }}
+                      </p>
+                      <p>&nbsp; - rozmiar</p>
+                    </div>
+                  </div>
+                  <div v-else>
+                    <div class="flex justify-center items-end flex-col text-xs">
+                      <p>Nie wybrano żadnych zdjęć</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </form>
@@ -771,7 +809,7 @@
       >
         <button
           @click="tabCreateHandler(true)"
-          class="h-full rounded-xl bg-gray-300 text-white transition hover:bg-gray-200 font-medium text-base shadow-inner flex justify-center items-center"
+          class="h-full rounded-xl bg-gray-200 text-white transition hover:bg-opacity-50 font-medium text-base shadow-inner flex justify-center items-center"
         >
           <span class="text-lg p-4">📁</span>
         </button>
@@ -851,6 +889,8 @@ export default defineComponent({
     const taskEdited = ref<any[]>([]);
     const taskHover = ref<number | null>(null);
     const taskExtend = ref<number | null>(null);
+    const taskCreateImage = ref<any>(null);
+    const taskCreateImageInfo = ref<boolean>(false);
     // const imageStatus = ref<number | null>(null);
     // const ImageLoaded = ref<boolean>(false);
 
@@ -947,6 +987,11 @@ export default defineComponent({
 
     // TASKS
 
+    const taskCreateImageInfoHandler = () => {
+      taskCreateImageInfo.value = false;
+      taskCreateImageInfo.value = true;
+    };
+
     const taskCreatePush = async (
       task: string,
       worker: string,
@@ -997,6 +1042,7 @@ export default defineComponent({
       taskExtend.value = null;
       if (tabID == null) {
         taskCreateForm.value = null;
+        taskCreateImageInfo.value = false;
       }
       if (taskCreateForm.value === tabID) {
         taskCreateForm.value = null;
@@ -1193,6 +1239,9 @@ export default defineComponent({
       taskExtend,
       taskDateChanger,
       tasks,
+      taskCreateImage,
+      taskCreateImageInfoHandler,
+      taskCreateImageInfo,
     };
   },
 });

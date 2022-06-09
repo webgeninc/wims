@@ -24,7 +24,6 @@ import Workplace from "../components/WorkPlace.vue";
 export default defineComponent({
   name: "HomeView",
   setup() {
-    const dataLoaded = ref<boolean>(false);
     const dataNotes = ref<unknown[] | null>([]);
     const dataTasks = ref<unknown[] | null>([]);
     const dataTabs = ref<unknown[] | null>([]);
@@ -48,7 +47,6 @@ export default defineComponent({
 
     const getData = async () => {
       dateStor.processing = true;
-      dataLoaded.value = false;
       try {
         const { data: notes_table, error: error_notes } = await supabase
           .from("notes_table")
@@ -71,11 +69,9 @@ export default defineComponent({
         dateStor.dataNotes = dataNotes.value;
         dateStor.dataTabs = dataTabs.value;
         dateStor.dataTasks = dataTasks.value;
-        dataLoaded.value = true;
-
         setTimeout(() => {
           dateStor.processing = null;
-        }, 1500);
+        }, 1000);
       } catch (error) {
         if (error instanceof Error) {
           console.warn(error.message);
@@ -85,7 +81,7 @@ export default defineComponent({
     checkData();
     getData();
 
-    return { getData, user, dataLoaded, dataNotes, dataTasks, dataTabs };
+    return { getData, user, dataNotes, dataTasks, dataTabs };
   },
   components: { Headerplace, Workplace },
 });
