@@ -2,7 +2,14 @@ module.exports = {
   content: ["./public/**/*.html", "./src/**/*.vue"],
   theme: {
     letterSpacing: {
-      widewide: ".015em",
+      tighter: "-0.05em",
+      tight: "-0.025em",
+      normal: "0em",
+      wide: ".015em",
+      widewide: ".025em",
+      wider: ".04em",
+      widest: ".07em",
+      widetest: ".1em",
     },
     minWidth: {
       80: "20rem",

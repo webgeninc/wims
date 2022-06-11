@@ -382,7 +382,7 @@
                     "
                     class="flex justify-center items-center cursor-pointer transition flex-col rounded-sm w-98/100 h-9/10 hover:text-gray-100 hover:bg-gray-300"
                   >
-                    <div class="text-webgencol text-xl font-bold mb-4">
+                    <div class="text-webgencol text-xl font-bold mb-3.5">
                       {{ infoTerm! < 10 ? "0" + infoTerm : infoTerm }}
                     </div>
                   </div>
@@ -617,7 +617,7 @@
             class="w-full pr-4 pl-7 2xl:pl-4 pb-3 pt-3 flex justify-center items-center"
           >
             <div
-              class="flex flex-col justify-start items-center w-full text-2xs 2xl:text-2sm tracking-wider"
+              class="flex flex-col justify-start items-center w-full text-2xs 2xl:text-2sm tracking-widewide"
             >
               <div class="flex justify-end items-center w-full h-full pl-0">
                 <p class="cursor-default select-none">dzisiaj jest</p>
@@ -627,7 +627,7 @@
               </div>
               <div class="flex justify-end items-center w-full h-full pl-5">
                 <p class="cursor-default select-none mr-2">{{ infoDay }}</p>
-                <p class="cursor-default select-none w-13 mr-1">
+                <p class="cursor-default select-none w-13 mr-2 tracking-widest">
                   {{ infoTime }}
                 </p>
               </div>
@@ -651,11 +651,11 @@
             </div>
             <div class="pl-3 3xl:pl-2 pr-5 3xl:pr-2">
               <p
-                class="text-xs 2xl:text-sm 3xl:text-base 3xl:tracking-widest tracking-normal font-medium"
+                class="text-xs 2xl:text-sm 3xl:text-base tracking-wider 3xl:tracking-widetest font-medium"
               >
                 WEBGENETICSS
               </p>
-              <p class="text-xs 2xl:text-sm tracking-wider font-bold">
+              <p class="text-xs 2xl:text-sm tracking-widest font-bold">
                 IM System <span class="text-2xs"></span>
                 <span class="text-2xs"> {{ dateStor.version }}</span>
               </p>
