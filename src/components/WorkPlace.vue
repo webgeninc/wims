@@ -71,7 +71,7 @@
       >
         <div v-if="taskCreateForm === tab.id" class="w-full mt-1 mb-2">
           <div
-            class="w-full bg-gray-300 bg-opacity-50 p-2 scrollbar-none !scrollbar-thumb-indigo-500"
+            class="w-full bg-gray-200 bg-opacity-70 p-2 scrollbar-none !scrollbar-thumb-indigo-500"
           >
             <form
               v-for="(item, index) in tasks"
@@ -95,15 +95,15 @@
                 <div class="h-full mr-1">
                   <button
                     @click="taskCreateHandler(null)"
-                    class="rounded-lg p-0.5 pr-4 pl-4 mr-1 bg-white bg-opacity-70 transition hover:bg-opacity-100 font-medium text-sm"
+                    class="rounded-lg p-0.5 pr-4 pl-4 mr-1 bg-gray-300 bg-opacity-80 transition hover:bg-opacity-50 font-medium text-sm"
                   >
                     <span class="opacity-60">❌</span>
                   </button>
                   <button
                     type="submit"
-                    class="rounded-lg p-0.5 pr-4 pl-4 ml-1 bg-white bg-opacity-70 transition hover:bg-opacity-100 font-medium text-sm"
+                    class="rounded-lg p-0.5 pr-4 pl-4 ml-1 bg-gray-300 bg-opacity-80 transition hover:bg-opacity-50 font-medium text-sm"
                   >
-                    <span class="opacity-60">✔️</span>
+                    <span class="opacity-80">✔️</span>
                   </button>
                 </div>
               </div>
@@ -145,12 +145,12 @@
                   <input
                     v-model="item.task_date"
                     type="date"
-                    class="w-1/2 h-6 p-1 bg-white bg-opacity-70 focus:border-gray-300 border-gray-200 border rounded-md focus:outline-none"
+                    class="w-1/2 h-6 p-1 bg-white bg-opacity-70 focus:border-gray-300 border-gray-50 border rounded-md focus:outline-none"
                   />
                   <select
                     required
                     v-model="item.task_color"
-                    class="p-1 w-2/5 h-6 bg-white bg-opacity-70 focus:border-gray-300 border-gray-200 border rounded-md focus:outline-none"
+                    class="p-1 w-2/5 h-6 bg-white bg-opacity-70 focus:border-gray-300 border-gray-50 border rounded-md focus:outline-none"
                   >
                     <option value="1">Zadanie</option>
                     <option value="2">Stop</option>
@@ -161,54 +161,60 @@
                   </select>
                 </div>
                 <div
-                  class="flex flex-row w-full justify-between items-center mt-1 text-2xs h-8"
+                  class="flex flex-row w-full justify-between items-center mt-2 text-2xs h-8"
                 >
+                  <div class="flex flex-1 justify-between h-full ml-1">
+                    <div
+                      v-if="taskCreateImageInfo"
+                      class="flex flex-1 flex-col justify-center items-start tracking-widewide text-xs"
+                    >
+                      <div class="flex justify-end items-center p-px">
+                        <p>{{ taskCreateImage[0].files[0].name }}</p>
+                        <p>&nbsp; - nazwa</p>
+                      </div>
+                      <div class="flex justify-end items-center p-px">
+                        <p>
+                          {{
+                            taskCreateImage[0].files[0].size / 1024 > 999
+                              ? (
+                                  taskCreateImage[0].files[0].size /
+                                  1024 /
+                                  1024
+                                ).toFixed(2) + " mb"
+                              : (
+                                  taskCreateImage[0].files[0].size / 1024
+                                ).toFixed() + " kb"
+                          }}
+                        </p>
+                        <p>&nbsp; - rozmiar</p>
+                      </div>
+                    </div>
+                    <div
+                      v-else
+                      class="h-full w-full flex justify-start items-center"
+                    >
+                      <div
+                        class="flex justify-center items-end flex-col text-xs pr-0.5"
+                      >
+                        <p>Nie wybrano żadnych zdjęć</p>
+                      </div>
+                    </div>
+                  </div>
                   <div
-                    class="w-14 h-full relative rounded-lg bg-white bg-opacity-70 pointer-events-auto cursor-pointer hover:bg-opacity-90 overflow-hidden flex justify-center items-center p-px"
+                    class="w-16 h-full relative rounded-lg bg-gray-300 pointer-events-auto cursor-pointer transition hover:bg-opacity-50 overflow-hidden flex justify-center items-center"
                   >
                     <span
-                      class="h-full w-full flex justify-center items-center text-lg"
+                      class="h-full w-full flex justify-center items-center text-lg opacity-90 transition"
                       >💾</span
                     >
                     <input
                       @change="taskCreateImageInfoHandler"
-                      @mouseleave="taskCreateImageInfoHandler"
                       ref="taskCreateImage"
                       id="taskCreateImage"
                       type="file"
                       accept="image/*"
                       class="opacity-0 absolute cursor-pointer p-0 top-0 bottom-0 text-xs"
                     />
-                  </div>
-                  <div
-                    v-if="taskCreateImageInfo"
-                    class="text-xs flex flex-1 flex-col justify-center items-end tracking-widewide"
-                  >
-                    <div class="flex justify-end items-center p-px">
-                      <p>{{ taskCreateImage[0].files[0].name }}</p>
-                      <p>&nbsp; - nazwa</p>
-                    </div>
-                    <div class="flex justify-end items-center p-px">
-                      <p>
-                        {{
-                          taskCreateImage[0].files[0].size / 1024 > 999
-                            ? (
-                                taskCreateImage[0].files[0].size /
-                                1024 /
-                                1024
-                              ).toFixed(2) + " mb"
-                            : (
-                                taskCreateImage[0].files[0].size / 1024
-                              ).toFixed() + " kb"
-                        }}
-                      </p>
-                      <p>&nbsp; - rozmiar</p>
-                    </div>
-                  </div>
-                  <div v-else>
-                    <div class="flex justify-center items-end flex-col text-xs">
-                      <p>Nie wybrano żadnych zdjęć</p>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -468,7 +474,7 @@
           </div>
           <div
             v-if="taskEditForm == task.id && tab.id === task.task_tabid"
-            class="flex justify-center items-center bg-gray-50 p-2 w-full mb-2"
+            class="flex justify-center items-center bg-gray-50 bg-opacity-70 p-2 w-full mb-2"
           >
             <form
               v-for="(item, index) in taskEdited"
@@ -989,7 +995,9 @@ export default defineComponent({
 
     const taskCreateImageInfoHandler = () => {
       taskCreateImageInfo.value = false;
-      taskCreateImageInfo.value = true;
+      if (taskCreateImage.value[0].files.length > 0) {
+        taskCreateImageInfo.value = true;
+      }
     };
 
     const taskCreatePush = async (
