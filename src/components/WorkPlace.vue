@@ -362,7 +362,7 @@
                           60 /
                           60 /
                           24
-                      ) < 0
+                      ) < 0 && task.task_color != 6
                     "
                     class="text-xs m-1 font-normal text-red-600"
                   >
@@ -393,7 +393,7 @@
                           60 /
                           60 /
                           24
-                      ) == 0
+                      ) == 0 && task.task_color != 6
                     "
                     class="text-xs m-1 font-medium tracking-wider text-yellow-600"
                   >
@@ -410,22 +410,20 @@
                           60 /
                           60 /
                           24
-                      ) <= 7
+                      ) <= 7 && task.task_color != 6
                     "
                     class="text-xs m-1 font-medium tracking-wider text-yellow-500"
                   >
                     (tylko
                     <span class="font-semibold tracking-wider">{{
                       Math.ceil(
-                        (new Date(
-                          task.task_date.replace(/\./g, "/")
-                        ).getTime() -
-                          new Date().getTime()) /
-                          1000 /
-                          60 /
-                          60 /
-                          24
-                      )
+                        new Date(task.task_date.replace(/\./g, "/")).getTime() -
+                          new Date().getTime()
+                      ) /
+                      1000 /
+                      60 /
+                      60 /
+                      24
                     }}</span>
                     dni)
                   </p>
@@ -440,7 +438,7 @@
                           60 /
                           60 /
                           24
-                      ) > 7
+                      ) > 7 && task.task_color != 6
                     "
                     class="text-xs m-1 font-normal text-gray-600"
                   >
