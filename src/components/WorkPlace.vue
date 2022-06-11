@@ -8,7 +8,13 @@
       class="flex flex-shrink-0 w-80 flex-col m-1"
     >
       <div
-        v-if="tabNameId != tab.id"
+        v-if="dateStor.ready == tab.id"
+        class="flex justify-center item-center text-xs font-medium"
+      >
+        <p class="p-0.5 mt-0.5">🔔 GOTOWE</p>
+      </div>
+      <div
+        v-if="tabNameId != tab.id && dateStor.ready != tab.id"
         class="flex flex-row justify-end text-xs cursor-grab"
       >
         <p
@@ -25,7 +31,7 @@
         </p>
       </div>
       <div
-        v-if="tabNameId === tab.id && dateStor.processing == null"
+        v-if="tabNameId === tab.id && dateStor.ready == null"
         class="flex flex-row justify-between w-full text-xs mr-0.5 ml-0.5 cursor-grab"
       >
         <input
@@ -46,12 +52,6 @@
         </button>
       </div>
       <div
-        v-if="dateStor.processing == tab.id"
-        class="flex justify-center item-center text-sm font-medium"
-      >
-        <p class="p-1 mt-1">🔔 GOTOWE</p>
-      </div>
-      <div
         class="p-1 pt-1 text-center flex flex-row justify-center items-center cursor-grab h-18"
       >
         <h3
@@ -61,7 +61,7 @@
         </h3>
         <button
           @click="taskCreateHandler(tab.id)"
-          class="bg-gray-200 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-3 pl-4"
+          class="bg-gray-300 opacity-80 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-3 pl-4"
         >
           <span class="text-sm grayscale opacity-70">📝</span>
         </button>
@@ -118,12 +118,12 @@
                     id="taskName"
                     type="text"
                     placeholder="Nazwa zadania"
-                    class="p-1 w-3/5 text-xs bg-white bg-opacity-70 rounded-md focus:outline-offset-1 border border-gray-50 focus:border-gray-300 focus:outline-none resize-none"
+                    class="p-1 w-3/5 text-xs bg-white bg-opacity-80 rounded-md focus:outline-offset-1 border border-gray-50 focus:border-gray-300 focus:outline-none resize-none"
                   />
                   <select
                     required
                     v-model="item.task_worker"
-                    class="p-1 w-2/6 text-xs bg-white bg-opacity-70 rounded-md focus:border-gray-300 border-gray-50 border focus:outline-none"
+                    class="p-1 w-2/6 text-xs bg-white bg-opacity-80 rounded-md focus:border-gray-300 border-gray-50 border focus:outline-none"
                   >
                     <option value="Ozi">Ozito</option>
                     <option value="Mati">Matito</option>
@@ -137,7 +137,7 @@
                   id="taskDesc"
                   type="text"
                   placeholder="Opis"
-                  class="w-full h-16 m-1 p-1 text-xs rounded-md bg-white bg-opacity-70 focus:border-gray-200 border-gray-50 border focus:outline-none resize-none overflow-y-scroll scrollbar-thin scrollbar-thumb-webgencol scrollbar-track-gray-200"
+                  class="w-full h-16 m-1 p-1 text-xs rounded-md bg-white bg-opacity-80 focus:border-gray-200 border-gray-50 border focus:outline-none resize-none overflow-y-scroll scrollbar-thin scrollbar-thumb-webgencol scrollbar-track-gray-200"
                 />
                 <div
                   class="flex flex-row w-full justify-between items-center mt-1 mb-1 text-xs"
@@ -145,12 +145,12 @@
                   <input
                     v-model="item.task_date"
                     type="date"
-                    class="w-1/2 h-6 p-1 bg-white bg-opacity-70 focus:border-gray-300 border-gray-50 border rounded-md focus:outline-none"
+                    class="w-1/2 h-6 p-1 bg-white bg-opacity-80 focus:border-gray-300 border-gray-50 border rounded-md focus:outline-none"
                   />
                   <select
                     required
                     v-model="item.task_color"
-                    class="p-1 w-2/5 h-6 bg-white bg-opacity-70 focus:border-gray-300 border-gray-50 border rounded-md focus:outline-none"
+                    class="p-1 w-2/5 h-6 bg-white bg-opacity-80 focus:border-gray-300 border-gray-50 border rounded-md focus:outline-none"
                   >
                     <option value="1">Zadanie</option>
                     <option value="2">Stop</option>
@@ -208,7 +208,7 @@
                       >💾</span
                     >
                     <input
-                      @change="taskCreateImageInfoHandler"
+                      @change="taskCreateImageInfoHandler(true)"
                       ref="taskCreateImage"
                       id="taskCreateImage"
                       type="file"
@@ -264,7 +264,7 @@
                     EDYTUJ
                   </p>
                   <p
-                    @click="taskDelete(task.id)"
+                    @click="taskDelete(task.id, tab.id)"
                     class="text-2xs ml-2 mr-2 font-semibold tracking-wider text-red-600 text-opacity-50 hover:text-opacity-100 cursor-pointer"
                   >
                     USUŃ
@@ -474,12 +474,12 @@
           </div>
           <div
             v-if="taskEditForm == task.id && tab.id === task.task_tabid"
-            class="flex justify-center items-center bg-gray-50 bg-opacity-70 p-2 w-full mb-2"
+            class="flex justify-center items-center bg-gray-200 bg-opacity-70 p-2 w-full mb-2"
           >
             <form
               v-for="(item, index) in taskEdited"
               :key="index"
-              @submit.prevent="taskEditPush(task.id)"
+              @submit.prevent="taskEditPush(task.id, tab.id)"
               class="flex flex-col justify-center text-xs items-center w-full"
             >
               <div class="w-full flex justify-between items-center pl-1 m-1">
@@ -489,13 +489,13 @@
                 <div class="h-full mr-1">
                   <button
                     @click="taskEditClose"
-                    class="rounded-lg p-0.5 pr-4 pl-4 mr-1 bg-white bg-opacity-90 text-white transition hover:bg-gray-200 font-medium text-sm"
+                    class="rounded-lg p-0.5 pr-4 pl-4 mr-1 bg-gray-300 text-white transition hover:bg-gray-200 font-medium text-sm"
                   >
                     <span class="opacity-60">❌</span>
                   </button>
                   <button
                     type="submit"
-                    class="rounded-lg p-0.5 pr-4 pl-4 ml-1 bg-white bg-opacity-90 text-white transition hover:bg-gray-200 font-medium text-sm"
+                    class="rounded-lg p-0.5 pr-4 pl-4 ml-1 bg-gray-300 text-white transition hover:bg-gray-200 font-medium text-sm"
                   >
                     <span class="opacity-60">✔️</span>
                   </button>
@@ -511,13 +511,13 @@
                     required
                     type="text"
                     :placeholder="item.task_name"
-                    class="p-1 w-3/5 text-xs border-gray-200 border focus:border-gray-400 focus:outline-none resize-none"
+                    class="p-1 w-3/5 text-xs bg-white bg-opacity-80 rounded-md focus:outline-offset-1 border border-gray-50 focus:border-gray-300 focus:outline-none resize-none"
                   />
 
                   <select
                     required
                     v-model="item.task_worker"
-                    class="p-1 w-2/6 text-xs focus:border-gray-400 border-gray-200 border focus:outline-none"
+                    class="p-1 w-2/6 text-xs bg-white bg-opacity-80 rounded-md focus:border-gray-300 border-gray-50 border focus:outline-none"
                   >
                     <option value="Ozi">Ozito</option>
                     <option value="Mati">Matito</option>
@@ -531,7 +531,7 @@
                   id="taskDesc"
                   type="text"
                   placeholder="Opis"
-                  class="w-full h-16 m-1 p-1 text-xs border-gray-200 border focus:border-gray-400 focus:outline-none resize-none overflow-y-scroll scrollbar-thin scrollbar-thumb-webgencol scrollbar-track-gray-200"
+                  class="w-full h-16 m-1 p-1 text-xs bg-white bg-opacity-80 rounded-md focus:border-gray-300 border-gray-50 border focus:outline-none resize-none overflow-y-scroll scrollbar-thin scrollbar-thumb-webgencol scrollbar-track-gray-200"
                 />
                 <div
                   class="flex flex-row w-full justify-between items-center mt-1 mb-1 text-xs"
@@ -539,12 +539,12 @@
                   <input
                     v-model="item.task_date"
                     type="date"
-                    class="w-1/2 h-6 p-1 focus:border-gray-400 border-gray-200 border focus:outline-none"
+                    class="w-1/2 h-6 p-1 bg-white bg-opacity-80 rounded-md focus:border-gray-300 border-gray-50 border focus:outline-none"
                   />
                   <select
                     required
                     v-model="item.task_color"
-                    class="p-1 w-2/5 h-6 focus:border-gray-400 border-gray-200 border focus:outline-none"
+                    class="p-1 w-2/5 h-6 bg-white bg-opacity-80 rounded-md focus:border-gray-300 border-gray-50 border focus:outline-none"
                   >
                     <option value="1">Zadanie</option>
                     <option value="2">Stop</option>
@@ -554,11 +554,64 @@
                     <option value="6">Zrobione</option>
                   </select>
                 </div>
-
                 <div
-                  class="flex flex-row w-full justify-around items-center mt-2 text-2xs"
+                  class="flex flex-row w-full justify-between items-center mt-2 text-2xs h-8"
                 >
-                  <!-- <input
+                  <div class="flex flex-1 justify-between h-full ml-1">
+                    <div
+                      v-if="taskCreateImageInfo"
+                      class="flex flex-1 flex-col justify-center items-start tracking-widewide text-xs"
+                    >
+                      <div class="flex justify-end items-center p-px">
+                        <p>{{ taskCreateImage[0].files[0].name }}</p>
+                        <p>&nbsp; - nazwa</p>
+                      </div>
+                      <div class="flex justify-end items-center p-px">
+                        <p>
+                          {{
+                            taskCreateImage[0].files[0].size / 1024 > 999
+                              ? (
+                                  taskCreateImage[0].files[0].size /
+                                  1024 /
+                                  1024
+                                ).toFixed(2) + " mb"
+                              : (
+                                  taskCreateImage[0].files[0].size / 1024
+                                ).toFixed() + " kb"
+                          }}
+                        </p>
+                        <p>&nbsp; - rozmiar</p>
+                      </div>
+                    </div>
+                    <div
+                      v-else
+                      class="h-full w-full flex justify-start items-center"
+                    >
+                      <div
+                        class="flex justify-center items-end flex-col text-xs pr-0.5"
+                      >
+                        <p>Nie wybrano żadnych zdjęć</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="w-16 h-full relative rounded-lg bg-gray-300 pointer-events-auto cursor-pointer transition hover:bg-opacity-50 overflow-hidden flex justify-center items-center"
+                  >
+                    <span
+                      class="h-full w-full flex justify-center items-center text-lg opacity-90 transition"
+                      >💾</span
+                    >
+                    <input
+                      @change="taskCreateImageInfoHandler(true)"
+                      ref="taskCreateImage"
+                      id="taskCreateImage"
+                      type="file"
+                      accept="image/*"
+                      class="opacity-0 absolute cursor-pointer p-0 top-0 bottom-0 text-xs"
+                    />
+                  </div>
+                </div>
+                <!-- <input
                     v-on:change="imageHandler"
                     ref="imageUpload"
                     id="imageUpload"
@@ -566,7 +619,6 @@
                     accept="image/*"
                     class="w-full text-2xs p-0 m-1 flex justify-start items-center"
                   /> -->
-                </div>
               </div>
             </form>
           </div>
@@ -815,7 +867,7 @@
       >
         <button
           @click="tabCreateHandler(true)"
-          class="h-full rounded-xl bg-gray-200 text-white transition hover:bg-opacity-50 font-medium text-base shadow-inner flex justify-center items-center"
+          class="h-full rounded-xl bg-gray-300 opacity-80 text-white transition hover:bg-opacity-50 font-medium text-base shadow-inner flex justify-center items-center"
         >
           <span class="text-lg p-4">📁</span>
         </button>
@@ -903,7 +955,6 @@ export default defineComponent({
     //TABS
 
     const tabDelete = async (tabID: number) => {
-      dateStor.processing = true;
       let question = window.confirm(
         "Na pewno? Danych nie będzie można odzyskać..."
       );
@@ -924,9 +975,6 @@ export default defineComponent({
             console.warn(error.message);
           }
         }
-        setTimeout(() => {
-          dateStor.processing = null;
-        }, 500);
       } else return;
     };
 
@@ -938,13 +986,12 @@ export default defineComponent({
     };
 
     const tabNamePush = async (tabID: number) => {
+      dateStor.ready = tabID;
       try {
         const { error } = await supabase
           .from("tabs_table")
           .update({ tab_name: tabName.value })
           .eq("id", tabID);
-        tabName.value = "";
-        dateStor.processing = tabID;
         if (error instanceof Error) throw error;
       } catch (error) {
         if (error instanceof Error) {
@@ -952,9 +999,9 @@ export default defineComponent({
         }
       }
       setTimeout(() => {
-        dateStor.processing = null;
         tabNameId.value = null;
-      }, 1500);
+        dateStor.ready = null;
+      }, 1200);
     };
 
     const tabCreateHandler = (handler: boolean) => {
@@ -971,7 +1018,6 @@ export default defineComponent({
       taskEditForm.value = null;
       taskCreateForm.value = null;
       tasks.value = [];
-      dateStor.processing = true;
       try {
         const { error } = await supabase.from("tabs_table").insert([
           {
@@ -986,14 +1032,14 @@ export default defineComponent({
           console.warn(error.message);
         }
       }
-      setTimeout(() => {
-        dateStor.processing = null;
-      }, 1500);
     };
 
     // TASKS
 
-    const taskCreateImageInfoHandler = () => {
+    const taskCreateImageInfoHandler = (opt: boolean) => {
+      if (opt == false) {
+        taskCreateImageInfo.value = false;
+      }
       taskCreateImageInfo.value = false;
       if (taskCreateImage.value[0].files.length > 0) {
         taskCreateImageInfo.value = true;
@@ -1008,7 +1054,7 @@ export default defineComponent({
       color: number,
       tabID: number
     ) => {
-      dateStor.processing = true;
+      dateStor.ready = tabID;
       taskCreateForm.value = null;
       try {
         const { error } = await supabase.from("tasks_table").insert([
@@ -1041,8 +1087,8 @@ export default defineComponent({
       //   fileDataTask.value = null;
       // }
       setTimeout(() => {
-        dateStor.processing = null;
-      }, 1500);
+        dateStor.ready = null;
+      }, 1200);
     };
 
     const taskCreateHandler = (tabID: number | null) => {
@@ -1095,6 +1141,7 @@ export default defineComponent({
     const taskEditClose = () => {
       taskEditForm.value = null;
       taskEdited.value = [];
+      taskCreateImageInfo.value = false;
     };
 
     const taskEditChange = (taskID: number) => {
@@ -1118,8 +1165,8 @@ export default defineComponent({
       }
     };
 
-    const taskEditPush = async (taskID: number) => {
-      dateStor.processing = true;
+    const taskEditPush = async (taskID: number, tabID: number) => {
+      dateStor.ready = tabID;
       try {
         const { error } = await supabase
           .from("tasks_table")
@@ -1156,12 +1203,12 @@ export default defineComponent({
       //   fileDataTask.value = null;
       // }
       setTimeout(() => {
-        dateStor.processing = null;
-      }, 1500);
+        dateStor.ready = null;
+      }, 1200);
     };
 
-    const taskDelete = async (taskID: number) => {
-      dateStor.processing = true;
+    const taskDelete = async (taskID: number, tabID: number) => {
+      dateStor.ready = tabID;
       let imageToRemove: any = null;
       imageToRemove = dateStor.dataTasks
         .filter((item: any) => item.id === taskID)
@@ -1191,8 +1238,8 @@ export default defineComponent({
         }
       }
       setTimeout(() => {
-        dateStor.processing = null;
-      }, 1500);
+        dateStor.ready = null;
+      }, 1200);
     };
 
     // IMAGES

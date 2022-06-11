@@ -9,5 +9,6 @@ export const dataStore = defineStore({
     dataImages: [] as unknown[] | null,
     version: "1.0.00" as string,
     processing: null as number | null,
+    ready: null as number | null,
   }),
 });

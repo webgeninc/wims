@@ -71,7 +71,7 @@ export default defineComponent({
         dateStor.dataTasks = dataTasks.value;
         setTimeout(() => {
           dateStor.processing = null;
-        }, 1000);
+        }, 700);
       } catch (error) {
         if (error instanceof Error) {
           console.warn(error.message);
