@@ -35,6 +35,7 @@
         class="flex flex-row justify-between w-full text-xs mr-0.5 ml-0.5 cursor-grab"
       >
         <input
+          autofocus
           ref="tabNameInput"
           autocomplete="off"
           maxlength="45"
@@ -169,21 +170,15 @@
                       class="flex flex-1 flex-col justify-center items-start tracking-widewide text-xs"
                     >
                       <div class="flex justify-end items-center p-px">
-                        <p>{{ taskCreateImage[0].files[0].name }}</p>
+                        <p>{{ taskFile.name }}</p>
                         <p>&nbsp; - nazwa</p>
                       </div>
                       <div class="flex justify-end items-center p-px">
                         <p>
                           {{
-                            taskCreateImage[0].files[0].size / 1024 > 999
-                              ? (
-                                  taskCreateImage[0].files[0].size /
-                                  1024 /
-                                  1024
-                                ).toFixed(2) + " mb"
-                              : (
-                                  taskCreateImage[0].files[0].size / 1024
-                                ).toFixed() + " kb"
+                            taskFile.size / 1024 > 999
+                              ? (taskFile.size / 1024 / 1024).toFixed(2) + " mb"
+                              : (taskFile.size / 1024).toFixed() + " kb"
                           }}
                         </p>
                         <p>&nbsp; - rozmiar</p>
@@ -208,7 +203,7 @@
                       >💾</span
                     >
                     <input
-                      @change="taskCreateImageInfoHandler(true)"
+                      @change="taskCreateImageInfoHandler"
                       ref="taskCreateImage"
                       id="taskCreateImage"
                       type="file"
@@ -414,18 +409,20 @@
                     "
                     class="text-xs m-1 font-medium tracking-wider text-yellow-500"
                   >
-                    (tylko
+                    tylko
                     <span class="font-semibold tracking-wider">{{
                       Math.ceil(
-                        new Date(task.task_date.replace(/\./g, "/")).getTime() -
-                          new Date().getTime()
-                      ) /
-                      1000 /
-                      60 /
-                      60 /
-                      24
+                        (new Date(
+                          task.task_date.replace(/\./g, "/")
+                        ).getTime() -
+                          new Date().getTime()) /
+                          1000 /
+                          60 /
+                          60 /
+                          24
+                      )
                     }}</span>
-                    dni)
+                    dni
                   </p>
                   <p
                     v-else-if="
@@ -561,21 +558,15 @@
                       class="flex flex-1 flex-col justify-center items-start tracking-widewide text-xs"
                     >
                       <div class="flex justify-end items-center p-px">
-                        <p>{{ taskCreateImage[0].files[0].name }}</p>
+                        <p>{{ taskFile.name }}</p>
                         <p>&nbsp; - nazwa</p>
                       </div>
                       <div class="flex justify-end items-center p-px">
                         <p>
                           {{
-                            taskCreateImage[0].files[0].size / 1024 > 999
-                              ? (
-                                  taskCreateImage[0].files[0].size /
-                                  1024 /
-                                  1024
-                                ).toFixed(2) + " mb"
-                              : (
-                                  taskCreateImage[0].files[0].size / 1024
-                                ).toFixed() + " kb"
+                            taskFile.size / 1024 > 999
+                              ? (taskFile.size / 1024 / 1024).toFixed(2) + " mb"
+                              : (taskFile.size / 1024).toFixed() + " kb"
                           }}
                         </p>
                         <p>&nbsp; - rozmiar</p>
@@ -600,7 +591,7 @@
                       >💾</span
                     >
                     <input
-                      @change="taskCreateImageInfoHandler(true)"
+                      @change="taskCreateImageInfoHandler"
                       ref="taskCreateImage"
                       id="taskCreateImage"
                       type="file"
@@ -938,6 +929,7 @@ export default defineComponent({
     const userStor: any = userStore();
     const tabNameId = ref<number | null>(null);
     const tabName = ref<string | null>(null);
+    const tabNameInput = ref<any>(null);
     const tabCreateForm = ref<boolean>(false);
     const taskCreateForm = ref<number | null>(null);
     const taskEditForm = ref<number | null>(null);
@@ -947,6 +939,7 @@ export default defineComponent({
     const taskExtend = ref<number | null>(null);
     const taskCreateImage = ref<any>(null);
     const taskCreateImageInfo = ref<boolean>(false);
+    const taskFile = ref<any>(null);
     // const imageStatus = ref<number | null>(null);
     // const ImageLoaded = ref<boolean>(false);
 
@@ -954,9 +947,28 @@ export default defineComponent({
 
     const tabDelete = async (tabID: number) => {
       let question = window.confirm(
-        "Na pewno? Danych nie będzie można odzyskać..."
+        "Na pewno? Danych (łącznie ze zdjęciami) nie będzie można odzyskać..."
       );
+      let imagesToRemove: any = null;
+      imagesToRemove = dateStor.dataTasks
+        .filter((item: any) => item.task_tabid == tabID)
+        .filter((item: any) => item.task_image != null)
+        .map((item: any) => item.task_image);
       if (question) {
+        if (imagesToRemove.length > 0) {
+          imagesToRemove.forEach(async (item: any) => {
+            try {
+              const { error } = await supabase.storage
+                .from("images")
+                .remove([item]);
+              if (error instanceof Error) throw error;
+            } catch (error) {
+              if (error instanceof Error) {
+                console.warn(error.message);
+              }
+            }
+          });
+        }
         try {
           const err1 = await supabase
             .from("tabs_table")
@@ -981,6 +993,9 @@ export default defineComponent({
         item.id === tabID ? (tabName.value = item.tab_name) : false;
       });
       tabNameId.value = tabID;
+      setTimeout(() => {
+        tabNameInput.value[0].focus();
+      }, 300);
     };
 
     const tabNamePush = async (tabID: number) => {
@@ -1034,13 +1049,17 @@ export default defineComponent({
 
     // TASKS
 
-    const taskCreateImageInfoHandler = (opt: boolean) => {
-      if (opt == false) {
+    const taskCreateImageInfoHandler = () => {
+      if (
+        taskCreateImage.value[0].files[0] == null ||
+        taskCreateImage.value[0].files[0] == undefined
+      ) {
         taskCreateImageInfo.value = false;
-      }
-      taskCreateImageInfo.value = false;
-      if (taskCreateImage.value[0].files.length > 0) {
+        taskFile.value = null;
+      } else {
+        taskCreateImageInfo.value = false;
         taskCreateImageInfo.value = true;
+        taskFile.value = taskCreateImage.value[0].files[0];
       }
     };
 
@@ -1062,7 +1081,7 @@ export default defineComponent({
             task_name: task,
             task_desc: desc,
             task_date: date,
-            // "task_image": fileDataTask.value === null ? null : fileDataTask.value.name,
+            task_image: taskFile.value === null ? null : taskFile.value.name,
             task_tabid: tabID,
           },
         ]);
@@ -1072,18 +1091,21 @@ export default defineComponent({
           console.warn(error.message);
         }
       }
-      // if (fileDataTask.value !== null) {
-      //   try {
-      //     const { errorr } = await supabase.storage
-      //       .from("images")
-      //       .upload(fileDataTask.value.name, fileDataTask.value);
+      if (taskFile.value !== null && taskFile.value !== undefined) {
+        try {
+          const { error } = await supabase.storage
+            .from("images")
+            .upload(taskFile.value.name, taskFile.value);
 
-      //     if (errorr) throw errorr;
-      //   } catch (errorr) {
-      //     console.log(errorr.message);
-      //   }
-      //   fileDataTask.value = null;
-      // }
+          if (error) throw error;
+        } catch (error) {
+          if (error instanceof Error) {
+            console.warn(error.message);
+          }
+        }
+        taskFile.value = null;
+      }
+      taskCreateImageInfo.value = false;
       setTimeout(() => {
         dateStor.ready = null;
       }, 1200);
@@ -1198,8 +1220,9 @@ export default defineComponent({
       //   } catch (errorr) {
       //     console.log(errorr.message);
       //   }
-      //   fileDataTask.value = null;
+      //   taskFile.value = null;
       // }
+      taskCreateImageInfo.value = false;
       setTimeout(() => {
         dateStor.ready = null;
       }, 1200);
@@ -1271,6 +1294,7 @@ export default defineComponent({
       userStor,
       tabNameChange,
       tabNamePush,
+      tabNameInput,
       tabCreateHandler,
       tabCreatePush,
       tabDelete,
@@ -1292,6 +1316,7 @@ export default defineComponent({
       taskExtend,
       taskDateChanger,
       tasks,
+      taskFile,
       taskCreateImage,
       taskCreateImageInfoHandler,
       taskCreateImageInfo,
