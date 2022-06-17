@@ -956,7 +956,7 @@ export default defineComponent({
         .map((item: any) => item.task_image);
       if (question) {
         if (imagesToRemove.length > 0) {
-          imagesToRemove.forEach(async (item: any) => {
+          for (const item of imagesToRemove) {
             try {
               const { error } = await supabase.storage
                 .from("images")
@@ -967,7 +967,7 @@ export default defineComponent({
                 console.warn(error.message);
               }
             }
-          });
+          }
         }
         try {
           const err1 = await supabase
