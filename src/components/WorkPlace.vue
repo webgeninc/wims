@@ -220,30 +220,20 @@
           <div
             v-if="taskEditForm != task.id && tab.id === task.task_tabid"
             @mouseleave="taskHoverHandler(null)"
-            class="overflow-hidden flex bg-gray-50 shadow-md mb-1 mt-1 pt-1"
+            class="overflow-hidden flex bg-gray-50 shadow-md mb-1.5 mt-1 pt-0.5"
           >
-            <div v-if="task.task_color === 3" class="bg-yellow-600 w-1.5"></div>
             <div
-              v-else-if="task.task_color === 5"
-              class="bg-blue-600 w-1.5"
+              class="w-1 rounded-full"
+              :class="{
+                'bg-gray-400': task.task_color === 1,
+                'bg-red-600': task.task_color === 2,
+                'bg-yellow-600': task.task_color === 3,
+                'bg-purple-600': task.task_color === 4,
+                'bg-blue-600': task.task_color === 5,
+                'bg-green-600': task.task_color === 6,
+              }"
             ></div>
-            <div
-              v-else-if="task.task_color === 2"
-              class="bg-red-600 w-1.5"
-            ></div>
-            <div
-              v-else-if="task.task_color === 1"
-              class="bg-gray-400 w-1.5"
-            ></div>
-            <div
-              v-else-if="task.task_color === 6"
-              class="bg-green-600 w-1.5"
-            ></div>
-            <div
-              v-else-if="task.task_color === 4"
-              class="bg-purple-600 w-1.5"
-            ></div>
-            <div class="m-0.5 ml-1.5 flex flex-col flex-1">
+            <div class="ml-1.5 flex flex-col flex-1 pr-0.5 pb-px pt-px">
               <div
                 v-if="taskEditForm != task.id"
                 class="flex flex-row w-full items-baseline overflow-hidden"
@@ -256,19 +246,19 @@
                     @click="taskEditChange(task.id)"
                     class="text-2xs ml-2 mr-2 font-semibold tracking-wider text-gray-600 text-opacity-50 hover:text-opacity-100 cursor-pointer"
                   >
-                    EDYTUJ
+                    edycja
                   </p>
                   <p
                     @click="taskDelete(task.id, tab.id)"
                     class="text-2xs ml-2 mr-2 font-semibold tracking-wider text-red-600 text-opacity-50 hover:text-opacity-100 cursor-pointer"
                   >
-                    USUŃ
+                    usunięcie
                   </p>
                 </div>
               </div>
               <div class="flex justify-between items-center">
                 <p
-                  class="text-sm m-1 font-semibold flex flex-wrap overflow-x-hidden"
+                  class="text-sm m-1 mb-0 font-semibold flex flex-wrap overflow-x-hidden"
                 >
                   {{ task.task_name }}
                 </p>
@@ -311,12 +301,14 @@
                 v-if="task.task_desc.length > 140 && taskExtend != task.id"
                 class="w-full"
               >
-                <p class="text-sm m-1 font-normal overflow-hidden h-16">
+                <p
+                  class="text-sm m-1 font-normal tracking-tight overflow-hidden h-16"
+                >
                   {{ task.task_desc }}
                 </p>
                 <p
                   @click="taskExtendHandler(task.id)"
-                  class="p-1 text-2xs text-gray-400 hover:text-gray-700 cursor-pointer m-0"
+                  class="p-1 pt-0 pb-0 text-2xs text-gray-400 hover:text-gray-700 cursor-pointer m-0"
                 >
                   zobacz wiecej
                 </p>
@@ -325,12 +317,14 @@
                 v-if="task.task_desc.length > 140 && taskExtend == task.id"
                 class="w-full"
               >
-                <p class="text-sm m-1 font-normal overflow-hidden">
+                <p
+                  class="text-sm m-1 font-normal tracking-normal overflow-hidden"
+                >
                   {{ task.task_desc }}
                 </p>
                 <p
                   @click="taskExtendHandler(task.id)"
-                  class="p-1 text-2xs text-gray-400 hover:text-gray-700 cursor-pointer m-0"
+                  class="p-1 text-2xs text-red-600 hover:text-red-400 cursor-pointer m-0"
                 >
                   zobacz mniej
                 </p>
