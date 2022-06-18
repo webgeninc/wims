@@ -223,7 +223,7 @@
             class="overflow-hidden flex bg-gray-50 shadow-md mb-1.5 mt-1 pt-0.5"
           >
             <div
-              class="w-1 rounded-full"
+              class="w-1.5"
               :class="{
                 'bg-gray-400': task.task_color === 1,
                 'bg-red-600': task.task_color === 2,
@@ -233,7 +233,7 @@
                 'bg-green-600': task.task_color === 6,
               }"
             ></div>
-            <div class="ml-1.5 flex flex-col flex-1 pr-0.5 pb-px pt-px">
+            <div class="ml-1 flex flex-col flex-1 pr-0.5 pb-px pt-px">
               <div
                 v-if="taskEditForm != task.id"
                 class="flex flex-row w-full items-baseline overflow-hidden"
@@ -258,7 +258,8 @@
               </div>
               <div class="flex justify-between items-center">
                 <p
-                  class="text-sm m-1 mb-0 font-semibold flex flex-wrap overflow-x-hidden"
+                  @click="taskExtendHandler(task.id)"
+                  class="text-sm m-1 mb-0 font-semibold flex flex-wrap overflow-x-hidden cursor-pointer"
                 >
                   {{ task.task_name }}
                 </p>
@@ -298,22 +299,19 @@
                 />
               </div> -->
               <div
+                @dblclick="taskExtendHandler(task.id)"
                 v-if="task.task_desc.length > 140 && taskExtend != task.id"
                 class="w-full"
               >
                 <p
-                  class="text-sm m-1 font-normal tracking-tight overflow-hidden h-16"
+                  class="text-sm m-1 mr-3 font-normal tracking-tight overflow-hidden h-16 display-box"
                 >
                   {{ task.task_desc }}
                 </p>
-                <p
-                  @click="taskExtendHandler(task.id)"
-                  class="p-1 pt-0 pb-0 text-2xs text-gray-400 hover:text-gray-700 cursor-pointer m-0"
-                >
-                  zobacz wiecej
-                </p>
+                <!-- <span @click="taskExtendHandler(task.id)"> ... </span> -->
               </div>
               <div
+                @dblclick="taskExtendHandler(task.id)"
                 v-if="task.task_desc.length > 140 && taskExtend == task.id"
                 class="w-full"
               >
@@ -321,12 +319,6 @@
                   class="text-sm m-1 font-normal tracking-normal overflow-hidden"
                 >
                   {{ task.task_desc }}
-                </p>
-                <p
-                  @click="taskExtendHandler(task.id)"
-                  class="p-1 text-2xs text-red-600 hover:text-red-400 cursor-pointer m-0"
-                >
-                  zobacz mniej
                 </p>
               </div>
               <p

@@ -1,3 +1,4 @@
+// prettier-ignore
 module.exports = {
   content: ["./public/**/*.html", "./src/**/*.vue"],
   theme: {
@@ -15,7 +16,7 @@ module.exports = {
       80: "20rem",
     },
     screens: {
-      xl: "1280px",
+      "xl": "1280px",
       "2xl": "1536px",
       "3xl": "1920px",
     },
