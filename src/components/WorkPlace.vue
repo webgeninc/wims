@@ -223,7 +223,7 @@
             class="overflow-hidden flex bg-gray-50 shadow-md mb-1.5 mt-1 pt-0.5"
           >
             <div
-              class="w-1.5"
+              class="w-1.5 opacity-80"
               :class="{
                 'bg-gray-400': task.task_color === 1,
                 'bg-red-600': task.task_color === 2,
@@ -259,7 +259,10 @@
               <div class="flex justify-between items-center">
                 <p
                   @click="taskExtendHandler(task.id)"
-                  class="text-sm m-1 mb-0 font-semibold flex flex-wrap overflow-x-hidden cursor-pointer"
+                  class="text-sm m-1 mb-0 font-semibold flex flex-wrap overflow-x-hidden"
+                  :class="{
+                    'cursor-pointer': task.task_desc.length > 140,
+                  }"
                 >
                   {{ task.task_name }}
                 </p>
@@ -304,7 +307,7 @@
                 class="w-full"
               >
                 <p
-                  class="text-sm m-1 mr-3 font-normal tracking-tight overflow-hidden h-16 display-box"
+                  class="text-sm m-1 mr-3 mb-0 font-normal tracking-tight overflow-hidden h-16 display-box"
                 >
                   {{ task.task_desc }}
                 </p>
@@ -316,17 +319,18 @@
                 class="w-full"
               >
                 <p
-                  class="text-sm m-1 font-normal tracking-normal overflow-hidden"
+                  class="text-sm m-2 ml-1 mr-1 font-normal tracking-normal overflow-hidden"
                 >
                   {{ task.task_desc }}
                 </p>
               </div>
               <p
                 v-if="task.task_desc.length <= 140"
-                class="text-sm m-1 font-normal"
+                class="text-sm m-1 mr-1 mb-0 font-normal"
               >
                 {{ task.task_desc }}
               </p>
+              <p v-if="task.task_desc.length == 0" class="m-0 p-0"></p>
               <div class="mt-1 flex flex-row justify-between">
                 <div v-if="task.task_date !== ''" class="flex flex-row">
                   <p class="text-xs m-1 font-semibold">
