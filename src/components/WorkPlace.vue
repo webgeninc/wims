@@ -266,24 +266,24 @@
                 >
                   {{ task.task_name }}
                 </p>
-                <!-- <button
+                <button
                   v-if="
                     task.task_image !== '' &&
                     task.task_image !== null &&
                     imageStatus !== task.id
                   "
-                  @click="openImage(task.id)"
-                  class="bg-gray-400 text-gray-50 rounded-2xl text-2xs font-medium transition hover:bg-gray-500 p-0.5 pr-3 pl-3 mr-0.5 ml-0.5"
+                  @click="imageHandler(task.id)"
+                  class="text-xl font-medium transition hover:opacity-30 pr-px"
                 >
-                  Zobacz obraz
+                  🖼
                 </button>
                 <button
                   v-if="imageStatus === task.id"
-                  @click="closeImage()"
+                  @click="imageHandler(null)"
                   class="bg-gray-400 text-gray-50 rounded-2xl text-2xs font-medium transition hover:bg-gray-500 p-0.5 pr-3 pl-3 mr-0.5 ml-0.5"
                 >
                   Zamknij
-                </button> -->
+                </button>
               </div>
               <!-- <div v-if="task.task_image !== '' && task.task_image !== null">
                 <div class="flex justify-center items-center">
@@ -307,7 +307,7 @@
                 class="w-full"
               >
                 <p
-                  class="text-sm m-1 mr-3 mb-0 font-normal tracking-tight overflow-hidden h-16 display-box"
+                  class="text-sm m-1 mr-3 mb-0 font-normal tracking-tight overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]"
                 >
                   {{ task.task_desc }}
                 </p>
@@ -930,8 +930,15 @@ export default defineComponent({
     const taskCreateImage = ref<any>(null);
     const taskCreateImageInfo = ref<boolean>(false);
     const taskFile = ref<any>(null);
+    const imageStatus = ref<number | null>(null);
     // const imageStatus = ref<number | null>(null);
     // const ImageLoaded = ref<boolean>(false);
+
+    //IMAGES
+
+    const imageHandler = (taskID: number | null) => {
+      imageStatus.value = taskID;
+    };
 
     //TABS
 
@@ -1310,6 +1317,8 @@ export default defineComponent({
       taskCreateImage,
       taskCreateImageInfoHandler,
       taskCreateImageInfo,
+      imageStatus,
+      imageHandler,
     };
   },
 });

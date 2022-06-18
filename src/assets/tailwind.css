@@ -10,18 +10,5 @@
     },
     .anim-run {
         animation-play-state: running;
-      },
-    .display-box{
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-    }
+      }
  };
-
- @layer components {
-  .display-box{
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-  }
-};
