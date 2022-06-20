@@ -97,7 +97,7 @@
                         </div>
                         <div class="">
                           <p
-                            class="text-2xs 2xl:text-xs 3xl:text-xs mt-0 2xl:m-0.5 font-normal flex flex-wrap overflow-hidden max-h-10 leading-snug"
+                            class="text-2xs 2xl:text-xs 3xl:text-xs mt-0 2xl:m-0.5 font-normal flex-wrap overflow-hidden max-h-10 leading-snug [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]"
                           >
                             {{ task.task_desc }}
                           </p>
@@ -303,7 +303,7 @@
                           class="w-full pl-2 pr-2 pb-1 2xl:p-1 pt-0 2xl:pt-0 2xl:pr-2 2xl:pl-2 flex justify-start items-center"
                         >
                           <p
-                            class="text-2xs 2xl:text-xs 3xl:text-xs mt-0 2xl:m-0.5 2xl:mt-0 font-normal flex flex-wrap overflow-hidden max-h-8 leading-snug"
+                            class="text-2xs 2xl:text-xs 3xl:text-xs mt-0 2xl:m-0.5 2xl:mt-0 font-normal flex-wrap overflow-hidden max-h-8 leading-snug [display:-webkit-box] [-webkit-line-clamp:1] [-webkit-box-orient:vertical]"
                           >
                             {{ task.task_desc }}
                           </p>
@@ -456,7 +456,7 @@
             </div>
             <div class="h-0.5 w-full bg-gray-300"></div>
             <div
-              v-if="dateStor.processing == null"
+              v-if="dateStor.processing == null && noti"
               class="flex justify-between items-center w-full bg-gray-100 text-gray-900"
             >
               <div class="h-3/4 w-2 bg-red-400 m-2 mr-0 rounded-xl"></div>
@@ -473,22 +473,6 @@
                 class="h-full flex justify-center items-start pt-1 pr-2 invert hue-rotate-180 text-lg"
               >
                 📌
-              </div>
-            </div>
-            <div
-              v-if="dateStor.processing != null"
-              class="flex justify-between items-center w-full bg-gray-100 text-gray-900"
-            >
-              <div class="h-3/4 w-2 bg-yellow-400 m-2 mr-0 rounded-xl"></div>
-              <div class="w-full p-5 pr-1 pl-2">
-                <p class="text-start text-sm flex-1">
-                  Pobieranie danych w toku...
-                </p>
-              </div>
-              <div
-                class="h-full flex justify-center items-start pt-1 pr-2 text-lg"
-              >
-                🔔
               </div>
             </div>
           </div>
@@ -613,6 +597,22 @@
         <div
           class="flex flex-col w-full justify-center items-center mb-0 mt-0 font-normal bg-gray-600 text-gray-50 tracking-wide h-18"
         >
+          <!-- <div
+            v-if="dateStor.processing == null"
+            class="flex justify-between items-center w-full text-gray-50 p-1 pt-4 pb-4"
+          >
+            <div class="h-3/4 w-2 bg-yellow-400 m-2 mr-0 rounded-xl"></div>
+            <div class="w-full p-5 pr-1 pl-2">
+              <p class="text-start text-sm flex-1">
+                Pobieranie danych w toku...
+              </p>
+            </div>
+            <div
+              class="h-full flex justify-center items-start pt-1 pr-2 text-lg"
+            >
+              🔔
+            </div>
+          </div> -->
           <div
             class="w-full pr-4 pl-7 2xl:pl-4 pb-3 pt-3 flex justify-center items-center"
           >
@@ -647,7 +647,13 @@
                 draggable="false"
                 alt="WIMS"
                 class="cursor-default select-none h-full font-montserrat w-24 absolute"
+                :class="{ 'opacity-50': dateStor.processing }"
               />
+              <span
+                v-if="dateStor.processing"
+                class="text-3xl absolute grayscale"
+                >⏳</span
+              >
             </div>
             <div class="pl-3 3xl:pl-2 pr-5 3xl:pr-2">
               <p
