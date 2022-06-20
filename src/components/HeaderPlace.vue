@@ -1014,7 +1014,8 @@ export default defineComponent({
       }
 
       infoTasks.value = [];
-      todayInfoTasks();
+
+      showInfoTasks(infoDateUS.value!);
     };
 
     const timeCalculator = () => {
@@ -1079,11 +1080,17 @@ export default defineComponent({
       }
     };
     const todayInfoTasks = async () => {
-      infoTasksToday.value = true;
-      infoTasks.value = await dateStor.dataTasks.filter(
-        (item: any) => item.task_date === infoDateUS.value
-      );
-      infoTasksTitle.value = "ZADANIA NA DZISIAJ";
+      if (dateStor.dataTasks.length != 0) {
+        infoTasksToday.value = true;
+        infoTasks.value = await dateStor.dataTasks.filter(
+          (item: any) => item.task_date === infoDateUS.value
+        );
+        infoTasksTitle.value = "ZADANIA NA DZISIAJ";
+      } else {
+        setTimeout(() => {
+          showInfoTasks(infoDateUS.value!);
+        }, 1000);
+      }
     };
 
     setInterval(() => {
