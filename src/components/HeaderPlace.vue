@@ -597,22 +597,6 @@
         <div
           class="flex flex-col w-full justify-center items-center mb-0 mt-0 font-normal bg-gray-600 text-gray-50 tracking-wide h-18"
         >
-          <!-- <div
-            v-if="dateStor.processing == null"
-            class="flex justify-between items-center w-full text-gray-50 p-1 pt-4 pb-4"
-          >
-            <div class="h-3/4 w-2 bg-yellow-400 m-2 mr-0 rounded-xl"></div>
-            <div class="w-full p-5 pr-1 pl-2">
-              <p class="text-start text-sm flex-1">
-                Pobieranie danych w toku...
-              </p>
-            </div>
-            <div
-              class="h-full flex justify-center items-start pt-1 pr-2 text-lg"
-            >
-              🔔
-            </div>
-          </div> -->
           <div
             class="w-full pr-4 pl-7 2xl:pl-4 pb-3 pt-3 flex justify-center items-center"
           >
@@ -669,6 +653,21 @@
           </div>
         </div>
         <div
+          v-if="dateStor.processing"
+          class="w-full h-8 bg-yellow-300 bg-opacity-90 flex justify-end items-center"
+        >
+          <div class="w-full h-full pr-2 flex justify-between items-center">
+            <span
+              class="text-lg p-0.5 pl-1.5 grayscale brightness-125 opacity-80"
+              >🔔</span
+            >
+            <span class="text-sm flex justify-end items-center h-full">
+              Pobieranie danych...
+            </span>
+          </div>
+        </div>
+        <div
+          v-else
           class="w-full h-8 bg-webgencol bg-opacity-90 flex justify-end items-center pr-2"
         >
           <div class="h-full w-12 p-1">

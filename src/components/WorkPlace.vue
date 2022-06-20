@@ -223,7 +223,7 @@
             class="overflow-hidden flex bg-gray-50 shadow-md mb-1.5 mt-1 pt-0.5"
           >
             <div
-              class="w-1.5 opacity-80"
+              class="w-1.2 opacity-80"
               :class="{
                 'bg-gray-400': task.task_color === 1,
                 'bg-red-600': task.task_color === 2,

@@ -26,6 +26,7 @@ module.exports = {
         system: "url('../assets/systems.svg')",
       },
       spacing: {
+        1.2: "0.3rem",
         13: "3.25rem",
         18: "4.5rem",
         22: "5.5rem",
