@@ -233,7 +233,7 @@
                 'bg-green-600': task.task_color === 6,
               }"
             ></div>
-            <div class="ml-1 flex flex-col flex-1 pr-0.5 pb-px pt-px">
+            <div class="ml-1 flex flex-col flex-1 pr-1 pb-px pt-px">
               <div
                 v-if="taskEditForm != task.id"
                 class="flex flex-row w-full items-baseline overflow-hidden"
@@ -261,7 +261,7 @@
                   @click="taskExtendHandler(task.id)"
                   class="text-sm m-1 mb-0 font-semibold flex flex-wrap overflow-x-hidden"
                   :class="{
-                    'cursor-pointer': task.task_desc.length > 140,
+                    'cursor-pointer': task.task_desc.length > 101,
                   }"
                 >
                   {{ task.task_name }}
@@ -273,16 +273,16 @@
                     imageStatus !== task.id
                   "
                   @click="imageHandler(task.id)"
-                  class="text-xl font-medium transition hover:opacity-30 pr-px"
+                  class="text-lg font-medium transition hover:opacity-70 pr-px"
                 >
-                  🖼
+                  <span class="p-1">💼</span>
                 </button>
                 <button
                   v-if="imageStatus === task.id"
                   @click="imageHandler(null)"
-                  class="bg-gray-400 text-gray-50 rounded-2xl text-2xs font-medium transition hover:bg-gray-500 p-0.5 pr-3 pl-3 mr-0.5 ml-0.5"
+                  class="text-lg font-medium transition opacity-50 hover:opacity-30 pr-px"
                 >
-                  Zamknij
+                  <span class="p-1">💼</span>
                 </button>
               </div>
               <!-- <div v-if="task.task_image !== '' && task.task_image !== null">
@@ -303,7 +303,7 @@
               </div> -->
               <div
                 @dblclick="taskExtendHandler(task.id)"
-                v-if="task.task_desc.length > 140 && taskExtend != task.id"
+                v-if="task.task_desc.length > 100 && taskExtend != task.id"
                 class="w-full"
               >
                 <p
@@ -315,7 +315,7 @@
               </div>
               <div
                 @dblclick="taskExtendHandler(task.id)"
-                v-if="task.task_desc.length > 140 && taskExtend == task.id"
+                v-if="task.task_desc.length > 100 && taskExtend == task.id"
                 class="w-full"
               >
                 <p
@@ -325,7 +325,7 @@
                 </p>
               </div>
               <p
-                v-if="task.task_desc.length <= 140"
+                v-if="task.task_desc.length < 101"
                 class="text-sm m-1 mr-1 mb-0 font-normal"
               >
                 {{ task.task_desc }}
