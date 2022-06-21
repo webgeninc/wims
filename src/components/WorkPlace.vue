@@ -1,11 +1,11 @@
 <template>
   <div
-    class="bg-gray-100 w-full h-full flex p-2 flex-nowrap overflow-x-auto font-montserrat"
+    class="bg-gray-100 w-full h-full flex p-2 pt-1 flex-nowrap overflow-x-auto font-montserrat"
   >
     <div
       v-for="(tab, index) in dateStor.dataTabs"
       :key="index"
-      class="flex flex-shrink-0 w-80 flex-col m-1"
+      class="flex flex-shrink-0 w-80 flex-col m-1 mt-0.5"
     >
       <div
         v-if="dateStor.ready == tab.id"
@@ -53,7 +53,7 @@
         </button>
       </div>
       <div
-        class="p-1 pt-1 text-center flex flex-row justify-center items-center cursor-grab h-18"
+        class="pr-1 pl-1 text-center flex flex-row justify-center items-center cursor-grab h-16"
       >
         <h3
           class="font-semibold text-left text-base text-gray-700 tracking-wide p-2 pt-0 pb-0 flex-1"
