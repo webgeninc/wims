@@ -364,7 +364,7 @@
                   <div
                     class="flex flex-col justify-center items-center cursor-pointer transition rounded-sm hover:bg-gray-300 w-98/100 h-9/10 pt-1"
                   >
-                    <span class="mb-3 pb-2">
+                    <span class="mb-3 pb-1.5">
                       {{ day }}
                     </span>
                   </div>
@@ -447,7 +447,7 @@
                   <div
                     class="flex justify-center flex-col items-center cursor-pointer transition rounded-sm hover:bg-gray-300 w-98/100 h-9/10 pb-1"
                   >
-                    <span class="mb-3">
+                    <span class="mb-1 pb-1.5">
                       {{ day }}
                     </span>
                   </div>
