@@ -273,16 +273,19 @@
                     imageStatus !== task.id
                   "
                   @click="imageHandler(task.id)"
-                  class="text-lg font-medium transition hover:opacity-70 pr-px"
+                  class="text-base font-medium transition hover:opacity-70 pr-px"
                 >
-                  <span class="p-1">💼</span>
+                  <span
+                    class="m-1 mb-0 tracking-tighter font-semibold text-gray-500 text-opacity-70 hover:text-opacity-50 transition cursor-pointer"
+                    >📷</span
+                  >
                 </button>
                 <button
                   v-if="imageStatus === task.id"
                   @click="imageHandler(null)"
-                  class="text-lg font-medium transition opacity-50 hover:opacity-30 pr-px"
+                  class="m-1 mt-0.5 mb-0 text-lg font-medium transition opacity-50 hover:opacity-30 pr-px"
                 >
-                  <span class="p-1">💼</span>
+                  <span class="p-1">✖</span>
                 </button>
               </div>
               <div v-if="task.task_image !== '' && task.task_image !== null">
