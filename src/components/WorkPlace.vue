@@ -285,10 +285,10 @@
                   <span class="p-1">💼</span>
                 </button>
               </div>
-              <!-- <div v-if="task.task_image !== '' && task.task_image !== null">
+              <div v-if="task.task_image !== '' && task.task_image !== null">
                 <div class="flex justify-center items-center">
                   <div
-                    v-if="imageStatus === task.id && imageDataLoaded !== true"
+                    v-if="imageStatus === task.id && imageLoaded !== true"
                     class="mt-4 mb-2 w-1 h-1 rounded-full p-4 bg-gradient-to-t from-gray-400 via-gray-50 to-gray-50 flex justify-center items-center animate-spin"
                   >
                     <div class="w-1 h-1 rounded-full p-3 bg-gray-100"></div>
@@ -296,11 +296,10 @@
                 </div>
                 <img
                   v-if="imageStatus === task.id"
-                  @click="socialPostOpener(task.id)"
-                  ref="imagerPreview"
+                  ref="imageViewer"
                   class="w-full mt-1 mb-2 cursor-pointer hover:opacity-80 hover:bg-gray-400"
                 />
-              </div> -->
+              </div>
               <div
                 @dblclick="taskExtendHandler(task.id)"
                 v-if="task.task_desc.length > 100 && taskExtend != task.id"
@@ -931,13 +930,44 @@ export default defineComponent({
     const taskCreateImageInfo = ref<boolean>(false);
     const taskFile = ref<any>(null);
     const imageStatus = ref<number | null>(null);
-    // const imageStatus = ref<number | null>(null);
-    // const ImageLoaded = ref<boolean>(false);
+    const imageLoaded = ref<boolean>(false);
+    const imageData = ref<string | null>(null);
+    const imageViewer = ref<any>(null);
 
     //IMAGES
 
-    const imageHandler = (taskID: number | null) => {
-      imageStatus.value = taskID;
+    const imageHandler = async (taskID: number | null) => {
+      if (taskID != null) {
+        console.log("open");
+        imageStatus.value = taskID;
+        imageLoaded.value = false;
+        let imageName: string | null = null;
+        imageName = dateStor.dataTasks
+          .filter((item: any) => item.id === taskID)
+          .map((item: any) => item.task_image)[0];
+        console.log(imageName);
+        try {
+          const { data: data_images, error } = await supabase.storage
+            .from("images")
+            .download(imageName!);
+          if (error) throw error;
+          imageData.value = URL.createObjectURL(
+            new Blob([data_images!], { type: "image/jpeg" })
+          );
+          imageViewer.value[0].src = imageData.value;
+          console.log(imageData.value);
+          imageLoaded.value = true;
+        } catch (error) {
+          if (error instanceof Error) {
+            console.warn(error.message);
+          }
+        }
+      } else {
+        imageViewer.value.src = null;
+        imageData.value = null;
+        imageStatus.value = taskID;
+        imageLoaded.value = false;
+      }
     };
 
     //TABS
@@ -1319,6 +1349,8 @@ export default defineComponent({
       taskCreateImageInfo,
       imageStatus,
       imageHandler,
+      imageLoaded,
+      imageViewer,
     };
   },
 });
