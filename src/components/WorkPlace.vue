@@ -68,7 +68,7 @@
         </button>
       </div>
       <div
-        class="h-full flex-nowrap overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-200 pr-2"
+        class="h-full flex-nowrap overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-gray-100 pr-2"
       >
         <div v-if="taskCreateForm === tab.id" class="w-full mt-1 mb-2">
           <div
@@ -298,6 +298,7 @@
                   </div>
                 </div>
                 <img
+                  @click="imageSocialHandler(task.id)"
                   v-if="imageStatus === task.id"
                   ref="imageViewer"
                   class="w-full mt-1 mb-2 cursor-pointer hover:opacity-80 hover:bg-gray-400"
@@ -606,19 +607,19 @@
         </div>
       </div>
     </div>
-    <!--<div
-      v-if="socialPost !== null"
+    <div
+      v-if="imageSocialPost !== null"
       class="absolute top-0 bottom-0 left-0 right-1/6 bg-white bg-opacity-80 pointer-events-auto"
-    ></div> -->
-    <!--<div
-      v-if="socialPost !== null"
+    ></div>
+    <div
+      v-if="imageSocialPost !== null"
       class="bg-fbbackground absolute top-30 left-30 right-110 bottom-30 rounded-xl shadow-2xl border border-gray-300 flex justify-start items-center overflow-hidden"
     >
       <div class="w-1/7 3xl:w-2/7 flex-shrink-0 h-full">
         <p
           class="text-2xs 2xl:text-xs 3xl:text-sm font-medium p-5 tracking-wider"
         >
-          Social Media 0.13.00
+          Socialmedia Viewer
         </p>
       </div>
       <div class="flex justify-start items-center w-3/4 3xl:w-2/3 h-full">
@@ -748,23 +749,23 @@
                     class="text-2xs 2xl:text-2xs 3xl:text-xs text-gray-400 tracking-tight font-sans font-normal"
                   >
                     Opublikowane przez: Użytkownik Strony
-                    {{ socialPost.date }} o 12:00
+                    {{ imageSocialPost.date }} o 12:00
                   </p>
                 </div>
               </div>
             </div>
-            <div class="pl-3 pr-3 3xl:pl-4 3xl:pr-4 w-full">
+            <div class="pl-2.5 pr-2.5 3xl:pl-3.5 3xl:pr-3.5 w-full">
               <div class="mb-2">
                 <p
-                  class="text-xs 2xl:text-sm 3xl:text-base tracking-tight font-sans font-normal leading-tight"
+                  class="text-xs 2xl:text-sm 3xl:text-2base tracking-tight font-sans font-normal leading-tight 3xl:leading-5"
                 >
-                  {{ socialPost.desc }}
+                  {{ imageSocialPost.desc }}
                 </p>
               </div>
             </div>
             <div>
               <img
-                ref="imagerSocialPreview"
+                ref="imageSocialPostViewer"
                 class="w-full mt-1 mb-2 border-t border-b border-black border-opacity-20"
               />
             </div>
@@ -833,14 +834,14 @@
       <div class="flex-grow flex-shrink h-full">
         <div class="flex justify-end items-start p-5">
           <button
-            @click="socialPostCloser()"
+            @click="imageSocialHandler(null)"
             class="bg-gray-400 text-gray-50 text-2xs 2xl:text-xs 3xl:text-sm rounded-2xl font-medium transition hover:bg-gray-500 p-0.5 pr-3 pl-3 mr-0.5 ml-0.5"
           >
             Zamknij
           </button>
         </div>
       </div>
-    </div> -->
+    </div>
     <div class="flex justify-center items-start h-20">
       <div
         v-if="!tabCreateForm"
@@ -936,19 +937,19 @@ export default defineComponent({
     const imageLoaded = ref<boolean>(false);
     const imageData = ref<string | null>(null);
     const imageViewer = ref<any>(null);
+    const imageSocialPost = ref<any>(null);
+    const imageSocialPostViewer = ref<any>(null);
 
     //IMAGES
 
     const imageHandler = async (taskID: number | null) => {
       if (taskID != null) {
-        console.log("open");
         imageStatus.value = taskID;
         imageLoaded.value = false;
         let imageName: string | null = null;
         imageName = dateStor.dataTasks
           .filter((item: any) => item.id === taskID)
           .map((item: any) => item.task_image)[0];
-        console.log(imageName);
         try {
           const { data: data_images, error } = await supabase.storage
             .from("images")
@@ -958,7 +959,6 @@ export default defineComponent({
             new Blob([data_images!], { type: "image/jpeg" })
           );
           imageViewer.value[0].src = imageData.value;
-          console.log(imageData.value);
           imageLoaded.value = true;
         } catch (error) {
           if (error instanceof Error) {
@@ -970,6 +970,26 @@ export default defineComponent({
         imageData.value = null;
         imageStatus.value = taskID;
         imageLoaded.value = false;
+      }
+    };
+
+    const imageSocialHandler = async (taskID: number | null) => {
+      if (taskID != null) {
+        let newTask = dateStor.dataTasks.filter(
+          (item: any) => item.id === taskID
+        );
+        imageSocialPost.value = {
+          desc: newTask[0].task_desc,
+          date: newTask[0].task_date,
+        };
+        console.log(imageSocialPost.value);
+        setTimeout(() => {
+          imageSocialPostViewer.value.src = imageData.value;
+        }, 400);
+      } else if (taskID == null) {
+        imageSocialPost.value = null;
+        imageSocialPostViewer.value = null;
+        imageHandler(null);
       }
     };
 
@@ -1354,6 +1374,9 @@ export default defineComponent({
       imageHandler,
       imageLoaded,
       imageViewer,
+      imageSocialPost,
+      imageSocialHandler,
+      imageSocialPostViewer,
     };
   },
 });

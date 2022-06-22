@@ -54,6 +54,7 @@ module.exports = {
         "2xs": "10px",
         "3xs": "8px",
         "2sm": "13px",
+        "2base": "15px",
       },
       animation: {
         "spin-slow": "spin 25s linear infinite",
