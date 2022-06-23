@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-gray-100 w-full h-full flex p-2 pt-1 flex-nowrap overflow-x-auto font-montserrat"
+    class="bg-gray-100 w-full h-full flex p-2 pt-1 flex-nowrap overflow-x-auto font-montserrat scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
   >
     <div
       v-for="(tab, index) in dateStor.dataTabs"
@@ -15,7 +15,7 @@
       </div>
       <div
         v-if="tabNameId != tab.id && dateStor.ready != tab.id"
-        class="flex flex-row justify-end text-xs cursor-grab"
+        class="flex flex-row justify-end text-xs"
       >
         <p
           @click="tabNameChange(tab.id)"
@@ -32,7 +32,7 @@
       </div>
       <div
         v-if="tabNameId === tab.id && dateStor.ready == null"
-        class="flex flex-row justify-between w-full text-xs mr-0.5 ml-0.5 cursor-grab"
+        class="flex flex-row justify-between w-full text-xs mr-0.5 ml-0.5"
       >
         <input
           autofocus
@@ -53,7 +53,7 @@
         </button>
       </div>
       <div
-        class="pr-1 pl-1 text-center flex flex-row justify-center items-center cursor-grab h-16"
+        class="pr-1 pl-1 text-center flex flex-row justify-center items-center h-16"
       >
         <h3
           class="font-semibold text-left text-base text-gray-700 tracking-wide p-2 pt-0 pb-0 flex-1"
