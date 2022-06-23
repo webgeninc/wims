@@ -842,22 +842,18 @@
         </div>
       </div>
     </div>
-    <div class="flex justify-center items-start h-20">
-      <div
-        v-if="!tabCreateForm"
-        class="flex h-12 w-10 justify-start items-center p-2 pl-4 pr-4"
-      >
-        <button
-          @click="tabCreateHandler(true)"
-          class="h-full rounded-xl bg-gray-300 opacity-80 text-white transition hover:bg-opacity-50 font-medium text-base shadow-inner flex justify-center items-center"
-        >
-          <span class="text-lg p-4">📁</span>
-        </button>
-      </div>
-      <div
-        v-if="tabCreateForm"
-        class="pl-4 p-1.5 text-sm flex flex-col justify-center items-center"
-      >
+    <div
+      v-if="!tabCreateForm"
+      @click="tabCreateHandler(true)"
+      class="absolute w-10 top-0 left-5 bg-gray-300 hover:opacity-30 transition cursor-pointer rounded-b-md"
+    >
+      <span class="flex justify-center items-center text-md p-0.5">📁</span>
+    </div>
+    <div
+      v-if="tabCreateForm"
+      class="absolute top-2 left-2 bg-gray-300 transition cursor-pointer rounded-xl"
+    >
+      <div class="text-xs flex flex-col justify-center items-center p-2">
         <form
           @submit.prevent="tabCreatePush"
           class="flex flex-col justify-center items-center"
@@ -872,38 +868,24 @@
             placeholder="Nazwa nowej tabeli"
             class="p-1.5 pr-2 pl-2 border-gray-300 border focus:outline-none resize-none rounded-lg"
           />
-          <div class="flex flex-row justify-start items-center w-full mt-1">
+          <div
+            class="flex flex-row justify-between items-center w-full mt-1 pl-1 pr-1"
+          >
             <button
               type="submit"
-              class="rounded-lg p-1 mt-1 w-1/4 mr-1 bg-gray-300 text-white transition hover:bg-gray-200 font-medium text-sm shadow-inner"
+              class="rounded-lg p-0.5 mt-0.5 w-1/3 mr-1 bg-gray-100 text-white transition hover:bg-gray-200 font-medium text-xs shadow-inner"
             >
               ✔️
             </button>
             <button
               @click="tabCreateHandler(false)"
-              class="rounded-lg mt-1 p-1 h w-1/4 ml-1 bg-gray-300 text-white transition hover:bg-gray-200 font-medium text-sm shadow-inner"
+              class="rounded-lg mt-0.5 p-0.5 h w-1/3 ml-1 bg-gray-100 text-white transition hover:bg-gray-200 font-medium text-xs shadow-inner"
             >
               ✖️
             </button>
           </div>
         </form>
       </div>
-      <!-- <div
-        v-if="statusMsg"
-        class="flex flex-row justify-evenly text-xs flex-wrap"
-      >
-        <div class="text-red-500 font-medium transition flex-1 pt-2 pb-2 m-1">
-          Status: {{ statusMsg }}
-        </div>
-      </div>
-      <div
-        v-if="errorMsg"
-        class="flex flex-row justify-evenly text-xs flex-wrap"
-      >
-        <div class="text-red-500 font-medium transition flex-1 pt-2 pb-2 m-1">
-          Error: {{ errorMsg }}
-        </div>
-      </div> -->
     </div>
   </div>
 </template>
