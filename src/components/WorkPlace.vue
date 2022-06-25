@@ -544,6 +544,7 @@
                 </div>
                 <div
                   class="flex flex-row w-full justify-between items-center mt-2 text-2xs h-8"
+                  :class="{ 'h-14': imageData != null }"
                 >
                   <div class="flex flex-1 justify-between h-full ml-1">
                     <div
@@ -566,18 +567,51 @@
                       </div>
                     </div>
                     <div
+                      v-else-if="imageData != null"
+                      class="flex flex-1 flex-col justify-center items-start tracking-widewide text-xs"
+                    >
+                      <div class="flex justify-end items-center p-px">
+                        <p>{{ imageData }}</p>
+                        <p>&nbsp; - nazwa</p>
+                      </div>
+                      <div
+                        class="flex justify-end items-center p-px pr-3 text-2xs"
+                      >
+                        <p class="leading-3 mt-0.5 text-gray-700">
+                          <span
+                            class="text-red-500 opacity-80 font-bold uppercase"
+                            >uwaga</span
+                          >
+                          - usuń dotychczasowe zdjęcie z serwera, nim wgrasz
+                          nowe
+                          <span class="brightness-50 opacity-50"> ▶▶</span>
+                        </p>
+                      </div>
+                    </div>
+                    <div
                       v-else
                       class="h-full w-full flex justify-start items-center"
                     >
                       <div
                         class="flex justify-center items-end flex-col text-xs pr-0.5"
                       >
-                        <p>Nie wybrano żadnych zdjęć</p>
+                        <p>Nie ma żadnych zdjęć</p>
                       </div>
                     </div>
                   </div>
                   <div
-                    class="w-16 h-full relative rounded-lg bg-gray-300 pointer-events-auto cursor-pointer transition hover:bg-opacity-50 overflow-hidden flex justify-center items-center"
+                    v-if="imageData != null"
+                    @click="taskEditImageDelete(task.id)"
+                    class="w-10 h-full mr-1 rounded-lg bg-gray-300 opacity-80 pointer-events-auto cursor-pointer transition hover:bg-opacity-50 overflow-hidden flex justify-center items-center"
+                  >
+                    <span
+                      class="h-full w-full flex justify-center items-center text-lg opacity-90 transition relative"
+                      >💾
+                      <span class="absolute text-xs">❌</span>
+                    </span>
+                  </div>
+                  <div
+                    class="w-12 h-full relative rounded-lg bg-gray-300 pointer-events-auto cursor-pointer transition hover:bg-opacity-50 overflow-hidden flex justify-center items-center"
                   >
                     <span
                       class="h-full w-full flex justify-center items-center text-lg opacity-90 transition"
@@ -593,14 +627,6 @@
                     />
                   </div>
                 </div>
-                <!-- <input
-                    v-on:change="imageHandler"
-                    ref="imageUpload"
-                    id="imageUpload"
-                    type="file"
-                    accept="image/*"
-                    class="w-full text-2xs p-0 m-1 flex justify-start items-center"
-                  /> -->
               </div>
             </form>
           </div>
@@ -1210,10 +1236,48 @@ export default defineComponent({
         dateStor.dataTasks.forEach((item: any) => {
           if (item.id === taskID) {
             taskEdited.value.push(item);
-            // fileDataTask.value =
-            // item.task_image === null ? null : item.task_image;
+            imageData.value =
+              item.task_image === (null || undefined) ? null : item.task_image;
           }
         });
+      }
+    };
+
+    const taskEditImageDelete = async (taskID: number) => {
+      let imageToRemove: any = null;
+      dateStor.processing = true;
+
+      if (imageData.value != null || undefined) {
+        imageToRemove = imageData.value;
+        try {
+          const { error } = await supabase.storage
+            .from("images")
+            .remove([imageToRemove]);
+          if (error instanceof Error) throw error;
+        } catch (error) {
+          if (error instanceof Error) {
+            console.warn(error.message);
+          }
+        }
+        try {
+          const { error } = await supabase
+            .from("tasks_table")
+            .update({
+              task_image: null,
+            })
+            .eq("id", taskID);
+          if (error instanceof Error) throw error;
+        } catch (error) {
+          if (error instanceof Error) {
+            console.warn(error.message);
+          }
+        }
+        imageData.value = null;
+        taskEditForm.value = null;
+        setTimeout(() => {
+          dateStor.processing = false;
+          taskEditForm.value = taskID;
+        }, 1000);
       }
     };
 
@@ -1227,13 +1291,12 @@ export default defineComponent({
             task_color: taskEdited.value[0].task_color,
             task_name: taskEdited.value[0].task_name,
             task_desc: taskEdited.value[0].task_desc,
-            // "task_image": fileDataTask.value === null ? null : fileDataTask.value.name,
+            task_image: taskFile.value === null ? null : taskFile.value.name,
             task_date: taskEdited.value[0].task_date,
           })
           .eq("id", taskID);
         taskExtend.value = null;
         tabCreateForm.value = false;
-        // taskCreate.value = false;
         taskHover.value = null;
         taskEditForm.value = null;
         if (error instanceof Error) throw error;
@@ -1242,18 +1305,19 @@ export default defineComponent({
           console.warn(error.message);
         }
       }
-      // if (fileDataTask.value !== null) {
-      //   try {
-      //     const { errorr } = await supabase.storage
-      //       .from("images")
-      //       .upload(fileDataTask.value.name, fileDataTask.value);
-
-      //     if (errorr) throw errorr;
-      //   } catch (errorr) {
-      //     console.log(errorr.message);
-      //   }
-      //   taskFile.value = null;
-      // }
+      if (taskFile.value !== null) {
+        try {
+          const { error } = await supabase.storage
+            .from("images")
+            .upload(taskFile.value.name, taskFile.value);
+          if (error instanceof Error) throw error;
+        } catch (error) {
+          if (error instanceof Error) {
+            console.warn(error.message);
+          }
+        }
+        taskFile.value = null;
+      }
       taskCreateImageInfo.value = false;
       setTimeout(() => {
         dateStor.ready = null;
@@ -1268,6 +1332,7 @@ export default defineComponent({
         .map((item: any) => item.task_image)[0];
 
       if (imageToRemove !== null) {
+        console.log(imageToRemove);
         try {
           const { error } = await supabase.storage
             .from("images")
@@ -1339,6 +1404,7 @@ export default defineComponent({
       taskEditForm,
       taskEditChange,
       taskEditPush,
+      taskEditImageDelete,
       taskEdited,
       taskEditClose,
       taskHoverHandler,
@@ -1352,6 +1418,7 @@ export default defineComponent({
       taskCreateImage,
       taskCreateImageInfoHandler,
       taskCreateImageInfo,
+      imageData,
       imageStatus,
       imageHandler,
       imageLoaded,
