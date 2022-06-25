@@ -237,25 +237,7 @@
               <div
                 v-if="taskEditForm != task.id"
                 class="flex flex-row w-full items-baseline overflow-hidden"
-              >
-                <div
-                  v-if="taskHover === task.id"
-                  class="pt-0.5 flex flex-row w-full justify-end items-center flex-shrink-0 transition duration-200"
-                >
-                  <p
-                    @click="taskEditChange(task.id)"
-                    class="text-2xs ml-2 mr-2 font-semibold tracking-wider text-gray-600 text-opacity-50 hover:text-opacity-100 cursor-pointer"
-                  >
-                    edycja
-                  </p>
-                  <p
-                    @click="taskDelete(task.id, tab.id)"
-                    class="text-2xs ml-2 mr-2 font-semibold tracking-wider text-red-600 text-opacity-50 hover:text-opacity-100 cursor-pointer"
-                  >
-                    usunięcie
-                  </p>
-                </div>
-              </div>
+              ></div>
               <div class="flex justify-between items-center">
                 <p
                   @click="taskExtendHandler(task.id)"
@@ -456,6 +438,23 @@
                   class="text-xs m-1 font-bold hover:text-gray-400 transition cursor-pointer"
                 >
                   {{ task.task_worker }}
+                </p>
+              </div>
+              <div
+                v-if="taskHover === task.id"
+                class="pb-1.5 pt-0.5 flex flex-row w-full justify-start items-center flex-shrink-0 transition duration-200"
+              >
+                <p
+                  @click="taskEditChange(task.id)"
+                  class="text-2xs ml-2 mr-2 font-semibold tracking-wider text-gray-600 text-opacity-50 hover:text-opacity-100 cursor-pointer"
+                >
+                  edycja
+                </p>
+                <p
+                  @click="taskDelete(task.id, tab.id)"
+                  class="text-2xs ml-2 mr-2 font-semibold tracking-wider text-red-600 text-opacity-50 hover:text-opacity-100 cursor-pointer"
+                >
+                  usunięcie
                 </p>
               </div>
             </div>
@@ -990,7 +989,6 @@ export default defineComponent({
           desc: newTask[0].task_desc,
           date: newTask[0].task_date,
         };
-        console.log(imageSocialPost.value);
         setTimeout(() => {
           imageSocialPostViewer.value.src = imageData.value;
         }, 400);
@@ -1241,6 +1239,7 @@ export default defineComponent({
           }
         });
       }
+      imageHandler(null);
     };
 
     const taskEditImageDelete = async (taskID: number) => {
@@ -1332,7 +1331,6 @@ export default defineComponent({
         .map((item: any) => item.task_image)[0];
 
       if (imageToRemove !== null) {
-        console.log(imageToRemove);
         try {
           const { error } = await supabase.storage
             .from("images")
