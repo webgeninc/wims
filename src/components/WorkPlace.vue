@@ -876,7 +876,7 @@
     </div>
     <div
       v-if="tabCreateForm"
-      class="absolute top-2 left-2 bg-gray-300 transition cursor-pointer rounded-xl"
+      class="absolute top-0 left-5 bg-gray-300 transition cursor-pointer rounded-b-xl"
     >
       <div class="text-xs flex flex-col justify-center items-center p-2">
         <form
