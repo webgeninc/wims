@@ -497,6 +497,7 @@
               {{ userStor.user.role }}
             </p>
             <p
+              @click="logOut"
               class="underline tracking-wider cursor-pointer text-red-700 hover:text-red-200 transition p-1 pt-px pb-0"
             >
               log out
@@ -720,6 +721,8 @@ import { ref } from "vue";
 import { defineComponent } from "vue";
 import { dataStore } from "@/stores/data.js";
 import { userStore } from "@/stores/user.js";
+import { supabase } from "../supabase/init.js";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "HeaderPlace",
@@ -749,7 +752,7 @@ export default defineComponent({
         ).getDate()
       )
     );
-
+    const router = useRouter();
     const months = [
       "styczeń",
       "luty",
@@ -1099,6 +1102,13 @@ export default defineComponent({
     timeCalculator();
     monthAtStart();
 
+    const logOut = async () => {
+      await supabase.auth.signOut();
+      setTimeout(() => {
+        router.push({ name: "LoginPage" });
+      }, 1000);
+    };
+
     return {
       noti,
       dateStor,
@@ -1127,6 +1137,7 @@ export default defineComponent({
       yearWithMonth,
       reallyNow,
       reallyNowDay,
+      logOut,
     };
   },
 });

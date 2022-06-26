@@ -8,7 +8,10 @@
     </div>
   </div>
   <div v-if="!user" class="h-screen w-screen flex overflow-hidden">
-    <p class="p-5">Not logged in. Get back.</p>
+    <p class="p-5">
+      Not logged in. If browser doesn't take you automatically - please refresh
+      the page.
+    </p>
   </div>
 </template>
 
