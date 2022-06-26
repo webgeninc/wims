@@ -78,9 +78,19 @@
             />
             <button
               type="submit"
-              class="self-center mt-3 mb-0 p-2.5 pr-12 pl-12 xl:p-2 xl:pr-8 xl:pl-8 bg-gray-100 rounded-xl transition hover:bg-gray-200"
+              class="self-center mt-3 mb-0 p-2.5 pr-12 pl-12 xl:p-2 xl:pr-3xl:pl-3 xl:w-32 xl:h-10 bg-gray-100 rounded-xl transition hover:bg-gray-200"
             >
-              Zaloguj się
+              <span
+                v-if="loadingAnim"
+                class="w-full h-full flex justify-center items-centerxl:h-10"
+              >
+                <div
+                  class="w-0.5 h-0.5 rounded-full p-3 bg-gradient-to-t from-gray-400 via-gray-50 to-gray-50 flex justify-center items-center animate-spin"
+                >
+                  <div class="w-0.5 h-0.5 rounded-full p-2 bg-gray-100"></div>
+                </div>
+              </span>
+              <span v-else> Zaloguj się </span>
             </button>
           </form>
           <div class="flex justify-end items-center p-1 pt-0">
@@ -149,6 +159,7 @@ export default defineComponent({
     const niceMsg = ref<string>("Miłego dnia :)");
     const niceMsgEng = ref<string>("Have a nice day :)");
     const router = useRouter();
+    const loadingAnim = ref<boolean>(false);
 
     interface Error {
       status?: number;
@@ -156,14 +167,15 @@ export default defineComponent({
     }
 
     const login = async () => {
+      loadingAnim.value = true;
       try {
         const { error } = await supabase.auth.signIn({
           email: email.value as string,
           password: password.value as string,
         });
         if (error) throw error;
-
         setTimeout(() => {
+          loadingAnim.value = false;
           router.push({ name: "HomeView" });
         }, 500);
       } catch (error_description) {
@@ -200,6 +212,7 @@ export default defineComponent({
       niceMsg,
       niceMsgEng,
       errorMsgEng,
+      loadingAnim,
     };
   },
 });
