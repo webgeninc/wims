@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-gray-100 w-full h-full flex p-2 pt-1 flex-nowrap overflow-x-auto font-montserrat scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
+    class="bg-gray-100 w-full h-full flex p-2 pl-4 pt-1 flex-nowrap overflow-x-auto font-montserrat scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
   >
     <div
       @mouseleave="tabHoverHandler(null)"
@@ -18,7 +18,7 @@
         v-if="
           tabNameId != tab.id && dateStor.ready != tab.id && tabHover == tab.id
         "
-        class="flex flex-row justify-end text-xs"
+        class="flex flex-row justify-end text-xs mt-1"
       >
         <p
           @click="tabNameChange(tab.id)"
@@ -65,9 +65,9 @@
         </h3>
         <button
           @click="tabHoverHandler(tab.id)"
-          class="bg-gray-300 opacity-80 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-3 pl-4 mr-1"
+          class="bg-gray-300 opacity-80 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-3 pl-3 mr-1"
         >
-          <span class="text-sm grayscale opacity-70">📂</span>
+          <span class="text-base grayscale invert opacity-70">🛠</span>
         </button>
         <button
           @click="taskCreateHandler(tab.id)"
@@ -877,48 +877,46 @@
       </div>
     </div>
     <div
-      v-if="!tabCreateForm"
-      @click="tabCreateHandler(true)"
-      class="absolute w-10 top-0 2xl:right-1/6 3xk:right-1/6 right-1/4 2xl:mr-20 3xl:mr-10 bg-gray-300 opacity-80 hover:opacity-30 transition cursor-pointer rounded-b-md"
+      class="absolute right-2 w-76 flex flex-col justify-center items-end"
+      :class="{
+        'top-[-2.50rem]': tabCreateForm == false,
+        'top-0': tabCreateForm == true,
+      }"
     >
-      <span class="flex justify-center items-center text-md p-0.5">📁</span>
-    </div>
-    <div
-      v-if="tabCreateForm"
-      class="absolute top-0 right-1/4 2xl:right-1/5 2xl:mr-7 3xl:mr-0 3xl:right-1/6 bg-gray-200 transition cursor-pointer rounded-bl-xl"
-    >
-      <div class="text-xs flex flex-col justify-center items-center p-2">
-        <form
-          @submit.prevent="tabCreatePush"
-          class="flex flex-col justify-center items-center"
+      <div class="bg-gray-300 transition cursor-pointer w-full pt-px pb-px">
+        <div
+          class="text-xs flex flex-col justify-center items-center p-1 pl-2 pr-2 h-full"
         >
-          <input
-            autocomplete="off"
-            maxlength="50"
-            required
-            v-model="tabName"
-            id="tabName"
-            type="text"
-            placeholder="Nazwa nowej tabeli"
-            class="p-1.5 pr-2 pl-2 border-gray-300 border bg-gray-50 focus:outline-none resize-none rounded-lg"
-          />
-          <div
-            class="flex flex-row justify-between items-center w-full mt-1 pl-1 pr-1"
+          <form
+            @submit.prevent="tabCreatePush"
+            class="flex flex-row justify-center items-center h-full w-full"
           >
-            <button
-              type="submit"
-              class="rounded-lg p-0.5 mt-0.5 w-1/3 mr-1 bg-gray-300 text-white transition hover:bg-gray-200 font-medium text-xs shadow-inner"
-            >
-              ✔️
-            </button>
-            <button
-              @click="tabCreateHandler(false)"
-              class="rounded-lg mt-0.5 p-0.5 h w-1/3 ml-1 bg-gray-300 text-white transition hover:bg-gray-200 font-medium text-xs shadow-inner"
-            >
-              ✖️
-            </button>
-          </div>
-        </form>
+            <input
+              autocomplete="off"
+              maxlength="50"
+              required
+              v-model="tabName"
+              id="tabName"
+              type="text"
+              placeholder="Nazwa nowej tabeli"
+              class="p-1.5 pr-2 pl-2 w-full border-gray-300 border bg-gray-50 focus:outline-none resize-none rounded-lg"
+            />
+            <div class="flex flex-row justify-between items-center h-full">
+              <button
+                type="submit"
+                class="rounded-lg w-full p-1.5 pr-3 pl-3 ml-2 bg-gray-100 text-white transition hover:bg-gray-200 font-medium text-xs shadow-inner"
+              >
+                ✔️
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div
+        @click="tabCreateHandler(true)"
+        class="w-10 bg-webgencol opacity-80 hover:opacity-30 transition cursor-pointer rounded-b-md"
+      >
+        <span class="flex justify-center items-center text-md p-1">📁</span>
       </div>
     </div>
   </div>
@@ -1084,6 +1082,9 @@ export default defineComponent({
     };
 
     const tabCreateHandler = (handler: boolean) => {
+      if (tabCreateForm.value == true && handler == true) {
+        handler = false;
+      }
       taskEditForm.value = null;
       taskExtend.value = null;
       taskCreateForm.value = null;
