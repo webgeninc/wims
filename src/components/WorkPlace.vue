@@ -3,6 +3,7 @@
     class="bg-gray-100 w-full h-full flex p-2 pt-1 flex-nowrap overflow-x-auto font-montserrat scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
   >
     <div
+      @mouseleave="tabHoverHandler(null)"
       v-for="(tab, index) in dateStor.dataTabs"
       :key="index"
       class="flex flex-shrink-0 w-80 flex-col m-1 mt-0.5"
@@ -14,7 +15,9 @@
         <p class="p-0.5 mt-0.5">🔔 GOTOWE</p>
       </div>
       <div
-        v-if="tabNameId != tab.id && dateStor.ready != tab.id"
+        v-if="
+          tabNameId != tab.id && dateStor.ready != tab.id && tabHover == tab.id
+        "
         class="flex flex-row justify-end text-xs"
       >
         <p
@@ -61,8 +64,14 @@
           {{ tab.tab_name }}
         </h3>
         <button
+          @click="tabHoverHandler(tab.id)"
+          class="bg-gray-300 opacity-80 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-3 pl-4 mr-1"
+        >
+          <span class="text-sm grayscale opacity-70">📂</span>
+        </button>
+        <button
           @click="taskCreateHandler(tab.id)"
-          class="bg-gray-300 opacity-80 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-3 pl-4"
+          class="bg-gray-300 opacity-80 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-3 pl-4 ml-1"
         >
           <span class="text-sm grayscale opacity-70">📝</span>
         </button>
@@ -870,13 +879,13 @@
     <div
       v-if="!tabCreateForm"
       @click="tabCreateHandler(true)"
-      class="absolute w-10 top-0 left-5 bg-gray-300 hover:opacity-30 transition cursor-pointer rounded-b-md"
+      class="absolute w-10 top-0 2xl:right-1/6 3xk:right-1/6 right-1/4 2xl:mr-20 3xl:mr-10 bg-gray-300 opacity-80 hover:opacity-30 transition cursor-pointer rounded-b-md"
     >
       <span class="flex justify-center items-center text-md p-0.5">📁</span>
     </div>
     <div
       v-if="tabCreateForm"
-      class="absolute top-0 left-5 bg-gray-300 transition cursor-pointer rounded-b-xl"
+      class="absolute top-0 right-1/4 2xl:right-1/5 2xl:mr-7 3xl:mr-0 3xl:right-1/6 bg-gray-200 transition cursor-pointer rounded-bl-xl"
     >
       <div class="text-xs flex flex-col justify-center items-center p-2">
         <form
@@ -891,20 +900,20 @@
             id="tabName"
             type="text"
             placeholder="Nazwa nowej tabeli"
-            class="p-1.5 pr-2 pl-2 border-gray-300 border focus:outline-none resize-none rounded-lg"
+            class="p-1.5 pr-2 pl-2 border-gray-300 border bg-gray-50 focus:outline-none resize-none rounded-lg"
           />
           <div
             class="flex flex-row justify-between items-center w-full mt-1 pl-1 pr-1"
           >
             <button
               type="submit"
-              class="rounded-lg p-0.5 mt-0.5 w-1/3 mr-1 bg-gray-100 text-white transition hover:bg-gray-200 font-medium text-xs shadow-inner"
+              class="rounded-lg p-0.5 mt-0.5 w-1/3 mr-1 bg-gray-300 text-white transition hover:bg-gray-200 font-medium text-xs shadow-inner"
             >
               ✔️
             </button>
             <button
               @click="tabCreateHandler(false)"
-              class="rounded-lg mt-0.5 p-0.5 h w-1/3 ml-1 bg-gray-100 text-white transition hover:bg-gray-200 font-medium text-xs shadow-inner"
+              class="rounded-lg mt-0.5 p-0.5 h w-1/3 ml-1 bg-gray-300 text-white transition hover:bg-gray-200 font-medium text-xs shadow-inner"
             >
               ✖️
             </button>
@@ -931,6 +940,7 @@ export default defineComponent({
     const tabName = ref<string | null>(null);
     const tabNameInput = ref<any>(null);
     const tabCreateForm = ref<boolean>(false);
+    const tabHover = ref<number | null>(null);
     const taskCreateForm = ref<number | null>(null);
     const taskEditForm = ref<number | null>(null);
     const tasks = ref<any[]>();
@@ -1101,6 +1111,10 @@ export default defineComponent({
           console.warn(error.message);
         }
       }
+    };
+
+    const tabHoverHandler = (opt: number | null) => {
+      tabHover.value = opt;
     };
 
     // TASKS
@@ -1396,6 +1410,8 @@ export default defineComponent({
       tabNameId,
       tabName,
       tabCreateForm,
+      tabHover,
+      tabHoverHandler,
       taskCreateHandler,
       taskCreateForm,
       taskCreatePush,
