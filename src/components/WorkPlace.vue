@@ -65,13 +65,13 @@
         </h3>
         <button
           @click="tabHoverHandler(tab.id)"
-          class="bg-gray-300 opacity-80 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-3 pl-3 mr-1"
+          class="bg-gray-300 opacity-80 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-2 pl-2 mr-0.5"
         >
           <span class="text-base grayscale invert opacity-70">🛠</span>
         </button>
         <button
           @click="taskCreateHandler(tab.id)"
-          class="bg-gray-300 opacity-80 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-3 pl-4 ml-1"
+          class="bg-gray-300 opacity-80 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-4 pl-5 ml-0.5"
         >
           <span class="text-sm grayscale opacity-70">📝</span>
         </button>
@@ -877,15 +877,17 @@
       </div>
     </div>
     <div
-      class="absolute right-2 w-76 flex flex-col justify-center items-end"
+      class="absolute 2xl:right-1/6 2xl:mr-4 right-2 w-56 flex flex-col justify-center items-end"
       :class="{
-        'top-[-2.50rem]': tabCreateForm == false,
+        'top-[-2.80rem]': tabCreateForm == false,
         'top-0': tabCreateForm == true,
       }"
     >
-      <div class="bg-gray-300 transition cursor-pointer w-full pt-px pb-px">
+      <div
+        class="bg-gray-300 transition cursor-pointer w-full pt-px pb-px rounded-bl-2xl"
+      >
         <div
-          class="text-xs flex flex-col justify-center items-center p-1 pl-2 pr-2 h-full"
+          class="text-2xs 2xl:text-xs flex flex-col justify-center items-center p-1.5 pl-3 pr-1 h-full"
         >
           <form
             @submit.prevent="tabCreatePush"
@@ -899,12 +901,12 @@
               id="tabName"
               type="text"
               placeholder="Nazwa nowej tabeli"
-              class="p-1.5 pr-2 pl-2 w-full border-gray-300 border bg-gray-50 focus:outline-none resize-none rounded-lg"
+              class="p-1.5 pr-2 pl-2 w-full border-gray-300 border bg-gray-100 focus:outline-none resize-none rounded-lg"
             />
             <div class="flex flex-row justify-between items-center h-full">
               <button
                 type="submit"
-                class="rounded-lg w-full p-1.5 pr-3 pl-3 ml-2 bg-gray-100 text-white transition hover:bg-gray-200 font-medium text-xs shadow-inner"
+                class="rounded-lg w-full 2xl:pr-3 2xl:pl-3 p-1.5 pr-2 pl-2 ml-2 bg-gray-100 text-white transition hover:opacity-70 font-medium 2xl:text-xs text-2xs shadow-inner"
               >
                 ✔️
               </button>
@@ -914,9 +916,11 @@
       </div>
       <div
         @click="tabCreateHandler(true)"
-        class="w-10 bg-webgencol opacity-80 hover:opacity-30 transition cursor-pointer rounded-b-md"
+        class="2xl:w-10 w-8 bg-webgencol opacity-80 hover:opacity-30 transition cursor-pointer rounded-b-md"
       >
-        <span class="flex justify-center items-center text-md p-1">📁</span>
+        <span class="flex justify-center items-center xl:text-md text-sm p-1"
+          >📁</span
+        >
       </div>
     </div>
   </div>
