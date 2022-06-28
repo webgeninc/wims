@@ -60,6 +60,7 @@ module.exports = {
       },
       animation: {
         "spin-slow": "spin 25s linear infinite",
+        "load": "header-on 1s linear infinite",
         "spin-slow-twice": "spin 1s linear infinite",
         "spin-reverse": "spin-slow-reverse 2s linear infinite",
         "spin-reverse-twice": "spin-slow-reverse-twice 3s linear infinite",
@@ -68,7 +69,10 @@ module.exports = {
       keyframes: {
         "header-on": {
           "0%": { opacity: 0 },
-          "100%": { opacity: 100 },
+          "10%": { opacity: 0 },
+          "50%": { opacity: 100 },
+          "90%": { opacity: 0 },
+          "100%": { opacity: 0 },
         },
         "spin-slow-reverse": {
           "0%": { transform: "translate(-100%)" },

@@ -84,7 +84,7 @@
             <span class="text-sm opacity-70">❌</span>
           </button>
         </div>
-        <button
+        <button 
           @click="tabHoverHandler(tab.id)"
           class="bg-gray-200 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-2.5 pl-2.5 mr-0.5"
         >

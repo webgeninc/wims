@@ -78,9 +78,9 @@
             />
             <button
               type="submit"
-              class="self-center mt-3 mb-0 p-2.5 pr-12 pl-12 xl:p-2 xl:pr-3xl:pl-3 xl:w-32 xl:h-10 bg-gray-100 rounded-xl transition hover:bg-gray-200"
+              class="self-center overflow-hidden mt-3 mb-0 p-2.5 pr-12 pl-12 xl:p-2 xl:pr-3xl:pl-3 xl:w-32 xl:h-10 bg-gray-100 rounded-xl transition hover:bg-gray-200"
             >
-              <span
+              <!-- <span
                 v-if="loadingAnim"
                 class="w-full h-full flex justify-center items-centerxl:h-10"
               >
@@ -89,8 +89,15 @@
                 >
                   <div class="w-0.5 h-0.5 rounded-full p-2 bg-gray-100"></div>
                 </div>
+              </span> -->
+              <span
+                v-if="!loadingAnim"
+                class="text-gray-800 text-sm tracking-wider"
+                >Zaloguj się</span
+              >
+              <span>
+                <LoaderAnimation />
               </span>
-              <span v-else> Zaloguj się </span>
             </button>
           </form>
           <div class="flex justify-end items-center p-1 pt-0">
@@ -148,6 +155,7 @@ import { ref } from "vue";
 import { supabase } from "../supabase/init.js";
 import { useRouter } from "vue-router";
 import { defineComponent } from "vue";
+import LoaderAnimation from "../components/LoaderAnimation.vue";
 
 export default defineComponent({
   name: "LoginPage",
@@ -215,5 +223,6 @@ export default defineComponent({
       loadingAnim,
     };
   },
+  components: { LoaderAnimation },
 });
 </script>
