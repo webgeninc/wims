@@ -14,7 +14,7 @@
       >
         <p class="p-0.5 mt-0.5">🔔 GOTOWE</p>
       </div>
-      <div
+      <!-- <div
         v-if="
           tabNameId != tab.id && dateStor.ready != tab.id && tabHover == tab.id
         "
@@ -32,7 +32,7 @@
         >
           usuń kartę
         </p>
-      </div>
+      </div> -->
       <div
         v-if="tabNameId === tab.id && dateStor.ready == null"
         class="flex flex-row justify-between w-full text-xs mr-0.5 ml-0.5"
@@ -63,15 +63,37 @@
         >
           {{ tab.tab_name }}
         </h3>
+        <div
+          v-if="
+            tabNameId != tab.id &&
+            dateStor.ready != tab.id &&
+            tabHover == tab.id
+          "
+          class="flex flex-row justify-end text-xs"
+        >
+          <button
+            @click="tabNameChange(tab.id)"
+            class="bg-gray-200 text-white rounded-full font-medium transition hover:bg-opacity-50 p-1 pr-2 pl-2 mr-0.5"
+          >
+            <span class="text-sm opacity-70">✍</span>
+          </button>
+          <button
+            @click="tabDelete(tab.id)"
+            class="bg-gray-200 text-white rounded-full font-medium transition hover:bg-opacity-50 p-1 pr-2 pl-2 mr-0.5"
+          >
+            <span class="text-sm opacity-70">❌</span>
+          </button>
+        </div>
         <button
           @click="tabHoverHandler(tab.id)"
-          class="bg-gray-300 opacity-80 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-2 pl-2 mr-0.5"
+          class="bg-gray-200 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-2.5 pl-2.5 mr-0.5"
         >
           <span class="text-base grayscale invert opacity-70">🛠</span>
         </button>
         <button
+          v-if="tabHover != tab.id"
           @click="taskCreateHandler(tab.id)"
-          class="bg-gray-300 opacity-80 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-4 pl-5 ml-0.5"
+          class="bg-gray-200 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-3 pl-4 ml-0.5"
         >
           <span class="text-sm grayscale opacity-70">📝</span>
         </button>
@@ -105,13 +127,13 @@
                 <div class="h-full mr-1">
                   <button
                     @click="taskCreateHandler(null)"
-                    class="rounded-lg p-0.5 pr-4 pl-4 mr-1 bg-gray-300 bg-opacity-80 transition hover:bg-opacity-50 font-medium text-sm"
+                    class="rounded-lg p-1 pr-4 pl-4 mr-1 bg-gray-300 bg-opacity-80 transition hover:bg-opacity-50 font-medium text-xs"
                   >
                     <span class="opacity-60">❌</span>
                   </button>
                   <button
                     type="submit"
-                    class="rounded-lg p-0.5 pr-4 pl-4 ml-1 bg-gray-300 bg-opacity-80 transition hover:bg-opacity-50 font-medium text-sm"
+                    class="rounded-lg p-1 pr-4 pl-4 ml-1 bg-gray-300 bg-opacity-80 transition hover:bg-opacity-50 font-medium text-xs"
                   >
                     <span class="opacity-80">✔️</span>
                   </button>
@@ -901,7 +923,7 @@
               id="tabName"
               type="text"
               placeholder="Nazwa nowej tabeli"
-              class="p-1.5 pr-2 pl-2 w-full border-gray-300 border bg-gray-100 focus:outline-none resize-none rounded-lg"
+              class="p-1.5 pr-2 pl-2 w-full border-gray-300 border font-medium text-gray-800 bg-gray-100 focus:outline-none resize-none rounded-lg"
             />
             <div class="flex flex-row justify-between items-center h-full">
               <button
@@ -916,7 +938,11 @@
       </div>
       <div
         @click="tabCreateHandler(true)"
-        class="2xl:w-10 w-8 bg-webgencol opacity-80 hover:opacity-30 transition cursor-pointer rounded-b-md"
+        class="2xl:w-10 w-8 hover:opacity-30 transition cursor-pointer rounded-b-md"
+        :class="{
+          'bg-webgencol opacity-80': tabCreateForm == false,
+          'bg-gray-400 ': tabCreateForm == true,
+        }"
       >
         <span class="flex justify-center items-center xl:text-md text-sm p-1"
           >📁</span
@@ -1119,7 +1145,11 @@ export default defineComponent({
     };
 
     const tabHoverHandler = (opt: number | null) => {
-      tabHover.value = opt;
+      if (tabHover.value === opt) {
+        tabHover.value = null;
+      } else {
+        tabHover.value = opt;
+      }
     };
 
     // TASKS
