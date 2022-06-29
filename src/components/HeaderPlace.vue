@@ -314,7 +314,7 @@
                 </div>
               </div>
             </div>
-            <div class="w-full pt-2 pb-2 bg-gray-300">
+            <div class="w-full pt-2 pb-2 bg-gray-300 transition-all duration-500">
               <div
                 class="flex w-full flex-row justify-around items-center text-gray-800"
               >
@@ -342,7 +342,7 @@
               </div>
             </div>
             <div
-              class="flex p-2 mt-0 pb-3 pt-4 w-full text-2xs font-semibold 2xl:text-xs bg-gray-200"
+              class="flex p-2 mt-0 pb-3 pt-4 w-full text-2xs font-semibold 2xl:text-xs bg-gray-200 transition-all duration-500"
             >
               <div class="w-1/7 flex justify-center items-center">PON</div>
               <div class="w-1/7 flex justify-center items-center">WT</div>
@@ -354,7 +354,7 @@
                 NDZ
               </div>
             </div>
-            <div class="flex">
+            <div class="flex transition-all duration-500">
               <div class="flex flex-wrap p-2 w-full text-xs 2xl:text-sm">
                 <div
                   v-for="(day, index) in calPrevDaysInMonth"
@@ -369,6 +369,7 @@
                     </span>
                   </div>
                 </div>
+                
                 <div
                   @click="showInfoTasks(day)"
                   v-for="(day, index) in calDaysInMonth"
@@ -457,7 +458,7 @@
             <div class="h-0.5 w-full bg-gray-300"></div>
             <div
               v-if="dateStor.processing == null && noti"
-              class="flex justify-between items-center w-full bg-gray-100 text-gray-900"
+              class="flex justify-between items-center w-full bg-gray-100 text-gray-900 transition-all duration-500"
             >
               <div class="h-3/4 w-2 bg-red-400 m-2 mr-0 rounded-xl"></div>
               <div class="w-full p-4 pr-1 pl-2">
@@ -668,6 +669,7 @@
             </span>
           </div>
         </div>
+
         <div
           v-else
           class="w-full h-8 bg-webgencol bg-opacity-90 flex justify-end items-center pr-2"
@@ -712,6 +714,7 @@
             </div>
           </div>
         </div>
+        
       </div>
     </div>
   </div>
