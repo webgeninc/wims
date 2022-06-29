@@ -1,7 +1,7 @@
 <template>
   <div
     ref="tabsDiv"
-    class="bg-gray-100 w-full h-full flex p-2 pl-7 pr-5 pt-1 flex-nowrap overflow-x-auto font-montserrat scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
+    class="bg-gray-100 w-full h-full flex p-2 pl-7 pr-5 pt-0 flex-nowrap overflow-x-auto font-montserrat scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
   >
     <div
       @mouseleave="tabHoverHandler(null)"
@@ -83,7 +83,7 @@
             @click="tabDelete(tab.id)"
             class="bg-gray-200 text-white rounded-full font-medium transition hover:bg-opacity-50 p-1 pr-2 pl-2 mr-0.5"
           >
-            <span class="text-sm opacity-70">❌</span>
+            <span class="text-sm opacity-70">💀</span>
           </button>
         </div>
         <button
@@ -901,14 +901,14 @@
       </div>
     </div>
     <div
-      class="absolute top-4 w-72 flex justify-center items-start"
+      class="absolute top-3 w-72 flex justify-center items-start"
       :class="{
         'left-[-16.4rem]': tabCreateForm == false,
         'left-0': tabCreateForm == true,
       }"
     >
       <div
-        class="bg-gray-300 transition cursor-pointer w-full pt-px pb-px rounded-br-2xl"
+        class="bg-gray-300 transition cursor-pointer w-full pt-0.5 pb-0.5 rounded-br-2xl"
       >
         <div
           class="text-2xs 2xl:text-xs flex flex-col justify-center items-center p-1.5 pl-2 pr-3 h-full"
@@ -930,7 +930,7 @@
             <div class="flex flex-row justify-between items-center h-full">
               <button
                 type="submit"
-                class="rounded-xl w-full 2xl:pr-3 2xl:pl-3 p-1.5 pr-2 pl-2 ml-2 bg-gray-200 text-white transition hover:opacity-70 font-medium 2xl:text-xs text-2xs shadow-inner"
+                class="rounded-xl w-full 2xl:pr-3 2xl:pl-3 p-1.5 pr-2 pl-2 ml-2 bg-gray-100 text-white transition hover:opacity-70 font-medium 2xl:text-xs text-2xs shadow-inner"
               >
                 ✔️
               </button>
@@ -943,7 +943,7 @@
         class="hover:opacity-80 transition cursor-pointer rounded-r-xl flex justify-center items-center"
         :class="{
           'bg-webgencol opacity-60 h-10 w-7': tabCreateForm == false,
-          'bg-gray-400 opacity-100 h-8 w-9': tabCreateForm == true,
+          'bg-gray-400 opacity-100 h-8 w-10': tabCreateForm == true,
         }"
       >
         <span
@@ -1162,6 +1162,7 @@ export default defineComponent({
         tabHover.value = null;
       } else {
         tabHover.value = opt;
+        tabCreateForm.value = false;
       }
     };
 
