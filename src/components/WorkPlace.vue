@@ -1,6 +1,7 @@
 <template>
   <div
-    class="bg-gray-100 w-full h-full flex p-2 pl-4 pt-1 flex-nowrap overflow-x-auto font-montserrat scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
+    ref="tabsDiv"
+    class="bg-gray-100 w-full h-full flex p-2 pl-5 pt-1 flex-nowrap overflow-x-auto font-montserrat scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
   >
     <div
       @mouseleave="tabHoverHandler(null)"
@@ -56,6 +57,7 @@
         </button>
       </div>
       <div
+        @wheel="scrollFunction"
         class="pr-1 pl-1 text-center flex flex-row justify-center items-center h-16"
       >
         <h3
@@ -84,7 +86,7 @@
             <span class="text-sm opacity-70">❌</span>
           </button>
         </div>
-        <button 
+        <button
           @click="tabHoverHandler(tab.id)"
           class="bg-gray-200 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-2.5 pl-2.5 mr-0.5"
         >
@@ -899,17 +901,17 @@
       </div>
     </div>
     <div
-      class="absolute 2xl:right-1/6 2xl:mr-4 right-2 w-56 flex flex-col justify-center items-end"
+      class="absolute top-2 w-72 flex justify-center items-start"
       :class="{
-        'top-[-2.80rem]': tabCreateForm == false,
-        'top-0': tabCreateForm == true,
+        'left-[-16.4rem]': tabCreateForm == false,
+        'left-0': tabCreateForm == true,
       }"
     >
       <div
-        class="bg-gray-300 transition cursor-pointer w-full pt-px pb-px rounded-bl-2xl"
+        class="bg-gray-500 transition cursor-pointer w-full pt-px pb-px rounded-br-2xl"
       >
         <div
-          class="text-2xs 2xl:text-xs flex flex-col justify-center items-center p-1.5 pl-3 pr-1 h-full"
+          class="text-2xs 2xl:text-xs flex flex-col justify-center items-center p-1.5 pl-2 pr-3 h-full"
         >
           <form
             @submit.prevent="tabCreatePush"
@@ -923,12 +925,12 @@
               id="tabName"
               type="text"
               placeholder="Nazwa nowej tabeli"
-              class="p-1.5 pr-2 pl-2 w-full border-gray-300 border font-medium text-gray-800 bg-gray-100 focus:outline-none resize-none rounded-lg"
+              class="p-1.5 pr-2 pl-2 w-full border-gray-300 border font-medium text-gray-700 bg-gray-100 focus:outline-none resize-none rounded-xl"
             />
             <div class="flex flex-row justify-between items-center h-full">
               <button
                 type="submit"
-                class="rounded-lg w-full 2xl:pr-3 2xl:pl-3 p-1.5 pr-2 pl-2 ml-2 bg-gray-100 text-white transition hover:opacity-70 font-medium 2xl:text-xs text-2xs shadow-inner"
+                class="rounded-xl w-full 2xl:pr-3 2xl:pl-3 p-1.5 pr-2 pl-2 ml-2 bg-gray-200 text-white transition hover:opacity-70 font-medium 2xl:text-xs text-2xs shadow-inner"
               >
                 ✔️
               </button>
@@ -938,10 +940,10 @@
       </div>
       <div
         @click="tabCreateHandler(true)"
-        class="2xl:w-10 w-8 hover:opacity-30 transition cursor-pointer rounded-b-md"
+        class="w-7 h-8 hover:opacity-80 transition cursor-pointer rounded-r-xl flex justify-center items-center"
         :class="{
-          'bg-webgencol opacity-80': tabCreateForm == false,
-          'bg-gray-400 ': tabCreateForm == true,
+          'bg-webgencol opacity-60': tabCreateForm == false,
+          'bg-webgencol': tabCreateForm == true,
         }"
       >
         <span class="flex justify-center items-center xl:text-md text-sm p-1"
@@ -984,6 +986,7 @@ export default defineComponent({
     const imageViewer = ref<any>(null);
     const imageSocialPost = ref<any>(null);
     const imageSocialPostViewer = ref<any>(null);
+    const tabsDiv = ref<any>(null);
 
     //IMAGES
 
@@ -1038,6 +1041,12 @@ export default defineComponent({
     };
 
     //TABS
+
+    const scrollFunction = (e: any) => {
+      console.log(tabsDiv.value.scrollLeft);
+      console.log(e.deltaY);
+      tabsDiv.value.scrollLeft += e.deltaY;
+    };
 
     const tabDelete = async (tabID: number) => {
       let question = window.confirm(
@@ -1447,6 +1456,8 @@ export default defineComponent({
       tabCreateForm,
       tabHover,
       tabHoverHandler,
+      tabsDiv,
+      scrollFunction,
       taskCreateHandler,
       taskCreateForm,
       taskCreatePush,
