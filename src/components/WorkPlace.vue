@@ -1,191 +1,107 @@
 <template>
-  <div
-    ref="tabsDiv"
-    class="bg-gray-100 w-full h-full flex p-2 pl-7 pr-5 pt-1 flex-nowrap overflow-x-auto font-montserrat scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
-  >
-    <transition-group
-      mode="out-in"
-      enter-active-class="animate__animated animate__fadeIn animate__fast"
-      leave-active-class="animate__animated animate__fadeOut animate__fast"
-    >
-      <div
-        @mouseleave="tabHoverHandler(null)"
-        v-for="(tab, index) in dateStor.dataTabs"
-        :key="index"
-        class="flex flex-shrink-0 w-84 flex-col transition-all duration-700 relative mt-1"
-      >
-        <transition
-          enter-active-class="animate__animated animate__fadeInDown animate__delay-1s"
-          leave-active-class="animate__animated animate__fadeOutUp animate__delay-1s"
-        >
-          <div
-            v-if="dateStor.ready == tab.id"
-            class="flex justify-center item-center text-xs font-medium absolute top-[-1%] left-[34%]"
-          >
+  <div ref="tabsDiv"
+    class="bg-gray-100 w-full h-full flex p-2 pl-7 pr-5 pt-1 flex-nowrap overflow-x-auto font-montserrat scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+    <transition-group mode="out-in" enter-active-class="animate__animated animate__fadeIn animate__fast"
+      leave-active-class="animate__animated animate__fadeOut animate__fast">
+      <div @mouseleave="tabHoverHandler(null)" v-for="(tab, index) in dateStor.dataTabs" :key="index"
+        class="flex flex-shrink-0 w-84 flex-col transition-all duration-700 relative mt-1">
+        <transition enter-active-class="animate__animated animate__fadeInDown animate__delay-1s"
+          leave-active-class="animate__animated animate__fadeOutUp animate__delay-1s">
+          <div v-if="dateStor.ready == tab.id"
+            class="flex justify-center item-center text-xs font-medium absolute top-[-1%] left-[34%]">
             <p class="p-0.5 pb-0 mt-2">🔔 GOTOWE</p>
           </div>
         </transition>
-        <div
-          v-if="tabNameId === tab.id && dateStor.ready == null"
-          class="flex flex-row justify-between w-full text-xs mr-0.5 ml-0.5"
-        >
-          <input
-            autofocus
-            ref="tabNameInput"
-            autocomplete="off"
-            maxlength="45"
-            required
-            type="text"
-            v-model="tabName"
+        <div v-if="tabNameId === tab.id && dateStor.ready == null"
+          class="flex flex-row justify-between w-full text-xs mr-0.5 ml-0.5">
+          <input autofocus ref="tabNameInput" autocomplete="off" maxlength="45" required type="text" v-model="tabName"
             placeholder="tabName"
-            class="p-1.5 flex-1 m-1 border-gray-300 border focus:outline-none resize-none rounded-xl"
-          />
-          <button
-            @click="tabNamePush(tab.id)"
-            class="bg-gray-300 text-white rounded-full font-medium transition hover:bg-gray-200 m-1 p-0.5 pr-4 pl-4"
-          >
+            class="p-1.5 flex-1 m-1 border-gray-300 border focus:outline-none resize-none rounded-xl" />
+          <button @click="tabNamePush(tab.id)"
+            class="bg-gray-300 text-white rounded-full font-medium transition hover:bg-gray-200 m-1 p-0.5 pr-4 pl-4">
             <span class="text-base grayscale opacity-50">👌</span>
           </button>
         </div>
-        <div
-          @wheel="scrollFunction"
-          class="pr-3 pl-1 text-center flex flex-row justify-center items-center h-16 transition-all duration-700"
-        >
+        <div @wheel="scrollFunction"
+          class="pr-3 pl-1 text-center flex flex-row justify-center items-center h-16 transition-all duration-700">
           <h3
-            class="font-semibold text-left text-2base text-gray-700 tracking-wide p-2 pt-0 pb-0 flex-1 transition-all duration-700"
-          >
+            class="font-semibold text-left text-2base text-gray-700 tracking-wide p-2 pt-0 pb-0 flex-1 transition-all duration-700">
             {{ tab.tab_name }}
           </h3>
-          <div
-            v-if="
-              tabNameId != tab.id &&
-              dateStor.ready != tab.id &&
-              tabHover == tab.id
-            "
-            class="flex flex-row justify-end text-xs pr-2 transition-all duration-700"
-          >
-            <button
-              @click="tabNameChange(tab.id)"
-              class="bg-gray-200 text-white rounded-full font-medium transition hover:bg-opacity-50 p-1 pr-2 pl-2 mr-0.5"
-            >
+          <div v-if="
+            tabNameId != tab.id &&
+            dateStor.ready != tab.id &&
+            tabHover == tab.id
+          " class="flex flex-row justify-end text-xs pr-2 transition-all duration-700">
+            <button @click="tabNameChange(tab.id)"
+              class="bg-gray-200 text-white rounded-full font-medium transition hover:bg-opacity-50 p-1 pr-2 pl-2 mr-0.5">
               <span class="text-sm opacity-70">✍</span>
             </button>
-            <button
-              @click="tabDelete(tab.id)"
-              class="bg-gray-200 text-white rounded-full font-medium transition hover:bg-opacity-50 p-1 pr-2 pl-2 mr-0.5"
-            >
+            <button @click="tabDelete(tab.id)"
+              class="bg-gray-200 text-white rounded-full font-medium transition hover:bg-opacity-50 p-1 pr-2 pl-2 mr-0.5">
               <span class="text-sm opacity-70">💀</span>
             </button>
           </div>
-          <button
-            @click="tabHoverHandler(tab.id)"
-            class="bg-gray-200 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-2.5 pl-2.5 mr-0.5"
-          >
+          <button @click="tabHoverHandler(tab.id)"
+            class="bg-gray-200 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-2.5 pl-2.5 mr-0.5">
             <span class="text-base grayscale invert opacity-70">🛠</span>
           </button>
-          <button
-            v-if="tabHover != tab.id"
-            @click="taskCreateHandler(tab.id)"
+          <button v-if="tabHover != tab.id" @click="taskCreateHandler(tab.id)"
             class="text-white rounded-full font-medium transition-all duration-500 hover:bg-opacity-50 p-0.5 pr-3 pl-4 ml-0.5"
             :class="{
               'bg-gray-200': taskCreateForm != tab.id,
               'bg-gray-300': taskCreateForm === tab.id,
-            }"
-          >
+            }">
             <span class="text-sm grayscale opacity-70">📝</span>
           </button>
         </div>
         <div
-          class="h-full flex-nowrap overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-gray-100 pr-2 mr-1 ml-1"
-        >
-          <transition
-            mode="out-in"
-            enter-active-class="animate__animated animate__fadeIn animate__faster"
-            leave-active-class="animate__animated animate__fadeOut animate__faster"
-          >
+          class="h-full flex-nowrap overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-gray-100 pr-2 mr-1 ml-1">
+          <transition mode="out-in" enter-active-class="animate__animated animate__fadeIn animate__faster"
+            leave-active-class="animate__animated animate__fadeOut animate__faster">
             <div v-if="taskCreateForm === tab.id" class="w-full mt-1 mb-2">
-              <div
-                class="w-full bg-gray-200 bg-opacity-70 p-2 scrollbar-none !scrollbar-thumb-indigo-500"
-              >
-                <form
-                  v-for="(item, index) in tasks"
-                  :key="index"
-                  @submit.prevent="
-                    taskCreatePush(
-                      item.task_name,
-                      item.task_worker,
-                      item.task_desc,
-                      item.task_date,
-                      item.task_color,
-                      tab.id
-                    )
-                  "
-                  class="flex flex-col justify-center text-xs items-center"
-                >
-                  <div
-                    class="w-full flex justify-between items-center pl-1 m-1"
-                  >
+              <div class="w-full bg-gray-200 bg-opacity-70 p-2 scrollbar-none !scrollbar-thumb-indigo-500">
+                <form v-for="(item, index) in tasks" :key="index" @submit.prevent="
+                  taskCreatePush(
+                    item.task_name,
+                    item.task_worker,
+                    item.task_desc,
+                    item.task_date,
+                    item.task_color,
+                    tab.id
+                  )
+                " class="flex flex-col justify-center text-xs items-center">
+                  <div class="w-full flex justify-between items-center pl-1 m-1">
                     <h4 class="text-xs m-0.5 pr-3 font-semibold uppercase">
                       Nowe zadanie
                     </h4>
                     <div class="h-full mr-1">
-                      <button
-                        type="submit"
-                        class="rounded-lg p-1 pr-4 pl-4 ml-1 bg-gray-300 bg-opacity-80 transition hover:bg-opacity-50 font-medium text-xs"
-                      >
+                      <button type="submit"
+                        class="rounded-lg p-1 pr-4 pl-4 ml-1 bg-gray-300 bg-opacity-80 transition hover:bg-opacity-50 font-medium text-xs">
                         <span class="opacity-80">✔️</span>
                       </button>
                     </div>
                   </div>
-                  <div
-                    class="flex w-full flex-col justify-center items-center p-1"
-                  >
-                    <div
-                      class="flex w-full justify-between items-center m-1 h-6"
-                    >
-                      <input
-                        v-model="item.task_name"
-                        autocomplete="off"
-                        maxlength="50"
-                        minlength="5"
-                        required
-                        id="taskName"
-                        type="text"
-                        placeholder="Nazwa zadania"
-                        class="p-1 w-3/5 text-xs bg-white bg-opacity-80 rounded-md focus:outline-offset-1 border border-gray-50 focus:border-gray-300 focus:outline-none resize-none"
-                      />
-                      <select
-                        required
-                        v-model="item.task_worker"
-                        class="p-1 w-2/6 text-xs bg-white bg-opacity-80 rounded-md focus:border-gray-300 border-gray-50 border focus:outline-none"
-                      >
+                  <div class="flex w-full flex-col justify-center items-center p-1">
+                    <div class="flex w-full justify-between items-center m-1 h-6">
+                      <input v-model="item.task_name" autocomplete="off" maxlength="50" minlength="5" required
+                        id="taskName" type="text" placeholder="Nazwa zadania"
+                        class="p-1 w-3/5 text-xs bg-white bg-opacity-80 rounded-md focus:outline-offset-1 border border-gray-50 focus:border-gray-300 focus:outline-none resize-none" />
+                      <select required v-model="item.task_worker"
+                        class="p-1 w-2/6 text-xs bg-white bg-opacity-80 rounded-md focus:border-gray-300 border-gray-50 border focus:outline-none">
                         <option value="Ozi">Ozito</option>
                         <option value="Mati">Matito</option>
                         <option value="Wszyscy">Wszyscy</option>
                       </select>
                     </div>
-                    <textarea
-                      v-model="item.task_desc"
-                      autocomplete="off"
-                      maxlength="500"
-                      id="taskDesc"
-                      type="text"
+                    <textarea v-model="item.task_desc" autocomplete="off" maxlength="500" id="taskDesc" type="text"
                       placeholder="Opis"
-                      class="w-full h-16 m-1 p-1 text-xs rounded-md bg-white bg-opacity-80 focus:border-gray-200 border-gray-50 border focus:outline-none resize-none overflow-y-scroll scrollbar-thin scrollbar-thumb-webgencol scrollbar-track-gray-200"
-                    />
-                    <div
-                      class="flex flex-row w-full justify-between items-center mt-1 mb-1 text-xs"
-                    >
-                      <input
-                        v-model="item.task_date"
-                        type="date"
-                        class="w-1/2 h-6 p-1 bg-white bg-opacity-80 focus:border-gray-300 border-gray-50 border rounded-md focus:outline-none"
-                      />
-                      <select
-                        required
-                        v-model="item.task_color"
-                        class="p-1 w-2/5 h-6 bg-white bg-opacity-80 focus:border-gray-300 border-gray-50 border rounded-md focus:outline-none"
-                      >
+                      class="w-full h-16 m-1 p-1 text-xs rounded-md bg-white bg-opacity-80 focus:border-gray-200 border-gray-50 border focus:outline-none resize-none overflow-y-scroll scrollbar-thin scrollbar-thumb-webgencol scrollbar-track-gray-200" />
+                    <div class="flex flex-row w-full justify-between items-center mt-1 mb-1 text-xs">
+                      <input v-model="item.task_date" type="date"
+                        class="w-1/2 h-6 p-1 bg-white bg-opacity-80 focus:border-gray-300 border-gray-50 border rounded-md focus:outline-none" />
+                      <select required v-model="item.task_color"
+                        class="p-1 w-2/5 h-6 bg-white bg-opacity-80 focus:border-gray-300 border-gray-50 border rounded-md focus:outline-none">
                         <option value="1">Zadanie</option>
                         <option value="2">Stop</option>
                         <option value="3">Weryfikacja</option>
@@ -194,14 +110,10 @@
                         <option value="6">Zrobione</option>
                       </select>
                     </div>
-                    <div
-                      class="flex flex-row w-full justify-between items-center mt-2 text-2xs h-8"
-                    >
+                    <div class="flex flex-row w-full justify-between items-center mt-2 text-2xs h-8">
                       <div class="flex flex-1 justify-between h-full ml-1">
-                        <div
-                          v-if="taskCreateImageInfo"
-                          class="flex flex-1 flex-col justify-center items-start tracking-widewide text-xs"
-                        >
+                        <div v-if="taskCreateImageInfo"
+                          class="flex flex-1 flex-col justify-center items-start tracking-widewide text-xs">
                           <div class="flex justify-end items-center p-px">
                             <p>{{ taskFile.name }}</p>
                             <p>&nbsp; - nazwa</p>
@@ -209,41 +121,28 @@
                           <div class="flex justify-end items-center p-px">
                             <p>
                               {{
-                                taskFile.size / 1024 > 999
-                                  ? (taskFile.size / 1024 / 1024).toFixed(2) +
+                                  taskFile.size / 1024 > 999
+                                    ? (taskFile.size / 1024 / 1024).toFixed(2) +
                                     " mb"
-                                  : (taskFile.size / 1024).toFixed() + " kb"
+                                    : (taskFile.size / 1024).toFixed() + " kb"
                               }}
                             </p>
                             <p>&nbsp; - rozmiar</p>
                           </div>
                         </div>
-                        <div
-                          v-else
-                          class="h-full w-full flex justify-start items-center"
-                        >
-                          <div
-                            class="flex justify-center items-end flex-col text-xs pr-0.5"
-                          >
+                        <div v-else class="h-full w-full flex justify-start items-center">
+                          <div class="flex justify-center items-end flex-col text-xs pr-0.5">
                             <p>Nie wybrano żadnych zdjęć</p>
                           </div>
                         </div>
                       </div>
                       <div
-                        class="w-16 h-full relative rounded-lg bg-gray-300 pointer-events-auto cursor-pointer transition hover:bg-opacity-50 overflow-hidden flex justify-center items-center"
-                      >
+                        class="w-16 h-full relative rounded-lg bg-gray-300 pointer-events-auto cursor-pointer transition hover:bg-opacity-50 overflow-hidden flex justify-center items-center">
                         <span
-                          class="h-full w-full flex justify-center items-center text-lg opacity-90 transition"
-                          >💾</span
-                        >
-                        <input
-                          @change="taskCreateImageInfoHandler"
-                          ref="taskCreateImage"
-                          id="taskCreateImage"
-                          type="file"
-                          accept="image/*"
-                          class="opacity-0 absolute cursor-pointer p-0 top-0 bottom-0 text-xs"
-                        />
+                          class="h-full w-full flex justify-center items-center text-lg opacity-90 transition">💾</span>
+                        <input @change="taskCreateImageInfoHandler" ref="taskCreateImage" id="taskCreateImage"
+                          type="file" accept="image/*"
+                          class="opacity-0 absolute cursor-pointer p-0 top-0 bottom-0 text-xs" />
                       </div>
                     </div>
                   </div>
@@ -251,107 +150,64 @@
               </div>
             </div>
           </transition>
-          <div
-            v-for="(task, index) in dateStor.dataTasks"
-            :key="index"
-            class="transition-all duration-700"
-          >
-            <div
-              v-if="taskEditForm != task.id && tab.id === task.task_tabid"
-              @mouseleave="taskHoverHandler(null)"
-              class="overflow-hidden flex bg-gray-50 shadow-md mb-1.5 mt-1 pt-0.5 transition-all duration-700"
-            >
-              <div
-                class="w-1.2 opacity-80"
-                :class="{
-                  'bg-gray-400': task.task_color === 1,
-                  'bg-red-600': task.task_color === 2,
-                  'bg-yellow-600': task.task_color === 3,
-                  'bg-purple-600': task.task_color === 4,
-                  'bg-blue-600': task.task_color === 5,
-                  'bg-green-600': task.task_color === 6,
-                }"
-              ></div>
+          <div v-for="(task, index) in dateStor.dataTasks" :key="index" class="transition-all duration-700">
+            <div v-if="taskEditForm != task.id && tab.id === task.task_tabid" @mouseleave="taskHoverHandler(null)"
+              class="overflow-hidden flex bg-gray-50 shadow-md mb-1.5 mt-1 pt-0.5 transition-all duration-700">
+              <div class="w-1.2 opacity-80" :class="{
+                'bg-gray-400': task.task_color === 1,
+                'bg-red-600': task.task_color === 2,
+                'bg-yellow-600': task.task_color === 3,
+                'bg-purple-600': task.task_color === 4,
+                'bg-blue-600': task.task_color === 5,
+                'bg-green-600': task.task_color === 6,
+              }"></div>
               <div class="ml-1 flex flex-col flex-1 pr-1 pb-px pt-px">
-                <div
-                  v-if="taskEditForm != task.id"
-                  class="flex flex-row w-full items-baseline overflow-hidden"
-                ></div>
+                <div v-if="taskEditForm != task.id" class="flex flex-row w-full items-baseline overflow-hidden"></div>
                 <div class="flex justify-between items-center">
-                  <p
-                    @click="taskExtendHandler(task.id)"
-                    class="text-sm m-1 mb-0 font-semibold flex flex-wrap overflow-x-hidden"
-                    :class="{
+                  <p @click="taskExtendHandler(task.id)"
+                    class="text-sm m-1 mb-0 font-semibold flex flex-wrap overflow-x-hidden" :class="{
                       'cursor-pointer': task.task_desc.length > 101,
-                    }"
-                  >
+                    }">
                     {{ task.task_name }}
                   </p>
-                  <button
-                    v-if="
-                      task.task_image !== '' &&
-                      task.task_image !== null &&
-                      imageStatus !== task.id
-                    "
-                    @click="imageHandler(task.id)"
-                    class="text-base font-medium transition hover:opacity-70 pr-px"
-                  >
+                  <button v-if="
+                    task.task_image !== '' &&
+                    task.task_image !== null &&
+                    imageStatus !== task.id
+                  " @click="imageHandler(task.id)" class="text-base font-medium transition hover:opacity-70 pr-px">
                     <span
-                      class="m-1 mb-0 tracking-tighter font-semibold text-gray-500 text-opacity-70 hover:text-opacity-50 transition cursor-pointer"
-                      >📷</span
-                    >
+                      class="m-1 mb-0 tracking-tighter font-semibold text-gray-500 text-opacity-70 hover:text-opacity-50 transition cursor-pointer">📷</span>
                   </button>
-                  <button
-                    v-if="imageStatus === task.id"
-                    @click="imageHandler(null)"
-                    class="m-1 mt-0.5 mb-0 text-lg font-medium transition opacity-50 hover:opacity-30 pr-px"
-                  >
+                  <button v-if="imageStatus === task.id" @click="imageHandler(null)"
+                    class="m-1 mt-0.5 mb-0 text-lg font-medium transition opacity-50 hover:opacity-30 pr-px">
                     <span class="p-1">✖</span>
                   </button>
                 </div>
                 <div v-if="task.task_image !== '' && task.task_image !== null">
                   <div class="flex justify-center items-center">
-                    <div
-                      v-if="imageStatus === task.id && imageLoaded !== true"
-                      class="mt-4 mb-2 w-1 h-1 rounded-full p-4 bg-gradient-to-t from-gray-400 via-gray-50 to-gray-50 flex justify-center items-center animate-spin"
-                    >
+                    <div v-if="imageStatus === task.id && imageLoaded !== true"
+                      class="mt-4 mb-2 w-1 h-1 rounded-full p-4 bg-gradient-to-t from-gray-400 via-gray-50 to-gray-50 flex justify-center items-center animate-spin">
                       <div class="w-1 h-1 rounded-full p-3 bg-gray-100"></div>
                     </div>
                   </div>
-                  <img
-                    @click="imageSocialHandler(task.id)"
-                    v-if="imageStatus === task.id"
-                    ref="imageViewer"
-                    class="w-full mt-1 mb-2 cursor-pointer hover:opacity-80 hover:bg-gray-400"
-                  />
+                  <img @click="imageSocialHandler(task.id)" v-if="imageStatus === task.id" ref="imageViewer"
+                    class="w-full mt-1 mb-2 cursor-pointer hover:opacity-80 hover:bg-gray-400" />
                 </div>
-                <div
-                  @dblclick="taskExtendHandler(task.id)"
-                  v-if="task.task_desc.length > 100 && taskExtend != task.id"
-                  class="w-full"
-                >
+                <div @dblclick="taskExtendHandler(task.id)" v-if="task.task_desc.length > 100 && taskExtend != task.id"
+                  class="w-full">
                   <p
-                    class="text-sm m-1 mr-3 mb-0 font-normal tracking-tight overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]"
-                  >
+                    class="text-sm m-1 mr-3 mb-0 font-normal tracking-tight overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]">
                     {{ task.task_desc }}
                   </p>
                   <!-- <span @click="taskExtendHandler(task.id)"> ... </span> -->
                 </div>
-                <div
-                  @dblclick="taskExtendHandler(task.id)"
-                  v-if="task.task_desc.length > 100 && taskExtend == task.id"
-                  class="w-full"
-                >
-                  <p
-                    class="text-sm m-2 ml-1 mr-1 font-normal tracking-normal overflow-hidden"
-                  >
+                <div @dblclick="taskExtendHandler(task.id)" v-if="task.task_desc.length > 100 && taskExtend == task.id"
+                  class="w-full">
+                  <p class="text-sm m-2 ml-1 mr-1 font-normal tracking-normal overflow-hidden">
                     {{ task.task_desc }}
                   </p>
                 </div>
-                <p
-                  v-if="task.task_desc.length < 101"
-                  class="text-sm m-1 mr-1 mb-0 font-normal"
-                >
+                <p v-if="task.task_desc.length < 101" class="text-sm m-1 mr-1 mb-0 font-normal">
                   {{ task.task_desc }}
                 </p>
                 <p v-if="task.task_desc.length == 0" class="m-0 p-0"></p>
@@ -360,111 +216,99 @@
                     <p class="text-xs m-1 font-semibold">
                       {{ taskDateChanger(task.task_date) }}
                     </p>
-                    <p
-                      v-if="
-                        Math.ceil(
-                          (new Date(
-                            task.task_date.replace(/\./g, '/')
-                          ).getTime() -
-                            new Date().getTime()) /
-                            1000 /
-                            60 /
-                            60 /
-                            24
-                        ) < 0 && task.task_color != 6
-                      "
-                      class="text-xs m-1 font-normal text-red-600"
-                    >
+                    <p v-if="
+                      Math.ceil(
+                        (new Date(
+                          task.task_date.replace(/\./g, '/')
+                        ).getTime() -
+                          new Date().getTime()) /
+                        1000 /
+                        60 /
+                        60 /
+                        24
+                      ) < 0 && task.task_color != 6
+                    " class="text-xs m-1 font-normal text-red-600">
                       (minęło
                       <span class="font-semibold tracking-wider">{{
-                        Math.ceil(
-                          Math.abs(
-                            new Date(
-                              task.task_date.replace(/\./g, "/")
-                            ).getTime() - new Date().getTime()
-                          ) /
+                          Math.ceil(
+                            Math.abs(
+                              new Date(
+                                task.task_date.replace(/\./g, "/")
+                              ).getTime() - new Date().getTime()
+                            ) /
                             1000 /
                             60 /
                             60 /
                             24
-                        ) - 1
+                          ) - 1
                       }}</span>
                       dni temu)
                     </p>
-                    <p
-                      v-else-if="
-                        Math.ceil(
-                          (new Date(
-                            task.task_date.replace(/\./g, '/')
-                          ).getTime() -
-                            new Date().getTime()) /
-                            1000 /
-                            60 /
-                            60 /
-                            24
-                        ) == 0 && task.task_color != 6
-                      "
-                      class="text-xs m-1 font-medium tracking-wider text-yellow-600"
-                    >
+                    <p v-else-if="
+                      Math.ceil(
+                        (new Date(
+                          task.task_date.replace(/\./g, '/')
+                        ).getTime() -
+                          new Date().getTime()) /
+                        1000 /
+                        60 /
+                        60 /
+                        24
+                      ) == 0 && task.task_color != 6
+                    " class="text-xs m-1 font-medium tracking-wider text-yellow-600">
                       (do dzisiaj)
                     </p>
-                    <p
-                      v-else-if="
-                        Math.ceil(
-                          (new Date(
-                            task.task_date.replace(/\./g, '/')
-                          ).getTime() -
-                            new Date().getTime()) /
-                            1000 /
-                            60 /
-                            60 /
-                            24
-                        ) <= 7 && task.task_color != 6
-                      "
-                      class="text-xs m-1 font-medium tracking-wider text-yellow-500"
-                    >
+                    <p v-else-if="
+                      Math.ceil(
+                        (new Date(
+                          task.task_date.replace(/\./g, '/')
+                        ).getTime() -
+                          new Date().getTime()) /
+                        1000 /
+                        60 /
+                        60 /
+                        24
+                      ) <= 7 && task.task_color != 6
+                    " class="text-xs m-1 font-medium tracking-wider text-yellow-500">
                       tylko
                       <span class="font-semibold tracking-wider">{{
-                        Math.ceil(
-                          (new Date(
-                            task.task_date.replace(/\./g, "/")
-                          ).getTime() -
-                            new Date().getTime()) /
+                          Math.ceil(
+                            (new Date(
+                              task.task_date.replace(/\./g, "/")
+                            ).getTime() -
+                              new Date().getTime()) /
                             1000 /
                             60 /
                             60 /
                             24
-                        )
+                          )
                       }}</span>
                       dni
                     </p>
-                    <p
-                      v-else-if="
-                        Math.ceil(
-                          (new Date(
-                            task.task_date.replace(/\./g, '/')
-                          ).getTime() -
-                            new Date().getTime()) /
-                            1000 /
-                            60 /
-                            60 /
-                            24
-                        ) > 7 && task.task_color != 6
-                      "
-                      class="text-xs m-1 font-normal text-gray-600"
-                    >
+                    <p v-else-if="
+                      Math.ceil(
+                        (new Date(
+                          task.task_date.replace(/\./g, '/')
+                        ).getTime() -
+                          new Date().getTime()) /
+                        1000 /
+                        60 /
+                        60 /
+                        24
+                      ) > 7 && task.task_color != 6
+                    " class="text-xs m-1 font-normal text-gray-600">
                       (zostało
                       <span class="font-semibold tracking-wider">{{
-                        Math.ceil(
-                          (new Date(
-                            task.task_date.replace(/\./g, "/")
-                          ).getTime() -
-                            new Date().getTime()) /
+                          Math.ceil(
+                            (new Date(
+                              task.task_date.replace(/\./g, "/")
+                            ).getTime() -
+                              new Date().getTime()) /
                             1000 /
                             60 /
                             60 /
                             24
-                        )
+                          )
                       }}</span>
                       dni)
                     </p>
@@ -472,108 +316,64 @@
                   <div v-if="task.task_date === ''" class="flex flex-row">
                     <p class="text-xs m-1 font-semibold">Bez daty</p>
                   </div>
-                  <p
-                    @click="taskHoverHandler(task.id)"
-                    class="text-xs m-1 font-bold hover:text-gray-400 transition cursor-pointer"
-                  >
+                  <p @click="taskHoverHandler(task.id)"
+                    class="text-xs m-1 font-bold hover:text-gray-400 transition cursor-pointer">
                     {{ task.task_worker }}
                   </p>
                 </div>
-                <div
-                  v-if="taskHover === task.id"
-                  class="pb-1.5 pt-0.5 flex flex-row w-full justify-start items-center flex-shrink-0 transition duration-200"
-                >
-                  <p
-                    @click="taskEditChange(task.id)"
-                    class="text-2xs ml-2 mr-2 font-semibold tracking-wider text-gray-600 text-opacity-50 hover:text-opacity-100 cursor-pointer"
-                  >
+                <div v-if="taskHover === task.id"
+                  class="pb-1.5 pt-0.5 flex flex-row w-full justify-start items-center flex-shrink-0 transition duration-200">
+                  <p @click="taskEditChange(task.id)"
+                    class="text-2xs ml-2 mr-2 font-semibold tracking-wider text-gray-600 text-opacity-50 hover:text-opacity-100 cursor-pointer">
                     edycja
                   </p>
-                  <p
-                    @click="taskDelete(task.id, tab.id)"
-                    class="text-2xs ml-2 mr-2 font-semibold tracking-wider text-red-600 text-opacity-50 hover:text-opacity-100 cursor-pointer"
-                  >
+                  <p @click="taskDelete(task.id, tab.id)"
+                    class="text-2xs ml-2 mr-2 font-semibold tracking-wider text-red-600 text-opacity-50 hover:text-opacity-100 cursor-pointer">
                     usunięcie
                   </p>
                 </div>
               </div>
             </div>
-            <div
-              v-if="taskEditForm == task.id && tab.id === task.task_tabid"
-              class="flex justify-center items-center bg-gray-200 bg-opacity-70 p-2 w-full mb-2"
-            >
-              <form
-                v-for="(item, index) in taskEdited"
-                :key="index"
-                @submit.prevent="taskEditPush(task.id, tab.id)"
-                class="flex flex-col justify-center text-xs items-center w-full"
-              >
+            <div v-if="taskEditForm == task.id && tab.id === task.task_tabid"
+              class="flex justify-center items-center bg-gray-200 bg-opacity-70 p-2 w-full mb-2">
+              <form v-for="(item, index) in taskEdited" :key="index" @submit.prevent="taskEditPush(task.id, tab.id)"
+                class="flex flex-col justify-center text-xs items-center w-full">
                 <div class="w-full flex justify-between items-center pl-1 m-1">
                   <h4 class="text-xs m-0.5 pl-1 pr-3 font-semibold uppercase">
                     Edycja zadania
                   </h4>
                   <div class="h-full mr-1">
-                    <button
-                      @click="taskEditClose"
-                      class="rounded-lg p-0.5 pr-4 pl-4 mr-1 bg-gray-300 text-white transition hover:bg-gray-200 font-medium text-sm"
-                    >
+                    <button @click="taskEditClose"
+                      class="rounded-lg p-0.5 pr-4 pl-4 mr-1 bg-gray-300 text-white transition hover:bg-gray-200 font-medium text-sm">
                       <span class="opacity-60">❌</span>
                     </button>
-                    <button
-                      type="submit"
-                      class="rounded-lg p-0.5 pr-4 pl-4 ml-1 bg-gray-300 text-white transition hover:bg-gray-200 font-medium text-sm"
-                    >
+                    <button type="submit"
+                      class="rounded-lg p-0.5 pr-4 pl-4 ml-1 bg-gray-300 text-white transition hover:bg-gray-200 font-medium text-sm">
                       <span class="opacity-60">✔️</span>
                     </button>
                   </div>
                 </div>
-                <div
-                  class="flex w-full flex-col justify-center items-center p-1"
-                >
+                <div class="flex w-full flex-col justify-center items-center p-1">
                   <div class="flex w-full justify-between items-center m-1 h-6">
-                    <input
-                      v-model="item.task_name"
-                      autocomplete="off"
-                      maxlength="50"
-                      minlength="5"
-                      required
-                      type="text"
+                    <input v-model="item.task_name" autocomplete="off" maxlength="50" minlength="5" required type="text"
                       :placeholder="item.task_name"
-                      class="p-1 w-3/5 text-xs bg-white bg-opacity-80 rounded-md focus:outline-offset-1 border border-gray-50 focus:border-gray-300 focus:outline-none resize-none"
-                    />
+                      class="p-1 w-3/5 text-xs bg-white bg-opacity-80 rounded-md focus:outline-offset-1 border border-gray-50 focus:border-gray-300 focus:outline-none resize-none" />
 
-                    <select
-                      required
-                      v-model="item.task_worker"
-                      class="p-1 w-2/6 text-xs bg-white bg-opacity-80 rounded-md focus:border-gray-300 border-gray-50 border focus:outline-none"
-                    >
+                    <select required v-model="item.task_worker"
+                      class="p-1 w-2/6 text-xs bg-white bg-opacity-80 rounded-md focus:border-gray-300 border-gray-50 border focus:outline-none">
                       <option value="Ozi">Ozito</option>
                       <option value="Mati">Matito</option>
                       <option value="Wszyscy">Wszyscy</option>
                     </select>
                   </div>
-                  <textarea
-                    v-model="item.task_desc"
-                    autocomplete="off"
-                    maxlength="500"
-                    id="taskDesc"
-                    type="text"
+                  <textarea v-model="item.task_desc" autocomplete="off" maxlength="500" id="taskDesc" type="text"
                     placeholder="Opis"
-                    class="w-full h-16 m-1 p-1 text-xs bg-white bg-opacity-80 rounded-md focus:border-gray-300 border-gray-50 border focus:outline-none resize-none overflow-y-scroll scrollbar-thin scrollbar-thumb-webgencol scrollbar-track-gray-200"
-                  />
-                  <div
-                    class="flex flex-row w-full justify-between items-center mt-1 mb-1 text-xs"
-                  >
-                    <input
-                      v-model="item.task_date"
-                      type="date"
-                      class="w-1/2 h-6 p-1 bg-white bg-opacity-80 rounded-md focus:border-gray-300 border-gray-50 border focus:outline-none"
-                    />
-                    <select
-                      required
-                      v-model="item.task_color"
-                      class="p-1 w-2/5 h-6 bg-white bg-opacity-80 rounded-md focus:border-gray-300 border-gray-50 border focus:outline-none"
-                    >
+                    class="w-full h-16 m-1 p-1 text-xs bg-white bg-opacity-80 rounded-md focus:border-gray-300 border-gray-50 border focus:outline-none resize-none overflow-y-scroll scrollbar-thin scrollbar-thumb-webgencol scrollbar-track-gray-200" />
+                  <div class="flex flex-row w-full justify-between items-center mt-1 mb-1 text-xs">
+                    <input v-model="item.task_date" type="date"
+                      class="w-1/2 h-6 p-1 bg-white bg-opacity-80 rounded-md focus:border-gray-300 border-gray-50 border focus:outline-none" />
+                    <select required v-model="item.task_color"
+                      class="p-1 w-2/5 h-6 bg-white bg-opacity-80 rounded-md focus:border-gray-300 border-gray-50 border focus:outline-none">
                       <option value="1">Zadanie</option>
                       <option value="2">Stop</option>
                       <option value="3">Weryfikacja</option>
@@ -582,15 +382,11 @@
                       <option value="6">Zrobione</option>
                     </select>
                   </div>
-                  <div
-                    class="flex flex-row w-full justify-between items-center mt-2 text-2xs h-8"
-                    :class="{ 'h-14': imageData != null }"
-                  >
+                  <div class="flex flex-row w-full justify-between items-center mt-2 text-2xs h-8"
+                    :class="{ 'h-14': imageData != null }">
                     <div class="flex flex-1 justify-between h-full ml-1">
-                      <div
-                        v-if="taskCreateImageInfo"
-                        class="flex flex-1 flex-col justify-center items-start tracking-widewide text-xs"
-                      >
+                      <div v-if="taskCreateImageInfo"
+                        class="flex flex-1 flex-col justify-center items-start tracking-widewide text-xs">
                         <div class="flex justify-end items-center p-px">
                           <p>{{ taskFile.name }}</p>
                           <p>&nbsp; - nazwa</p>
@@ -598,74 +394,49 @@
                         <div class="flex justify-end items-center p-px">
                           <p>
                             {{
-                              taskFile.size / 1024 > 999
-                                ? (taskFile.size / 1024 / 1024).toFixed(2) +
+                                taskFile.size / 1024 > 999
+                                  ? (taskFile.size / 1024 / 1024).toFixed(2) +
                                   " mb"
-                                : (taskFile.size / 1024).toFixed() + " kb"
+                                  : (taskFile.size / 1024).toFixed() + " kb"
                             }}
                           </p>
                           <p>&nbsp; - rozmiar</p>
                         </div>
                       </div>
-                      <div
-                        v-else-if="imageData != null"
-                        class="flex flex-1 flex-col justify-center items-start tracking-widewide text-xs"
-                      >
+                      <div v-else-if="imageData != null"
+                        class="flex flex-1 flex-col justify-center items-start tracking-widewide text-xs">
                         <div class="flex justify-end items-center p-px">
                           <p>{{ imageData }}</p>
                           <p>&nbsp; - nazwa</p>
                         </div>
-                        <div
-                          class="flex justify-end items-center p-px pr-3 text-2xs"
-                        >
+                        <div class="flex justify-end items-center p-px pr-3 text-2xs">
                           <p class="leading-3 mt-0.5 text-gray-700">
-                            <span
-                              class="text-red-500 opacity-80 font-bold uppercase"
-                              >uwaga</span
-                            >
+                            <span class="text-red-500 opacity-80 font-bold uppercase">uwaga</span>
                             - usuń dotychczasowe zdjęcie z serwera, nim wgrasz
                             nowe
                             <span class="brightness-50 opacity-50"> ▶▶</span>
                           </p>
                         </div>
                       </div>
-                      <div
-                        v-else
-                        class="h-full w-full flex justify-start items-center"
-                      >
-                        <div
-                          class="flex justify-center items-end flex-col text-xs pr-0.5"
-                        >
+                      <div v-else class="h-full w-full flex justify-start items-center">
+                        <div class="flex justify-center items-end flex-col text-xs pr-0.5">
                           <p>Nie ma żadnych zdjęć</p>
                         </div>
                       </div>
                     </div>
-                    <div
-                      v-if="imageData != null"
-                      @click="taskEditImageDelete(task.id)"
-                      class="w-10 h-full mr-1 rounded-lg bg-gray-300 opacity-80 pointer-events-auto cursor-pointer transition hover:bg-opacity-50 overflow-hidden flex justify-center items-center"
-                    >
+                    <div v-if="imageData != null" @click="taskEditImageDelete(task.id)"
+                      class="w-10 h-full mr-1 rounded-lg bg-gray-300 opacity-80 pointer-events-auto cursor-pointer transition hover:bg-opacity-50 overflow-hidden flex justify-center items-center">
                       <span
-                        class="h-full w-full flex justify-center items-center text-lg opacity-90 transition relative"
-                        >💾
+                        class="h-full w-full flex justify-center items-center text-lg opacity-90 transition relative">💾
                         <span class="absolute text-xs">❌</span>
                       </span>
                     </div>
                     <div
-                      class="w-12 h-full relative rounded-lg bg-gray-300 pointer-events-auto cursor-pointer transition hover:bg-opacity-50 overflow-hidden flex justify-center items-center"
-                    >
+                      class="w-12 h-full relative rounded-lg bg-gray-300 pointer-events-auto cursor-pointer transition hover:bg-opacity-50 overflow-hidden flex justify-center items-center">
                       <span
-                        class="h-full w-full flex justify-center items-center text-lg opacity-90 transition"
-                        >💾</span
-                      >
-                      <input
-                        @change="taskCreateImageInfoHandler"
-                        ref="taskCreateImage"
-                        id="taskCreateImage"
-                        type="file"
-                        accept="image/*"
-                        class="opacity-0 absolute cursor-pointer p-0 top-0 bottom-0 text-xs"
-                      />
+                        class="h-full w-full flex justify-center items-center text-lg opacity-90 transition">💾</span>
+                      <input @change="taskCreateImageInfoHandler" ref="taskCreateImage" id="taskCreateImage" type="file"
+                        accept="image/*" class="opacity-0 absolute cursor-pointer p-0 top-0 bottom-0 text-xs" />
                     </div>
                   </div>
                 </div>
@@ -675,28 +446,18 @@
         </div>
       </div>
     </transition-group>
-    <div
-      v-if="imageSocialPost !== null"
-      class="absolute top-0 bottom-0 left-0 right-1/6 bg-white bg-opacity-80 pointer-events-auto"
-    ></div>
-    <div
-      v-if="imageSocialPost !== null"
-      class="bg-fbbackground absolute top-30 left-30 right-110 bottom-30 rounded-xl shadow-2xl border border-gray-300 flex justify-start items-center overflow-hidden"
-    >
+    <div v-if="imageSocialPost !== null"
+      class="absolute top-0 bottom-0 left-0 right-1/6 bg-white bg-opacity-80 pointer-events-auto"></div>
+    <div v-if="imageSocialPost !== null"
+      class="bg-fbbackground absolute top-30 left-30 right-110 bottom-30 rounded-xl shadow-2xl border border-gray-300 flex justify-start items-center overflow-hidden">
       <div class="w-1/7 3xl:w-2/7 flex-shrink-0 h-full">
-        <p
-          class="text-2xs 2xl:text-xs 3xl:text-sm font-medium p-5 tracking-wider"
-        >
+        <p class="text-2xs 2xl:text-xs 3xl:text-sm font-medium p-5 tracking-wider">
           Socialmedia Viewer
         </p>
       </div>
       <div class="flex justify-start items-center w-3/4 3xl:w-2/3 h-full">
-        <div
-          class="flex flex-col justify-start items-start w-1/2 3xl:w-2/5 h-full p-2"
-        >
-          <div
-            class="w-full bg-white border border-black border-opacity-20 rounded-xl p-3 mt-1 shadow-md"
-          >
+        <div class="flex flex-col justify-start items-start w-1/2 3xl:w-2/5 h-full p-2">
+          <div class="w-full bg-white border border-black border-opacity-20 rounded-xl p-3 mt-1 shadow-md">
             <div class="flex justify-between items-start">
               <p class="text-2xs 2xl:text-xs 3xl:text-sm font-semibold flex-1">
                 Utwórz reklamę
@@ -739,9 +500,7 @@
               </p>
             </div>
           </div>
-          <div
-            class="w-full bg-white border border-black border-opacity-20 rounded-xl p-3 mt-5 shadow-md"
-          >
+          <div class="w-full bg-white border border-black border-opacity-20 rounded-xl p-3 mt-5 shadow-md">
             <div class="flex justify-between items-center">
               <p class="text-2xs 2xl:text-xs 3xl:text-sm font-bold">
                 Statystyki
@@ -755,29 +514,21 @@
                 Ostatnie 28 dni : 11 kwi – 8 maj
               </p>
             </div>
-            <div
-              class="mt-4 flex flex-row justify-between items-center bg-gray-200 rounded-lg p-3"
-            >
+            <div class="mt-4 flex flex-row justify-between items-center bg-gray-200 rounded-lg p-3">
               <p class="text-2xs 2xl:text-xs 3xl:text-xs">Liczba odbiorców</p>
               <p class="text-2xs 2xl:text-xs 3xl:text-sm font-bold">1,503</p>
             </div>
-            <div
-              class="mt-4 flex flex-row justify-between items-center bg-gray-200 rounded-lg p-3"
-            >
+            <div class="mt-4 flex flex-row justify-between items-center bg-gray-200 rounded-lg p-3">
               <p class="text-2xs 2xl:text-xs 3xl:text-xs">
                 Aktywność dotycząca postów
               </p>
               <p class="text-2xs 2xl:text-xs 3xl:text-sm font-bold">96</p>
             </div>
-            <div
-              class="mt-4 flex flex-row justify-between items-center bg-gray-200 rounded-lg p-3"
-            >
+            <div class="mt-4 flex flex-row justify-between items-center bg-gray-200 rounded-lg p-3">
               <p class="text-2xs 2xl:text-xs 3xl:text-xs">Polubienia strony</p>
               <p class="text-2xs 2xl:text-xs 3xl:text-sm font-bold">1</p>
             </div>
-            <div
-              class="mt-4 flex flex-row justify-between items-center bg-gray-200 rounded-lg p-3"
-            >
+            <div class="mt-4 flex flex-row justify-between items-center bg-gray-200 rounded-lg p-3">
               <p class="text-2xs 2xl:text-xs 3xl:text-xs">
                 Kliknięcia oznaczonych produktów
               </p>
@@ -785,8 +536,7 @@
             </div>
           </div>
           <div
-            class="h-16 w-full bg-white border-t border-l border-r border-black border-opacity-20 rounded-t-xl p-3 mt-5 shadow-md"
-          >
+            class="h-16 w-full bg-white border-t border-l border-r border-black border-opacity-20 rounded-t-xl p-3 mt-5 shadow-md">
             <div class="flex justify-between items-center bg-white">
               <p class="text-2xs 2xl:text-xs 3xl:text-sm font-bold bg-white">
                 Informacje
@@ -794,28 +544,16 @@
             </div>
           </div>
         </div>
-        <div
-          class="flex justify-start items-start w-3/4 3xl:w-3/5 h-full p-2 mt-6"
-        >
-          <div
-            class="w-full bg-white border border-black border-opacity-20 rounded-xl mt-2 shadow-md"
-          >
+        <div class="flex justify-start items-start w-3/4 3xl:w-3/5 h-full p-2 mt-6">
+          <div class="w-full bg-white border border-black border-opacity-20 rounded-xl mt-2 shadow-md">
             <div class="p-2 pb-3 2xl:p-3 3xl:p-4 3xl:pb-4 w-full">
               <div class="flex flex-row justify-between items-center w-full">
-                <div
-                  class="w-1/12 rounded-full p-5 2xl:p-6 3xl:p-6 bg-black bg-opacity-80 mr-3"
-                ></div>
-                <div
-                  class="w-full h-full flex flex-col items-start justify-center pb-1"
-                >
-                  <p
-                    class="text-xs 2xl:text-sm 3xl:text-base tracking-tight font-sans font-medium"
-                  >
+                <div class="w-1/12 rounded-full p-5 2xl:p-6 3xl:p-6 bg-black bg-opacity-80 mr-3"></div>
+                <div class="w-full h-full flex flex-col items-start justify-center pb-1">
+                  <p class="text-xs 2xl:text-sm 3xl:text-base tracking-tight font-sans font-medium">
                     Strona Firmy
                   </p>
-                  <p
-                    class="text-2xs 2xl:text-2xs 3xl:text-xs text-gray-400 tracking-tight font-sans font-normal"
-                  >
+                  <p class="text-2xs 2xl:text-2xs 3xl:text-xs text-gray-400 tracking-tight font-sans font-normal">
                     Opublikowane przez: Użytkownik Strony
                     {{ imageSocialPost.date }} o 12:00
                   </p>
@@ -825,73 +563,50 @@
             <div class="pl-2.5 pr-2.5 3xl:pl-3.5 3xl:pr-3.5 w-full">
               <div class="mb-2">
                 <p
-                  class="text-xs 2xl:text-sm 3xl:text-2base tracking-tight font-sans font-normal leading-tight 3xl:leading-5"
-                >
+                  class="text-xs 2xl:text-sm 3xl:text-2base tracking-tight font-sans font-normal leading-tight 3xl:leading-5">
                   {{ imageSocialPost.desc }}
                 </p>
               </div>
             </div>
             <div>
-              <img
-                ref="imageSocialPostViewer"
-                class="w-full mt-1 mb-2 border-t border-b border-black border-opacity-20"
-              />
+              <img ref="imageSocialPostViewer"
+                class="w-full mt-1 mb-2 border-t border-b border-black border-opacity-20" />
             </div>
-            <div
-              class="flex flex-row justify-between items-center pl-2 pr-2 3xl:pr-4 3xl:pl-4 mt-4 mb-4"
-            >
+            <div class="flex flex-row justify-between items-center pl-2 pr-2 3xl:pr-4 3xl:pl-4 mt-4 mb-4">
               <div class="flex flex-col justify-center items-start">
-                <p
-                  class="text-2xs 2xl:text-xs 3xl:text-sm font-medium tracking-tighter 3xl:tracking-normal"
-                >
+                <p class="text-2xs 2xl:text-xs 3xl:text-sm font-medium tracking-tighter 3xl:tracking-normal">
                   523
                 </p>
-                <p
-                  class="text-2xs 2xl:text-xs 3xl:text-xs font-normal tracking-tighter 3xl:tracking-normal"
-                >
+                <p class="text-2xs 2xl:text-xs 3xl:text-xs font-normal tracking-tighter 3xl:tracking-normal">
                   Liczba odbiorców
                 </p>
               </div>
               <div class="flex flex-col justify-center items-start">
-                <p
-                  class="text-2xs 2xl:text-xs 3xl:text-sm font-medium tracking-tighter 3xl:tracking-normal"
-                >
+                <p class="text-2xs 2xl:text-xs 3xl:text-sm font-medium tracking-tighter 3xl:tracking-normal">
                   23
                 </p>
-                <p
-                  class="text-2xs 2xl:text-xs 3xl:text-xs font-normal tracking-tighter 3xl:tracking-normal"
-                >
+                <p class="text-2xs 2xl:text-xs 3xl:text-xs font-normal tracking-tighter 3xl:tracking-normal">
                   Aktywność
                 </p>
               </div>
               <div class="flex flex-col justify-center items-start">
-                <p
-                  class="text-2xs 2xl:text-xs 3xl:text-sm font-medium tracking-tighter 3xl:tracking-normal"
-                >
+                <p class="text-2xs 2xl:text-xs 3xl:text-sm font-medium tracking-tighter 3xl:tracking-normal">
                   Średni +1,0x
                 </p>
-                <p
-                  class="text-2xs 2xl:text-xs 3xl:text-xs font-normal tracking-tighter 3xl:tracking-normal"
-                >
+                <p class="text-2xs 2xl:text-xs 3xl:text-xs font-normal tracking-tighter 3xl:tracking-normal">
                   Wynik dystrybucji
                 </p>
               </div>
               <div class="flex flex-col justify-center items-center">
-                <div
-                  class="bg-webgencol rounded-md p-1 pr-1.5 pl-1.5 3xl:p-2 3xl:pr-2.5 3xl:pl-2.5"
-                >
-                  <p
-                    class="text-white text-2xs 2xl:text-xs 3xl:text-sm font-medium"
-                  >
+                <div class="bg-webgencol rounded-md p-1 pr-1.5 pl-1.5 3xl:p-2 3xl:pr-2.5 3xl:pl-2.5">
+                  <p class="text-white text-2xs 2xl:text-xs 3xl:text-sm font-medium">
                     Promuj post
                   </p>
                 </div>
               </div>
             </div>
             <div class="w-full h-px bg-gray-300 mt-3 mb-8"></div>
-            <div
-              class="w-full h-full flex justify-center items-center m-3 mb-10"
-            >
+            <div class="w-full h-full flex justify-center items-center m-3 mb-10">
               <p class="text-sm 2xl:text-base 3xl:text-lg font-normal">
                 Wczytywanie zdjęcia...
               </p>
@@ -901,10 +616,8 @@
       </div>
       <div class="flex-grow flex-shrink h-full">
         <div class="flex justify-end items-start p-5">
-          <button
-            @click="imageSocialHandler(null)"
-            class="bg-gray-400 text-gray-50 text-2xs 2xl:text-xs 3xl:text-sm rounded-2xl font-medium transition hover:bg-gray-500 p-0.5 pr-3 pl-3 mr-0.5 ml-0.5"
-          >
+          <button @click="imageSocialHandler(null)"
+            class="bg-gray-400 text-gray-50 text-2xs 2xl:text-xs 3xl:text-sm rounded-2xl font-medium transition hover:bg-gray-500 p-0.5 pr-3 pl-3 mr-0.5 ml-0.5">
             Zamknij
           </button>
         </div>
@@ -915,55 +628,31 @@
       :class="{
         'left-[-16.4rem]': tabCreateForm == false,
         'left-0': tabCreateForm == true,
-      }"
-    >
-      <div
-        class="bg-gray-300 transition cursor-pointer w-full pt-0.5 pb-0.5 rounded-br-2xl"
-      >
-        <div
-          class="text-2xs 2xl:text-xs flex flex-col justify-center items-center p-1.5 pl-2 pr-3 h-full"
-        >
-          <form
-            @submit.prevent="tabCreatePush"
-            class="flex flex-row justify-center items-center h-full w-full"
-          >
-            <input
-              autocomplete="off"
-              maxlength="50"
-              required
-              v-model="tabName"
-              id="tabName"
-              type="text"
+      }">
+      <div class="bg-gray-300 transition cursor-pointer w-full pt-0.5 pb-0.5 rounded-br-2xl">
+        <div class="text-2xs 2xl:text-xs flex flex-col justify-center items-center p-1.5 pl-2 pr-3 h-full">
+          <form @submit.prevent="tabCreatePush" class="flex flex-row justify-center items-center h-full w-full">
+            <input autocomplete="off" maxlength="50" required v-model="tabName" id="tabName" type="text"
               placeholder="Nazwa nowej tabeli"
-              class="p-1.5 pr-2 pl-2 w-full border-gray-300 border font-medium text-gray-700 bg-gray-100 focus:outline-none resize-none rounded-xl"
-            />
+              class="p-1.5 pr-2 pl-2 w-full border-gray-300 border font-medium text-gray-700 bg-gray-100 focus:outline-none resize-none rounded-xl" />
             <div class="flex flex-row justify-between items-center h-full">
-              <button
-                type="submit"
-                class="rounded-xl w-full 2xl:pr-3 2xl:pl-3 p-1.5 pr-2 pl-2 ml-2 bg-gray-100 text-white transition hover:opacity-70 font-medium 2xl:text-xs text-2xs shadow-inner"
-              >
+              <button type="submit"
+                class="rounded-xl w-full 2xl:pr-3 2xl:pl-3 p-1.5 pr-2 pl-2 ml-2 bg-gray-100 text-white transition hover:opacity-70 font-medium 2xl:text-xs text-2xs shadow-inner">
                 ✔️
               </button>
             </div>
           </form>
         </div>
       </div>
-      <div
-        @click="tabCreateHandler(true)"
-        class="hover:opacity-80 transition cursor-pointer rounded-r-xl flex justify-center items-center"
-        :class="{
+      <div @click="tabCreateHandler(true)"
+        class="hover:opacity-80 transition cursor-pointer rounded-r-xl flex justify-center items-center" :class="{
           'bg-webgencol opacity-60 h-10 w-7': tabCreateForm == false,
           'bg-gray-400 opacity-100 h-8 w-10': tabCreateForm == true,
-        }"
-      >
-        <span
-          class="flex justify-center items-center xl:text-md text-sm p-1"
-          :class="{
-            'invert-0': tabCreateForm == false,
-            ' grayscale brightness-150 opacity-90 ': tabCreateForm == true,
-          }"
-          >📁</span
-        >
+        }">
+        <span class="flex justify-center items-center xl:text-md text-sm p-1" :class="{
+          'invert-0': tabCreateForm == false,
+          ' grayscale brightness-150 opacity-90 ': tabCreateForm == true,
+        }">📁</span>
       </div>
     </div>
   </div>
