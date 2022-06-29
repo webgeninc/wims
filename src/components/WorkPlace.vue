@@ -1,13 +1,13 @@
 <template>
   <div
     ref="tabsDiv"
-    class="bg-gray-100 w-full h-full flex p-2 pl-5 pt-1 flex-nowrap overflow-x-auto font-montserrat scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
+    class="bg-gray-100 w-full h-full flex p-2 pl-7 pr-5 pt-1 flex-nowrap overflow-x-auto font-montserrat scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
   >
     <div
       @mouseleave="tabHoverHandler(null)"
       v-for="(tab, index) in dateStor.dataTabs"
       :key="index"
-      class="flex flex-shrink-0 w-80 flex-col m-1 mt-0.5"
+      class="flex flex-shrink-0 w-84 flex-col mt-0.5"
     >
       <div
         v-if="dateStor.ready == tab.id"
@@ -58,10 +58,10 @@
       </div>
       <div
         @wheel="scrollFunction"
-        class="pr-1 pl-1 text-center flex flex-row justify-center items-center h-16"
+        class="pr-3 pl-1 text-center flex flex-row justify-center items-center h-16"
       >
         <h3
-          class="font-semibold text-left text-base text-gray-700 tracking-wide p-2 pt-0 pb-0 flex-1"
+          class="font-semibold text-left text-2base text-gray-700 tracking-wide p-2 pt-0 pb-0 flex-1"
         >
           {{ tab.tab_name }}
         </h3>
@@ -71,7 +71,7 @@
             dateStor.ready != tab.id &&
             tabHover == tab.id
           "
-          class="flex flex-row justify-end text-xs"
+          class="flex flex-row justify-end text-xs pr-2"
         >
           <button
             @click="tabNameChange(tab.id)"
@@ -101,7 +101,7 @@
         </button>
       </div>
       <div
-        class="h-full flex-nowrap overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-gray-100 pr-2"
+        class="h-full flex-nowrap overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-gray-100 pr-2 mr-1 ml-1"
       >
         <div v-if="taskCreateForm === tab.id" class="w-full mt-1 mb-2">
           <div
@@ -901,14 +901,14 @@
       </div>
     </div>
     <div
-      class="absolute top-2 w-72 flex justify-center items-start"
+      class="absolute top-4 w-72 flex justify-center items-start"
       :class="{
         'left-[-16.4rem]': tabCreateForm == false,
         'left-0': tabCreateForm == true,
       }"
     >
       <div
-        class="bg-gray-500 transition cursor-pointer w-full pt-px pb-px rounded-br-2xl"
+        class="bg-gray-300 transition cursor-pointer w-full pt-px pb-px rounded-br-2xl"
       >
         <div
           class="text-2xs 2xl:text-xs flex flex-col justify-center items-center p-1.5 pl-2 pr-3 h-full"
@@ -940,13 +940,18 @@
       </div>
       <div
         @click="tabCreateHandler(true)"
-        class="w-7 h-8 hover:opacity-80 transition cursor-pointer rounded-r-xl flex justify-center items-center"
+        class="hover:opacity-80 transition cursor-pointer rounded-r-xl flex justify-center items-center"
         :class="{
-          'bg-webgencol opacity-60': tabCreateForm == false,
-          'bg-webgencol': tabCreateForm == true,
+          'bg-webgencol opacity-60 h-10 w-7': tabCreateForm == false,
+          'bg-gray-400 opacity-100 h-8 w-9': tabCreateForm == true,
         }"
       >
-        <span class="flex justify-center items-center xl:text-md text-sm p-1"
+        <span
+          class="flex justify-center items-center xl:text-md text-sm p-1"
+          :class="{
+            'invert-0': tabCreateForm == false,
+            ' grayscale brightness-150 opacity-90 ': tabCreateForm == true,
+          }"
           >📁</span
         >
       </div>
@@ -1043,9 +1048,8 @@ export default defineComponent({
     //TABS
 
     const scrollFunction = (e: any) => {
-      console.log(tabsDiv.value.scrollLeft);
-      console.log(e.deltaY);
-      tabsDiv.value.scrollLeft += e.deltaY;
+      e.preventDefault();
+      tabsDiv.value.scrollLeft += e.deltaY / 1.5;
     };
 
     const tabDelete = async (tabID: number) => {

@@ -508,9 +508,9 @@
           class="text-gray-300 font-light text-2xs 2xl:text-xs 3xl:text-sm text-center tracking-wide p-2 pb-3 pt-3"
         >
           <div
-            class="flex flex-col justify-evenly items-start flex-wrap m-0.5 mb-2"
+            class="flex flex-col justify-evenly items-start flex-wrap m-0.5"
           >
-            <div class="flex m-0.5 2xl:m-1">
+            <div class="flex m-0.5 2xl:m-1 2xl:mb-2">
               <div
                 class="p-1 bg-gray-400 rounded-full ml-0.5 mr-0.5 hover:opacity-70"
               ></div>
@@ -522,7 +522,7 @@
                 unikalnych.
               </p>
             </div>
-            <div class="flex m-0.5 2xl:m-1">
+            <div class="flex m-0.5 2xl:m-1 2xl:mb-2">
               <div
                 class="p-1 bg-red-600 rounded-full ml-0.5 mr-0.5 hover:opacity-70"
               ></div>
@@ -534,7 +534,7 @@
                 nie możemy rozwiązać.
               </p>
             </div>
-            <div class="flex m-0.5 2xl:m-1">
+            <div class="flex m-0.5 2xl:m-1 2xl:mb-2">
               <div
                 class="p-1 bg-yellow-600 rounded-full ml-0.5 mr-0.5 hover:opacity-70"
               ></div>
@@ -546,7 +546,7 @@
                 zgody w decyzyjności wspólnej.
               </p>
             </div>
-            <div class="flex m-0.5 2xl:m-1">
+            <div class="flex m-0.5 2xl:m-1 2xl:mb-2">
               <div
                 class="p-1 bg-purple-500 rounded-full ml-0.5 mr-0.5 hover:opacity-70"
               ></div>
@@ -558,7 +558,7 @@
                 z tą zmianą.
               </p>
             </div>
-            <div class="flex m-0.5 2xl:m-1">
+            <div class="flex m-0.5 2xl:m-1 2xl:mb-2">
               <div
                 class="p-1 bg-blue-500 rounded-full ml-0.5 mr-0.5 hover:opacity-70"
               ></div>
@@ -569,7 +569,7 @@
                 etykietą oznaczamy zadania, które mają status aktywny.
               </p>
             </div>
-            <div class="flex m-0.5 2xl:m-1">
+            <div class="flex m-0.5 2xl:m-1 2xl:mb-2">
               <div
                 class="p-1 bg-green-500 rounded-full ml-0.5 mr-0.5 hover:opacity-70"
               ></div>
@@ -586,11 +586,12 @@
             <span class="border-gray-200 font-semibold p-1 text-2xs"
               >shift + scroll myszką</span
             >
-            lub
-            <span class="border-gray-200 font-semibold p-1 text-2xs"
-              >drag nagłówka karty</span
+            <p class="text-2sm">lub</p> 
+            <p class="border-gray-200 font-semibold p-1 text-2xs"
+              >scroll myszką po najechaniu na nagłówek tablicy</p
             >
-            scrollowanie okna pracy
+            <p>scrollowanie okna pracy</p>
+            
           </p>
         </div>
       </div>
