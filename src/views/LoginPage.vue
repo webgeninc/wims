@@ -85,17 +85,18 @@
                 class="w-full h-full flex justify-center items-centerxl:h-10"
               >
                 <div
-                  class="w-0.5 h-0.5 rounded-full p-3 bg-gradient-to-t from-gray-400 via-gray-50 to-gray-50 flex justify-center items-center animate-spin"
+                  class="w-0.5 h-0.5 rounded-full p-3 bg-gradient-to-t from-gr ay-400 via-gray-50 to-gray-50 flex justify-center items-center animate-spin"
                 >
                   <div class="w-0.5 h-0.5 rounded-full p-2 bg-gray-100"></div>
                 </div>
               </span> -->
               <span
                 v-if="!loadingAnim"
-                class="text-gray-800 text-sm tracking-wider"
-                >Zaloguj się</span
+                class="font-medium text-gray-800 text-sm tracking-wider"
               >
-              <span>
+                <span>Zaloguj się</span>
+              </span>
+              <span v-else>
                 <LoaderAnimation />
               </span>
             </button>
