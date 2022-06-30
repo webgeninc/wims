@@ -954,7 +954,7 @@
       </div>
       <div
         @click="tabCreateHandler(true)"
-        class="hover:opacity-80 transition cursor-pointer rounded-r-xl flex justify-center items-center"
+        class="hover:opacity-80 cursor-pointer rounded-r-xl flex justify-center items-center transition-all duration-500 delay-200"
         :class="{
           'bg-webgencol opacity-60 h-10 w-7': tabCreateForm == false,
           'bg-gray-400 opacity-100 h-8 w-10': tabCreateForm == true,
