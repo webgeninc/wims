@@ -27,25 +27,30 @@
         </transition>
         <div
           v-if="tabNameId === tab.id && dateStor.ready == null"
-          class="flex flex-row justify-between w-full text-xs mr-0.5 ml-0.5"
+          class="w-full text-xs pr-1 pl-1"
         >
-          <input
-            autofocus
-            ref="tabNameInput"
-            autocomplete="off"
-            maxlength="45"
-            required
-            type="text"
-            v-model="tabName"
-            placeholder="tabName"
-            class="p-1.5 flex-1 m-1 border-gray-300 border focus:outline-none resize-none rounded-xl"
-          />
-          <button
-            @click="tabNamePush(tab.id)"
-            class="bg-gray-300 text-white rounded-full font-medium transition hover:bg-gray-200 m-1 p-0.5 pr-4 pl-4"
+          <form
+            @submit.prevent="tabNamePush(tab.id)"
+            class="flex flex-row justify-between w-full"
           >
-            <span class="text-base grayscale opacity-50">👌</span>
-          </button>
+            <input
+              autofocus
+              ref="tabNameInput"
+              autocomplete="off"
+              maxlength="45"
+              required
+              type="text"
+              v-model="tabName"
+              placeholder="tabName"
+              class="p-1.5 flex-1 m-1 border-gray-300 border focus:outline-none resize-none rounded-xl"
+            />
+            <button
+              type="submit"
+              class="bg-gray-300 text-white rounded-full font-medium transition hover:bg-gray-200 m-1 p-0.5 pr-4 pl-4"
+            >
+              <span class="text-base grayscale opacity-50">👌</span>
+            </button>
+          </form>
         </div>
         <div
           @wheel="scrollFunction"
@@ -58,7 +63,13 @@
               'opacity-0': dateStor.ready == tab.id,
             }"
           >
-            {{ tab.tab_name }}
+            <!-- <p
+              v-if="helpText[0] && tab.id == helpText[0] && helpTextShow"
+              class="text-2xs tracking-wider font-medium text-webgencol"
+            >
+              {{ helpText[1] }} &nbsp;
+            </p> -->
+            <p>{{ tab.tab_name }}</p>
           </h3>
           <div
             v-if="
@@ -76,9 +87,9 @@
             </button>
             <button
               @click="tabDelete(tab.id)"
-              class="bg-gray-200 text-white rounded-full font-medium transition hover:bg-opacity-50 p-1 pr-2 pl-2 mr-0.5"
+              class="bg-red-500 text-white rounded-full font-medium transition hover:bg-opacity-50 p-1 pr-2 pl-2 mr-0.5 opacity-60"
             >
-              <span class="text-sm opacity-70">💀</span>
+              <span class="text-sm">💀</span>
             </button>
           </div>
           <button
@@ -615,9 +626,15 @@
                         v-else-if="imageData != null"
                         class="flex flex-1 flex-col justify-center items-start tracking-widewide text-xs"
                       >
-                        <div class="flex justify-end items-center p-px">
-                          <p>{{ imageData }}</p>
-                          <p>&nbsp; - nazwa</p>
+                        <div
+                          class="flex justify-end items-center p-px pr-5"
+                          :class="{ 'text-2xs': imageData.length > 25 }"
+                        >
+                          <p
+                            class="text-ellipsis overflow-hidden whitespace-nowrap"
+                          >
+                            {{ imageData }}
+                          </p>
                         </div>
                         <div
                           class="flex justify-end items-center p-px pr-3 text-2xs"
@@ -932,6 +949,7 @@
             class="flex flex-row justify-center items-center h-full w-full"
           >
             <input
+              ref="tabNameCreateInput"
               autocomplete="off"
               maxlength="50"
               required
@@ -990,6 +1008,7 @@ export default defineComponent({
     const tabName = ref<string | null>(null);
     const tabNameInput = ref<any>(null);
     const tabCreateForm = ref<boolean>(false);
+    const tabNameCreateInput = ref<any>(null);
     const tabHover = ref<number | null>(null);
     const taskCreateForm = ref<number | null>(null);
     const taskEditForm = ref<number | null>(null);
@@ -1012,6 +1031,7 @@ export default defineComponent({
 
     const imageHandler = async (taskID: number | null) => {
       if (taskID != null) {
+        taskEditForm.value = null;
         imageStatus.value = taskID;
         imageLoaded.value = false;
         let imageName: string | null = null;
@@ -1034,8 +1054,9 @@ export default defineComponent({
           }
         }
       } else {
+        console.log(imageData.value);
         imageViewer.value.src = null;
-        imageData.value = null;
+        // imageData.value = null;
         imageStatus.value = taskID;
         imageLoaded.value = false;
       }
@@ -1121,7 +1142,6 @@ export default defineComponent({
     };
 
     const tabNamePush = async (tabID: number) => {
-      dateStor.ready = tabID;
       try {
         const { error } = await supabase
           .from("tabs_table")
@@ -1133,6 +1153,7 @@ export default defineComponent({
           console.warn(error.message);
         }
       }
+      dateStor.ready = tabID;
       setTimeout(() => {
         tabNameId.value = null;
         dateStor.ready = null;
@@ -1150,6 +1171,7 @@ export default defineComponent({
       handler === true
         ? ((tabCreateForm.value = true), (tabName.value = ""))
         : (tabCreateForm.value = false);
+      tabNameCreateInput.value.focus();
     };
 
     const tabCreatePush = async () => {
@@ -1205,7 +1227,6 @@ export default defineComponent({
       color: number,
       tabID: number
     ) => {
-      dateStor.ready = tabID;
       taskCreateForm.value = null;
       try {
         const { error } = await supabase.from("tasks_table").insert([
@@ -1225,6 +1246,7 @@ export default defineComponent({
           console.warn(error.message);
         }
       }
+      dateStor.ready = tabID;
       if (taskFile.value !== null && taskFile.value !== undefined) {
         try {
           const { error } = await supabase.storage
@@ -1317,7 +1339,9 @@ export default defineComponent({
           }
         });
       }
-      imageHandler(null);
+      if (imageViewer.value != null) {
+        imageHandler(null);
+      }
     };
 
     const taskEditImageDelete = async (taskID: number) => {
@@ -1359,7 +1383,6 @@ export default defineComponent({
     };
 
     const taskEditPush = async (taskID: number, tabID: number) => {
-      dateStor.ready = tabID;
       try {
         const { error } = await supabase
           .from("tasks_table")
@@ -1382,6 +1405,7 @@ export default defineComponent({
           console.warn(error.message);
         }
       }
+      dateStor.ready = tabID;
       if (taskFile.value !== null) {
         try {
           const { error } = await supabase.storage
@@ -1402,7 +1426,6 @@ export default defineComponent({
     };
 
     const taskDelete = async (taskID: number, tabID: number) => {
-      dateStor.ready = tabID;
       let imageToRemove: any = null;
       imageToRemove = dateStor.dataTasks
         .filter((item: any) => item.id === taskID)
@@ -1431,6 +1454,8 @@ export default defineComponent({
           console.warn(error.message);
         }
       }
+      dateStor.ready = tabID;
+      imageHandler(null);
       setTimeout(() => {
         dateStor.ready = null;
       }, 1200);
@@ -1473,6 +1498,7 @@ export default defineComponent({
       tabDelete,
       tabNameId,
       tabName,
+      tabNameCreateInput,
       tabCreateForm,
       tabHover,
       tabHoverHandler,
