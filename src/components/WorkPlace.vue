@@ -44,11 +44,12 @@
               placeholder="tabName"
               class="p-1.5 flex-1 m-1 border-gray-300 border focus:outline-none resize-none rounded-xl"
             />
+
             <button
               type="submit"
               class="bg-gray-300 text-white rounded-full font-medium transition hover:bg-gray-200 m-1 p-0.5 pr-4 pl-4"
             >
-              <span class="text-base grayscale opacity-50">👌</span>
+              <span class="text-base opacity-60 brightness-110">👌</span>
             </button>
           </form>
         </div>
@@ -69,7 +70,7 @@
             >
               {{ helpText[1] }} &nbsp;
             </p> -->
-            <p>{{ tab.tab_name }}</p>
+            <p><span v-if="tab.isPriority">🔥 </span>{{ tab.tab_name }}</p>
           </h3>
           <div
             v-if="
@@ -77,38 +78,45 @@
               dateStor.ready != tab.id &&
               tabHover == tab.id
             "
-            class="flex flex-row justify-end text-xs pr-2 transition-all duration-700"
+            class="flex flex-row justify-center items-center text-xs transition-all duration-700"
           >
             <button
+              @click="tabPriorityHandler(tab.id)"
+              class="bg-gray-200 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-2.5 pl-2.5 mr-1"
+            >
+              <span class="text-sm opacity-70">🔥</span>
+            </button>
+            <button
               @click="tabNameChange(tab.id)"
-              class="bg-gray-200 text-white rounded-full font-medium transition hover:bg-opacity-50 p-1 pr-2 pl-2 mr-0.5"
+              class="bg-gray-200 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-3 pl-3 mr-1"
             >
               <span class="text-sm opacity-70">✍</span>
             </button>
             <button
               @click="tabDelete(tab.id)"
-              class="bg-red-500 text-white rounded-full font-medium transition hover:bg-opacity-50 p-1 pr-2 pl-2 mr-0.5 opacity-60"
+              class="bg-red-500 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-3 pl-3 mr-1 opacity-60"
             >
               <span class="text-sm">💀</span>
             </button>
           </div>
-          <button
-            @click="tabHoverHandler(tab.id)"
-            class="bg-gray-200 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-2.5 pl-2.5 mr-0.5"
-          >
-            <span class="text-base grayscale invert opacity-70">🛠</span>
-          </button>
-          <button
-            v-if="tabHover != tab.id"
-            @click="taskCreateHandler(tab.id)"
-            class="text-white rounded-full font-medium transition-all duration-500 hover:bg-opacity-50 p-0.5 pr-3 pl-4 ml-0.5"
-            :class="{
-              'bg-gray-200': taskCreateForm != tab.id,
-              'bg-gray-300': taskCreateForm === tab.id,
-            }"
-          >
-            <span class="text-sm grayscale opacity-70">📝</span>
-          </button>
+          <div v-if="tabHover != tab.id" class="">
+            <button
+              @click="tabHoverHandler(tab.id)"
+              class="bg-gray-200 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-2.5 pl-2.5 mr-0.5"
+            >
+              <span class="text-base grayscale invert opacity-70">🛠</span>
+            </button>
+            <button
+              @click="taskCreateHandler(tab.id)"
+              class="text-white rounded-full font-medium transition-all duration-500 hover:bg-opacity-50 p-0.5 pr-3 pl-4 ml-0.5"
+              :class="{
+                'bg-gray-200': taskCreateForm != tab.id,
+                'bg-gray-300': taskCreateForm === tab.id,
+              }"
+            >
+              <span class="text-sm grayscale opacity-70">📝</span>
+            </button>
+          </div>
         </div>
         <div
           class="h-full flex-nowrap overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-gray-100 pr-2 mr-1 ml-1"
@@ -1088,6 +1096,24 @@ export default defineComponent({
       tabsDiv.value.scrollLeft += e.deltaY / 1.5;
     };
 
+    const tabPriorityHandler = async (tabID: number) => {
+      let priority = dateStor.dataTabs
+        .filter((item: any) => item.id === tabID)
+        .map((item: any) => item.isPriority);
+
+      try {
+        const { error } = await supabase
+          .from("tabs_table")
+          .update({ isPriority: !priority[0] })
+          .eq("id", tabID);
+        if (error instanceof Error) throw error;
+      } catch (error) {
+        if (error instanceof Error) {
+          console.warn(error.message);
+        }
+      }
+    };
+
     const tabDelete = async (tabID: number) => {
       let question = window.confirm(
         "Na pewno? Danych (łącznie ze zdjęciami) nie będzie można odzyskać..."
@@ -1503,6 +1529,7 @@ export default defineComponent({
       tabHover,
       tabHoverHandler,
       tabsDiv,
+      tabPriorityHandler,
       scrollFunction,
       taskCreateHandler,
       taskCreateForm,

@@ -26,7 +26,7 @@ export const dataStore = defineStore({
                 const { data: tabs_table, error: error_tabs } = await supabase
                     .from("tabs_table")
                     .select("*")
-                    .order("created_at", { ascending: true });
+                    .order("order", { ascending: true });
                 if (error_notes instanceof Error)
                     throw error_task;
                 this.dataNotes = notes_table;
