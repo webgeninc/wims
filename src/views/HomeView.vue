@@ -41,50 +41,17 @@ export default defineComponent({
         .from("*")
         .on("*", () => {
           setTimeout(() => {
-            getData();
+            dateStor.getData();
           }, 100);
         })
         .subscribe();
       return () => supabase.removeSubscription(subs);
     };
 
-    const getData = async () => {
-      dateStor.processing = true;
-      try {
-        const { data: notes_table, error: error_notes } = await supabase
-          .from("notes_table")
-          .select("*")
-          .order("created_at", { ascending: false });
-        const { data: tasks_table, error: error_task } = await supabase
-          .from("tasks_table")
-          .select("*")
-          .order("task_date", { ascending: true });
-        const { data: tabs_table, error: error_tabs } = await supabase
-          .from("tabs_table")
-          .select("*")
-          .order("created_at", { ascending: true });
-        if (error_notes instanceof Error) throw error_task;
-        dataNotes.value = notes_table;
-        if (error_task instanceof Error) throw error_task;
-        dataTasks.value = tasks_table;
-        if (error_tabs instanceof Error) throw error_tabs;
-        dataTabs.value = tabs_table;
-        dateStor.dataNotes = dataNotes.value;
-        dateStor.dataTabs = dataTabs.value;
-        dateStor.dataTasks = dataTasks.value;
-        setTimeout(() => {
-          dateStor.processing = null;
-        }, 700);
-      } catch (error) {
-        if (error instanceof Error) {
-          console.warn(error.message);
-        }
-      }
-    };
     checkData();
-    getData();
+    dateStor.getData();
 
-    return { getData, user, dataNotes, dataTasks, dataTabs };
+    return { user, dataNotes, dataTasks, dataTabs };
   },
   components: { Headerplace, Workplace },
 });
