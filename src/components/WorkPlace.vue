@@ -34,7 +34,6 @@
             class="flex flex-row justify-between items-center w-full"
           >
             <input
-              autofocus
               ref="tabNameInput"
               autocomplete="off"
               maxlength="45"
@@ -77,8 +76,12 @@
             >
               {{ helpText[1] }} &nbsp;
             </p> -->
+
             <p class="transition-all duration-700">
-              <span v-if="tab.isPriority">🔥 </span>{{ tab.tab_name }}
+              <span v-if="tab.isPriority">🔥 </span>{{ tab.tab_name
+              }}<span class="text-2xs p-0 ml-1 text-gray-400">{{
+                tab.order
+              }}</span>
             </p>
           </h3>
           <div
@@ -87,31 +90,30 @@
               dateStor.ready != tab.id &&
               tabHover == tab.id
             "
-            class="flex flex-row justify-center items-center text-xs transition-all duration-700"
           >
             <button
-              @click="tabPriorityHandler(tab.id)"
-              class="bg-gray-200 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-2.5 pl-2.5 mr-1"
+              @click="tabNameChange(tab.id)"
+              class="bg-gray-200 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-2.5 pl-2.5 m-1 mr-0.5"
             >
-              <span class="text-sm opacity-70">🔥</span>
+              <span class="text-xs opacity-80">✍</span>
             </button>
             <button
-              @click="tabNameChange(tab.id)"
-              class="bg-gray-200 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-3 pl-3 mr-1"
+              @click="tabPriorityHandler(tab.id)"
+              class="bg-gray-200 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-2.5 pl-2.5 m-1 mr-0.5"
             >
-              <span class="text-sm opacity-70">✍</span>
+              <span class="text-xs opacity-80">🔥</span>
             </button>
             <button
               @click="tabDelete(tab.id)"
-              class="bg-red-500 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-3 pl-3 mr-1 opacity-60"
+              class="bg-gray-200 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-2.5 pl-2.5 m-1"
             >
-              <span class="text-sm">💀</span>
+              <span class="text-xs opacity-80">❌</span>
             </button>
           </div>
-          <div v-if="tabHover != tab.id" class="">
+          <div v-else>
             <button
               @click="tabHoverHandler(tab.id)"
-              class="bg-gray-200 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-2.5 pl-2.5 mr-0.5"
+              class="bg-gray-200 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-2 pl-2 mr-0.5"
             >
               <span class="text-base grayscale invert opacity-70">🛠</span>
             </button>
@@ -989,8 +991,9 @@
       </div>
       <div
         @click="tabCreateHandler(true)"
-        class="hover:opacity-80 cursor-pointer rounded-r-xl flex justify-center items-center transition-all duration-500 delay-200"
+        class="hover:opacity-80 cursor-pointer rounded-r-xl flex justify-center items-center transition-all duration-500"
         :class="{
+          'opacity-5': tabCreateFormVisible == false,
           'bg-webgencol opacity-60 h-10 w-7': tabCreateForm == false,
           'bg-gray-400 opacity-100 h-8 w-10': tabCreateForm == true,
         }"
@@ -1025,6 +1028,7 @@ export default defineComponent({
     const tabName = ref<string | null>(null);
     const tabNameInput = ref<any>(null);
     const tabCreateForm = ref<boolean>(false);
+    const tabCreateFormVisible = ref<boolean>(true);
     const tabNameCreateInput = ref<any>(null);
     const tabHover = ref<number | null>(null);
     const tabsDiv = ref<any>(null);
@@ -1102,8 +1106,12 @@ export default defineComponent({
     //TABS
 
     const scrollFunction = (e: any) => {
+      tabCreateFormVisible.value = false;
       e.preventDefault();
       tabsDiv.value.scrollLeft += e.deltaY / 1.5;
+      setTimeout(() => {
+        tabCreateFormVisible.value = true;
+      }, 700);
     };
 
     const tabPriorityHandler = async (tabID: number) => {
@@ -1169,8 +1177,9 @@ export default defineComponent({
 
     const tabNameChange = (tabID: number) => {
       dateStor.dataTabs.forEach((item: any) => {
-        item.id === tabID ? (tabName.value = item.tab_name) : false,
-          item.id === tabID ? (tabOrder.value = item.order) : false;
+        item.id === tabID
+          ? ((tabName.value = item.tab_name), (tabOrder.value = item.order))
+          : false;
       });
 
       tabNameId.value = tabID;
@@ -1180,45 +1189,66 @@ export default defineComponent({
     };
 
     const tabNamePush = async (tabID: number) => {
-      let existing = dateStor.dataTabs.filter(
+      let _existing = dateStor.dataTabs.filter(
         (item: any) => item.order === tabOrder.value
       );
       let summary = dateStor.dataTabs.length + 1;
+      if (_existing[0]) {
+        let existing = _existing[0];
 
-      if (existing[0].id === tabID && existing[0].tab_name === tabName.value) {
-        tabNameId.value = null;
-        dateStor.ready = null;
-        tabName.value = null;
-      } else if (
-        existing[0].id === tabID &&
-        existing[0].tab_name !== tabName.value
-      ) {
-        dateStor.processing = true;
-        try {
-          const { error } = await supabase
-            .from("tabs_table")
-            .update({ tab_name: tabName.value })
-            .eq("id", tabID);
-          if (error instanceof Error) throw error;
-        } catch (error) {
-          if (error instanceof Error) {
-            console.warn(error.message);
+        if (existing.id === tabID && existing.tab_name === tabName.value) {
+          console.log("1");
+          tabNameId.value = null;
+          dateStor.ready = null;
+          tabName.value = null;
+        } else if (
+          existing.id === tabID &&
+          existing.tab_name !== tabName.value
+        ) {
+          console.log("2");
+          dateStor.processing = true;
+          try {
+            const { error } = await supabase
+              .from("tabs_table")
+              .update({ tab_name: tabName.value })
+              .eq("id", tabID);
+            if (error instanceof Error) throw error;
+          } catch (error) {
+            if (error instanceof Error) {
+              console.warn(error.message);
+            }
+          }
+          dateStor.ready = tabID;
+        } else if (existing.id != tabID) {
+          let clicked = dateStor.dataTabs.filter(
+            (item: any) => item.id === tabID
+          );
+          dateStor.processing = true;
+          try {
+            const { error } = await supabase
+              .from("tabs_table")
+              .update({ order: clicked[0].order })
+              .eq("id", existing.id);
+            if (error instanceof Error) throw error;
+          } catch (error) {
+            if (error instanceof Error) {
+              console.warn(error.message);
+            }
+          }
+          try {
+            const { error } = await supabase
+              .from("tabs_table")
+              .update({ tab_name: tabName.value, order: tabOrder.value })
+              .eq("id", tabID);
+            if (error instanceof Error) throw error;
+          } catch (error) {
+            if (error instanceof Error) {
+              console.warn(error.message);
+            }
           }
         }
-        dateStor.ready = tabID;
-      } else if (existing[0]) {
-        dateStor.processing = true;
-        try {
-          const { error } = await supabase
-            .from("tabs_table")
-            .update({ order: summary })
-            .eq("id", existing[0].id);
-          if (error instanceof Error) throw error;
-        } catch (error) {
-          if (error instanceof Error) {
-            console.warn(error.message);
-          }
-        }
+      } else {
+        console.log("4");
         try {
           const { error } = await supabase
             .from("tabs_table")
@@ -1230,7 +1260,6 @@ export default defineComponent({
             console.warn(error.message);
           }
         }
-      } else {
       }
       setTimeout(() => {
         tabNameId.value = null;
@@ -1253,6 +1282,7 @@ export default defineComponent({
     };
 
     const tabCreatePush = async () => {
+      let length = dateStor.dataTabs.length + 1;
       taskEditForm.value = null;
       taskCreateForm.value = null;
       tasks.value = [];
@@ -1260,6 +1290,7 @@ export default defineComponent({
         const { error } = await supabase.from("tabs_table").insert([
           {
             tab_name: tabName.value,
+            order: length,
           },
         ]);
         if (error instanceof Error) throw error;
@@ -1578,6 +1609,7 @@ export default defineComponent({
       tabName,
       tabNameCreateInput,
       tabCreateForm,
+      tabCreateFormVisible,
       tabHover,
       tabHoverHandler,
       tabsDiv,
