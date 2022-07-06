@@ -36,10 +36,35 @@ export const dataStore = defineStore({
         this.dataTabs = tabs_table;
         setTimeout(() => {
           this.processing = false;
+          this.resolve()
         }, 700);
+        
       } catch (error) {
         if (error instanceof Error) {
           console.warn(error.message);
+        }
+      }
+      
+    },
+    async resolve() {
+      let images: any;
+      try {
+        const { data: data_images, error } = await supabase.storage.from("images").list()
+        if (error) throw error;
+        if(data_images){
+          images = data_images.filter((ell: any) => ell.name != "");
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          console.log(error)
+          console.warn(error.message);
+        }
+      }
+      if(this.dataTasks){
+        let result = images.map((item: any) => item.name).filter((it: any) => !this.dataTasks!.filter((el: any) => el.task_image != (undefined || null)).filter((ell: any) => ell.task_image != "").map((elll: any) => elll.task_image).includes(it))
+        if(result[0]){
+          console.log("Storage inaccuracies")
+          console.log(...result)
         }
       }
     }

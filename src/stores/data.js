@@ -38,11 +38,36 @@ export const dataStore = defineStore({
                 this.dataTabs = tabs_table;
                 setTimeout(() => {
                     this.processing = false;
+                    this.resolve();
                 }, 700);
             }
             catch (error) {
                 if (error instanceof Error) {
                     console.warn(error.message);
+                }
+            }
+        },
+        async resolve() {
+            let images;
+            try {
+                const { data: data_images, error } = await supabase.storage.from("images").list();
+                if (error)
+                    throw error;
+                if (data_images) {
+                    images = data_images.filter((ell) => ell.name != "");
+                }
+            }
+            catch (error) {
+                if (error instanceof Error) {
+                    console.log(error);
+                    console.warn(error.message);
+                }
+            }
+            if (this.dataTasks) {
+                let result = images.map((item) => item.name).filter((it) => !this.dataTasks.filter((el) => el.task_image != (undefined || null)).filter((ell) => ell.task_image != "").map((elll) => elll.task_image).includes(it));
+                if (result[0]) {
+                    console.log("Storage inaccuracies");
+                    console.log(...result);
                 }
             }
         }
