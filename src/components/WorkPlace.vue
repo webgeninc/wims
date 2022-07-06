@@ -27,11 +27,11 @@
         </transition>
         <div
           v-if="tabNameId === tab.id && dateStor.ready == null"
-          class="w-full text-xs pr-1 pl-1"
+          class="w-full text-xs pr-1 pl-1 transition-all duration-500"
         >
           <form
             @submit.prevent="tabNamePush(tab.id)"
-            class="flex flex-row justify-between w-full"
+            class="flex flex-row justify-between items-center w-full"
           >
             <input
               autofocus
@@ -44,12 +44,19 @@
               placeholder="tabName"
               class="p-1.5 flex-1 m-1 border-gray-300 border focus:outline-none resize-none rounded-xl"
             />
-
+            <input
+              type="number"
+              min="1"
+              max="99"
+              v-model="tabOrder"
+              class="text-xs h-full w-12 p-1.5 m-1 pr-2 pl-2 rounded-xl"
+              placeholder="tabOrder"
+            />
             <button
               type="submit"
               class="bg-gray-300 text-white rounded-full font-medium transition hover:bg-gray-200 m-1 p-0.5 pr-4 pl-4"
             >
-              <span class="text-base opacity-60 brightness-110">👌</span>
+              <span class="text-base opacity-70 brightness-110">👌</span>
             </button>
           </form>
         </div>
@@ -70,7 +77,9 @@
             >
               {{ helpText[1] }} &nbsp;
             </p> -->
-            <p><span v-if="tab.isPriority">🔥 </span>{{ tab.tab_name }}</p>
+            <p class="transition-all duration-700">
+              <span v-if="tab.isPriority">🔥 </span>{{ tab.tab_name }}
+            </p>
           </h3>
           <div
             v-if="
@@ -1018,6 +1027,8 @@ export default defineComponent({
     const tabCreateForm = ref<boolean>(false);
     const tabNameCreateInput = ref<any>(null);
     const tabHover = ref<number | null>(null);
+    const tabsDiv = ref<any>(null);
+    const tabOrder = ref<number | null>(null);
     const taskCreateForm = ref<number | null>(null);
     const taskEditForm = ref<number | null>(null);
     const tasks = ref<any[]>();
@@ -1033,7 +1044,6 @@ export default defineComponent({
     const imageViewer = ref<any>(null);
     const imageSocialPost = ref<any>(null);
     const imageSocialPostViewer = ref<any>(null);
-    const tabsDiv = ref<any>(null);
 
     //IMAGES
 
@@ -1159,8 +1169,10 @@ export default defineComponent({
 
     const tabNameChange = (tabID: number) => {
       dateStor.dataTabs.forEach((item: any) => {
-        item.id === tabID ? (tabName.value = item.tab_name) : false;
+        item.id === tabID ? (tabName.value = item.tab_name) : false,
+          item.id === tabID ? (tabOrder.value = item.order) : false;
       });
+
       tabNameId.value = tabID;
       setTimeout(() => {
         tabNameInput.value[0].focus();
@@ -1168,22 +1180,62 @@ export default defineComponent({
     };
 
     const tabNamePush = async (tabID: number) => {
-      try {
-        const { error } = await supabase
-          .from("tabs_table")
-          .update({ tab_name: tabName.value })
-          .eq("id", tabID);
-        if (error instanceof Error) throw error;
-      } catch (error) {
-        if (error instanceof Error) {
-          console.warn(error.message);
+      let existing = dateStor.dataTabs.filter(
+        (item: any) => item.order === tabOrder.value
+      );
+      let summary = dateStor.dataTabs.length + 1;
+
+      if (existing[0].id === tabID && existing[0].tab_name === tabName.value) {
+        tabNameId.value = null;
+        dateStor.ready = null;
+        tabName.value = null;
+      } else if (
+        existing[0].id === tabID &&
+        existing[0].tab_name !== tabName.value
+      ) {
+        dateStor.processing = true;
+        try {
+          const { error } = await supabase
+            .from("tabs_table")
+            .update({ tab_name: tabName.value })
+            .eq("id", tabID);
+          if (error instanceof Error) throw error;
+        } catch (error) {
+          if (error instanceof Error) {
+            console.warn(error.message);
+          }
         }
+        dateStor.ready = tabID;
+      } else if (existing[0]) {
+        dateStor.processing = true;
+        try {
+          const { error } = await supabase
+            .from("tabs_table")
+            .update({ order: summary })
+            .eq("id", existing[0].id);
+          if (error instanceof Error) throw error;
+        } catch (error) {
+          if (error instanceof Error) {
+            console.warn(error.message);
+          }
+        }
+        try {
+          const { error } = await supabase
+            .from("tabs_table")
+            .update({ tab_name: tabName.value, order: tabOrder.value })
+            .eq("id", tabID);
+          if (error instanceof Error) throw error;
+        } catch (error) {
+          if (error instanceof Error) {
+            console.warn(error.message);
+          }
+        }
+      } else {
       }
-      dateStor.ready = tabID;
       setTimeout(() => {
         tabNameId.value = null;
         dateStor.ready = null;
-      }, 1500);
+      }, 1000);
     };
 
     const tabCreateHandler = (handler: boolean) => {
@@ -1529,6 +1581,7 @@ export default defineComponent({
       tabHover,
       tabHoverHandler,
       tabsDiv,
+      tabOrder,
       tabPriorityHandler,
       scrollFunction,
       taskCreateHandler,

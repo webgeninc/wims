@@ -64,6 +64,7 @@
               required
               id="email"
               type="text"
+              ref="emailInput"
               placeholder="email / login"
               v-model="email"
               class="mr-2 ml-2 mt-3 p-3 border text-gray-900 border-gray-400 rounded-xl focus:border-webgencol focus:outline-none w-full"
