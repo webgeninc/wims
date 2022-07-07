@@ -354,15 +354,27 @@
               <p class="p-1 pt-1 pb-0 tracking-wider font-semibold">
                 Zalogowano jako:
               </p>
-              <p class="p-1 pt-0 pb-px tracking-wider">
+              <p class="p-1 pt-0.5 pb-px tracking-wider">
                 {{ userStor.user.email }}
               </p>
-              <p class="p-1 pt-1 pb-0 tracking-wider font-semibold">Status:</p>
-              <p class="p-1 pt-0 pb-px tracking-wider">
+              <p class="p-1 pt-2 pb-0 tracking-wider font-semibold">Status:</p>
+              <p class="p-1 pt-0.5 pb-px tracking-wider">
                 {{ userStor.user.role }}
               </p>
+              <p class="p-1 pt-1 pb-0.5 tracking-wider font-semibold">Chmura:</p>
+              <p class="p-1 pt-0.5 pb-1 tracking-wider">
+                Ilość plików <span class="bg-gray-600 bg-opacity-90 p-px pr-1 pl-1 text-white font-normal">{{ dateStor.diagnostics.storageFiles }}</span>
+              </p>
+              <p class="p-1 pt-0.5 pb-1.5 tracking-wider">
+                Zajęta pamięć <span class="bg-gray-600 bg-opacity-90 p-px pr-1 pl-1 text-white font-normal">{{ (dateStor.diagnostics.storageFileMemory / 10).toFixed(2) }} %</span> ({{ dateStor.diagnostics.storageFileMemory }} mb  / 1 gb)
+              </p>
+              <div class="w-full h-2 flex justify-end items-center text-xs pr-1.5 tracking-wider bg-webgencol relative overflow-hidden">
+              
+                <div class="h-full bg-red-700 opacity-80 absolute left-0" :style="{ width:  dateStor.diagnostics.storageFileMemory / 10 + '%' }">
+                </div>
+              </div>
               <p @click="logOut"
-                class="underline tracking-wider cursor-pointer text-red-700 hover:text-red-200 transition p-1 pt-px pb-0">
+                class="underline tracking-wider cursor-pointer text-red-700 hover:opacity-60 transition p-1 pt-2 pb-0">
                 log out
               </p>
             </div>
@@ -417,7 +429,7 @@
                   zrobione lub zrobione i sprawdzone.
                 </p>
               </div>
-            </div>``
+            </div>
             <p class="p-1 pb-0 text-3xs 2xl:text-xs 3xl:text-sm">
               <span class="border-gray-200 font-semibold p-1 text-2xs">shift + scroll myszką</span>
             <p class="text-2sm">lub</p>

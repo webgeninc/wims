@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { supabase } from "@/supabase/init.js";
+import { toNumber } from "@vue/shared";
 
 export const dataStore = defineStore({
   id: "dataState",
@@ -11,6 +12,7 @@ export const dataStore = defineStore({
     version: "1.0.00" as string,
     processing: false as boolean,
     ready: null as number | null,
+    diagnostics: {} as Object | null,
   }),
   actions:{
     async getData() {
@@ -48,11 +50,17 @@ export const dataStore = defineStore({
     },
     async resolve() {
       let images: any;
+      let imagesMemory: any;
       try {
         const { data: data_images, error } = await supabase.storage.from("images").list()
         if (error) throw error;
         if(data_images){
           images = data_images.filter((ell: any) => ell.name != "");
+          imagesMemory = data_images.map((item: any) => Object.values(item.metadata)[0]).reduce((it: any, a: any) => it + a) 
+          this.diagnostics = {
+            storageFiles: data_images.filter((ell: any) => ell.name != "").length,
+            storageFileMemory: toNumber((imagesMemory / 1010000).toFixed(1)) , 
+          }
         }
       } catch (error) {
         if (error instanceof Error) {
