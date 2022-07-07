@@ -52,11 +52,12 @@ export const dataStore = defineStore({
       let images: any;
       let imagesMemory: any;
       let tabs: any = this.dataTabs;
+      let orderAlert: boolean = false;
       if(this.dataTabs){
         for (const item of tabs){
           if (item.order != (tabs.indexOf(item) + 1)){
             console.log("Order inaccuracies.. fixing...")
-            
+            orderAlert = true;
             try {
               const { error } = await supabase
                 .from("tabs_table")
@@ -68,10 +69,14 @@ export const dataStore = defineStore({
                 console.warn(error.message);
               }
             }
-
           }
         }
+        if (orderAlert) {
+          alert("Naprawiono sekwencję tabel. Niektóre z nich mogą być przypisane do innego miejsca.")
+          orderAlert = false;
+        }
       }
+      
       try {
         const { data: data_images, error } = await supabase.storage.from("images").list()
         if (error) throw error;
@@ -92,6 +97,7 @@ export const dataStore = defineStore({
       if(this.dataTasks){
         let result = images.map((item: any) => item.name).filter((it: any) => !this.dataTasks!.filter((el: any) => el.task_image != (undefined || null)).filter((ell: any) => ell.task_image != "").map((elll: any) => elll.task_image).includes(it))
         if(result[0]){
+          alert("Wykryto niezgodności z plikami w chmurze.. Sprawdź konsolę..")
           console.log("Storage inaccuracies")
           console.log(...result)
         }
