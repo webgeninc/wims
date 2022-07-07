@@ -350,28 +350,36 @@
         <div v-if="tab === 1"
           class="transition flex flex-col justify-start items-center flex-grow w-full cursor-default select-none h-3/4">
           <div class="w-full bg-gray-300 p-2 pb-3 pt-3">
-            <div class="w-full font-medium text-xs flex flex-col justify-start items-end text-gray-900 tracking-wider">
-              <p class="p-1 pt-1 pb-0 tracking-wider font-semibold">
+            <div class="w-full font-medium text-xs flex flex-col justify-start items-start text-gray-900 tracking-wider">
+              <div class="flex justify-between items-start w-full h-full">
+                <div class="flex flex-col justify-start items-start h-full">
+              <p class="p-1 pt-0 pb-0 tracking-wider font-semibold">
                 Zalogowano jako:
               </p>
-              <p class="p-1 pt-0.5 pb-px tracking-wider">
+              <p class="p-1 pt-0.5 pb-px tracking-wider text-ellipsis overflow-hidden whitespace-nowrap w-52">
                 {{ userStor.user.email }}
               </p>
-              <p class="p-1 pt-2 pb-0 tracking-wider font-semibold">Status:</p>
-              <p class="p-1 pt-0.5 pb-px tracking-wider">
-                {{ userStor.user.role }}
+              </div>
+              <div class="flex flex-col justify-start items-end h-full">
+              <p class="p-2 pt-0 pb-0 tracking-wider font-semibold">Status:</p>
+              <p class="p-2 pt-0.5 pb-px tracking-wider text-ellipsis overflow-hidden whitespace-nowrap w-24">
+                {{ userStor.user.role == 'authenticated' ? "zalogowano" : '' }} 
               </p>
+              </div>
+              </div>
               <p class="p-1 pt-1 pb-0.5 tracking-wider font-semibold">Chmura:</p>
               <p class="p-1 pt-0.5 pb-1 tracking-wider">
-                Ilość plików <span class="bg-gray-600 bg-opacity-90 p-px pr-1 pl-1 text-white font-normal">{{ dateStor.diagnostics.storageFiles }}</span>
+                Ilość zapisanych plików <span class="bg-gray-600 bg-opacity-90 p-px pr-1 pl-1 text-white font-normal">{{ dateStor.diagnostics.storageFiles }}</span>
               </p>
               <p class="p-1 pt-0.5 pb-1.5 tracking-wider">
                 Zajęta pamięć <span class="bg-gray-600 bg-opacity-90 p-px pr-1 pl-1 text-white font-normal">{{ (dateStor.diagnostics.storageFileMemory / 10).toFixed(2) }} %</span> ({{ dateStor.diagnostics.storageFileMemory }} mb  / 1 gb)
               </p>
-              <div class="w-full h-2 flex justify-end items-center text-xs pr-1.5 tracking-wider bg-webgencol relative overflow-hidden">
+              <div class="w-full h-full pr-1 pl-1">
+              <div class="w-full h-2 flex justify-end items-center text-xs tracking-wider bg-webgencol relative overflow-hidden">
               
                 <div class="h-full bg-red-700 opacity-80 absolute left-0" :style="{ width:  dateStor.diagnostics.storageFileMemory / 10 + '%' }">
                 </div>
+              </div>
               </div>
               <p @click="logOut"
                 class="underline tracking-wider cursor-pointer text-red-700 hover:opacity-60 transition p-1 pt-2 pb-0">

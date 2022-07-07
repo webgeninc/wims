@@ -38,10 +38,10 @@ export const dataStore = defineStore({
                 if (error_tabs instanceof Error)
                     throw error_tabs;
                 this.dataTabs = tabs_table;
+                this.resolve();
                 setTimeout(() => {
                     this.processing = false;
-                    this.resolve();
-                }, 700);
+                }, 500);
             }
             catch (error) {
                 if (error instanceof Error) {
