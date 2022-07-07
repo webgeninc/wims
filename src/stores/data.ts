@@ -51,6 +51,27 @@ export const dataStore = defineStore({
     async resolve() {
       let images: any;
       let imagesMemory: any;
+      let tabs: any = this.dataTabs;
+      if(this.dataTabs){
+        for (const item of tabs){
+          if (item.order != (tabs.indexOf(item) + 1)){
+            console.log("Order inaccuracies.. fixing...")
+            
+            try {
+              const { error } = await supabase
+                .from("tabs_table")
+                .update({ order: (tabs.indexOf(item) + 1) })
+                .eq("id", item.id);
+              if (error instanceof Error) throw error;
+            } catch (error) {
+              if (error instanceof Error) {
+                console.warn(error.message);
+              }
+            }
+
+          }
+        }
+      }
       try {
         const { data: data_images, error } = await supabase.storage.from("images").list()
         if (error) throw error;

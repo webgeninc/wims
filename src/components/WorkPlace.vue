@@ -1197,7 +1197,6 @@ export default defineComponent({
         let existing = _existing[0];
 
         if (existing.id === tabID && existing.tab_name === tabName.value) {
-          console.log("1");
           tabNameId.value = null;
           dateStor.ready = null;
           tabName.value = null;
@@ -1205,7 +1204,6 @@ export default defineComponent({
           existing.id === tabID &&
           existing.tab_name !== tabName.value
         ) {
-          console.log("2");
           dateStor.processing = true;
           try {
             const { error } = await supabase
@@ -1248,7 +1246,6 @@ export default defineComponent({
           }
         }
       } else {
-        console.log("4");
         try {
           const { error } = await supabase
             .from("tabs_table")
