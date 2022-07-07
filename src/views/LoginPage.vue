@@ -190,6 +190,7 @@ export default defineComponent({
         }, 500);
       } catch (error_description) {
         if (error_description != Error) {
+          loadingAnim.value = false;
           niceMsg.value = "";
           niceMsgEng.value = "";
           if (
@@ -210,7 +211,7 @@ export default defineComponent({
           errorMsgEng.value = "";
           niceMsg.value = "Miłego dnia :)";
           niceMsgEng.value = "Have a nice day :)";
-        }, 5000);
+        }, 7000);
       }
     };
 
