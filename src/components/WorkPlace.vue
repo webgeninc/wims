@@ -105,7 +105,7 @@
             </button>
             <button
               @click="tabDelete(tab.id)"
-              class="bg-gray-200 text-white rounded-full font-medium transition hover:bg-opacity-50 p-0.5 pr-2.5 pl-2.5 m-1"
+              class="bg-red-800 bg-opacity-20 text-white rounded-full font-medium transition hover:bg-opacity-10 p-0.5 pr-2.5 pl-2.5 m-1"
             >
               <span class="text-xs opacity-80">❌</span>
             </button>
@@ -953,12 +953,16 @@
     <div
       class="absolute top-3 w-72 flex justify-center items-start animate__animated animate__fadeInLeft animate__delay-1s transition-all duration-500"
       :class="{
+        'opacity-5': tabCreateFormVisible == false,
         'left-[-16.4rem]': tabCreateForm == false,
         'left-0': tabCreateForm == true,
       }"
     >
       <div
-        class="bg-gray-300 transition cursor-pointer w-full pt-0.5 pb-0.5 rounded-br-2xl"
+        class="bg-gray-300 cursor-pointer w-full pt-0.5 pb-0.5 rounded-br-2xl transition-all duration-500"
+        :class="{
+          'opacity-30': tabCreateFormVisible == false,
+        }"
       >
         <div
           class="text-2xs 2xl:text-xs flex flex-col justify-center items-center p-1.5 pl-2 pr-3 h-full"
