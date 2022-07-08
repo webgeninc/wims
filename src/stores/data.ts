@@ -82,7 +82,7 @@ export const dataStore = defineStore({
         const { data: data_images, error } = await supabase.storage.from("images").list()
         if (error) throw error;
         if(data_images){
-          images = data_images.filter((ell: any) => ell.name != "");
+          images = data_images.filter((ell: any) => ell.name != ("" || ".emptyFolderPlaceholder"));
           imagesMemory = data_images.map((item: any) => Object.values(item.metadata)[0]).reduce((it: any, a: any) => it + a) 
           this.diagnostics = {
             storageFiles: data_images.filter((ell: any) => ell.name != "").length,
@@ -97,6 +97,8 @@ export const dataStore = defineStore({
       }
       if(this.dataTasks){
         let result = images.map((item: any) => item.name).filter((it: any) => !this.dataTasks!.filter((el: any) => el.task_image != (undefined || null)).filter((ell: any) => ell.task_image != "").map((elll: any) => elll.task_image).includes(it))
+        console.log(result)
+        console.log(images)
         if(result[0]){
           alert("Wykryto niezgodności z plikami w chmurze.. Sprawdź konsolę..")
           console.log("Storage inaccuracies")

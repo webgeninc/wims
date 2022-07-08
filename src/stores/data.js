@@ -85,7 +85,7 @@ export const dataStore = defineStore({
                 if (error)
                     throw error;
                 if (data_images) {
-                    images = data_images.filter((ell) => ell.name != "");
+                    images = data_images.filter((ell) => ell.name != ("" || ".emptyFolderPlaceholder"));
                     imagesMemory = data_images.map((item) => Object.values(item.metadata)[0]).reduce((it, a) => it + a);
                     this.diagnostics = {
                         storageFiles: data_images.filter((ell) => ell.name != "").length,
@@ -101,6 +101,8 @@ export const dataStore = defineStore({
             }
             if (this.dataTasks) {
                 let result = images.map((item) => item.name).filter((it) => !this.dataTasks.filter((el) => el.task_image != (undefined || null)).filter((ell) => ell.task_image != "").map((elll) => elll.task_image).includes(it));
+                console.log(result);
+                console.log(images);
                 if (result[0]) {
                     alert("Wykryto niezgodności z plikami w chmurze.. Sprawdź konsolę..");
                     console.log("Storage inaccuracies");

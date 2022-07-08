@@ -1493,30 +1493,29 @@ export default defineComponent({
     };
 
     const taskEditPush = async (taskID: number, tabID: number) => {
-      try {
-        const { error } = await supabase
-          .from("tasks_table")
-          .update({
-            task_worker: taskEdited.value[0].task_worker,
-            task_color: taskEdited.value[0].task_color,
-            task_name: taskEdited.value[0].task_name,
-            task_desc: taskEdited.value[0].task_desc,
-            task_image: taskFile.value === null ? null : taskFile.value.name,
-            task_date: taskEdited.value[0].task_date,
-          })
-          .eq("id", taskID);
-        taskExtend.value = null;
-        tabCreateForm.value = false;
-        taskHover.value = null;
-        taskEditForm.value = null;
-        if (error instanceof Error) throw error;
-      } catch (error) {
-        if (error instanceof Error) {
-          console.warn(error.message);
-        }
-      }
-      dateStor.ready = tabID;
       if (taskFile.value !== null) {
+        try {
+          const { error } = await supabase
+            .from("tasks_table")
+            .update({
+              task_worker: taskEdited.value[0].task_worker,
+              task_color: taskEdited.value[0].task_color,
+              task_name: taskEdited.value[0].task_name,
+              task_desc: taskEdited.value[0].task_desc,
+              task_image: taskFile.value.name,
+              task_date: taskEdited.value[0].task_date,
+            })
+            .eq("id", taskID);
+          taskExtend.value = null;
+          tabCreateForm.value = false;
+          taskHover.value = null;
+          taskEditForm.value = null;
+          if (error instanceof Error) throw error;
+        } catch (error) {
+          if (error instanceof Error) {
+            console.warn(error.message);
+          }
+        }
         try {
           const { error } = await supabase.storage
             .from("images")
@@ -1528,7 +1527,30 @@ export default defineComponent({
           }
         }
         taskFile.value = null;
+      } else {
+        try {
+          const { error } = await supabase
+            .from("tasks_table")
+            .update({
+              task_worker: taskEdited.value[0].task_worker,
+              task_color: taskEdited.value[0].task_color,
+              task_name: taskEdited.value[0].task_name,
+              task_desc: taskEdited.value[0].task_desc,
+              task_date: taskEdited.value[0].task_date,
+            })
+            .eq("id", taskID);
+          taskExtend.value = null;
+          tabCreateForm.value = false;
+          taskHover.value = null;
+          taskEditForm.value = null;
+          if (error instanceof Error) throw error;
+        } catch (error) {
+          if (error instanceof Error) {
+            console.warn(error.message);
+          }
+        }
       }
+      dateStor.ready = tabID;
       taskCreateImageInfo.value = false;
       setTimeout(() => {
         dateStor.ready = null;
