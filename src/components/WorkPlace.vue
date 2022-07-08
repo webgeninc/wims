@@ -79,7 +79,7 @@
 
             <p class="transition-all duration-700">
               <span v-if="tab.isPriority">🔥 </span>{{ tab.tab_name
-              }}<span class="text-2xs p-0 ml-1 text-gray-400">{{
+              }}<span class="text-2xs font-light p-0 ml-1 text-gray-400">{{
                 tab.order
               }}</span>
             </p>
