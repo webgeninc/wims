@@ -101,8 +101,6 @@ export const dataStore = defineStore({
             }
             if (this.dataTasks) {
                 let result = images.map((item) => item.name).filter((it) => !this.dataTasks.filter((el) => el.task_image != (undefined || null)).filter((ell) => ell.task_image != "").map((elll) => elll.task_image).includes(it));
-                console.log(result);
-                console.log(images);
                 if (result[0]) {
                     alert("Wykryto niezgodności z plikami w chmurze.. Sprawdź konsolę..");
                     console.log("Storage inaccuracies");

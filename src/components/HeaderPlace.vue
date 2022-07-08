@@ -450,7 +450,7 @@
           <div
             class="flex flex-col w-full justify-center items-center mb-0 mt-0 font-normal bg-gray-600 text-gray-50 tracking-wide h-18">
             <div class="w-full pr-4 pl-7 2xl:pl-4 pb-3 pt-3 flex justify-center items-center">
-              <div class="flex flex-col justify-start items-center w-full text-2xs 2xl:text-2sm tracking-widewide">
+              <div class="flex flex-col justify-start items-center w-full text-2sm 2xl:text-sm font-light tracking-widewide">
                 <div class="flex justify-end items-center w-full h-full pl-0">
                   <p class="cursor-default select-none">dzisiaj jest</p>
                   <p class="cursor-default select-none ml-1">{{ infoTerm }}</p>
