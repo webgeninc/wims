@@ -11,6 +11,7 @@ export const dataStore = defineStore({
     dataImages: [] as unknown[] | null,
     version: "1.0.00" as string,
     processing: false as boolean,
+    fixing: false as boolean,
     ready: null as number | null,
     diagnostics: {} as Object | null,
   }),
@@ -52,12 +53,11 @@ export const dataStore = defineStore({
       let images: any;
       let imagesMemory: any;
       let tabs: any = this.dataTabs;
-      let orderAlert: boolean = false;
       if(this.dataTabs){
         for (const item of tabs){
           if (item.order != (tabs.indexOf(item) + 1)){
             console.log("Order inaccuracies.. fixing...")
-            orderAlert = true;
+            this.fixing = true;
             try {
               const { error } = await supabase
                 .from("tabs_table")
@@ -71,9 +71,10 @@ export const dataStore = defineStore({
             }
           }
         }
-        if (orderAlert) {
-          alert("Naprawiono sekwencję tabel. Niektóre z nich mogą być przypisane do innego miejsca.")
-          orderAlert = false;
+        if (this.fixing) {
+          setTimeout(() => {
+            this.fixing = false;
+          }, 800);
         }
       }
       

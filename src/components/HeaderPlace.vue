@@ -487,15 +487,30 @@
               </div>
             </div>
           </div>
-          <div v-if="dateStor.processing" class="w-full h-8 bg-yellow-300 bg-opacity-90 flex justify-end items-center">
-            <div class="w-full h-full pr-2 flex justify-between items-center">
-              <span class="text-lg p-0.5 pl-1.5 grayscale brightness-125 opacity-80">🔔</span>
-              <span class="text-sm flex justify-end items-center h-full">
-                Pobieranie danych...
+          <div  v-if="dateStor.fixing" class="w-full h-8 bg-gray-600 bg-opacity-90 flex justify-end items-center">
+            <div class="w-full h-full  flex justify-between items-center overflow-hidden">
+              <div class="bg-red-400 bg-opacity-60 flex justify-center items-center">
+              <span class="text-xl p-1 pr-2 pl-2  grayscale invert opacity-90">🛠</span>
+              </div>
+              <div class="bg-red-500 bg-opacity-40 w-full h-full pr-2">
+              <span class="text-sm pr-2 flex justify-end items-center h-full font-light text-gray-100 tracking-wider">
+                Naprawianie rzeczy..
               </span>
+              </div>
             </div>
           </div>
-
+          <div v-else-if="dateStor.processing" class="w-full h-8 bg-gray-600 bg-opacity-90 flex justify-end items-center">
+            <div class="w-full h-full  flex justify-between items-center overflow-hidden">
+              <div class="bg-cyan-400 bg-opacity-60 flex justify-center items-center">
+              <span class="text-xl p-1 pr-2 pl-2 grayscale brightness-150 opacity-70">⌛</span>
+              </div>
+              <div class="bg-sky-600 bg-opacity-30 w-full h-full pr-2">
+              <span class="text-sm pr-2 flex justify-end items-center h-full font-light text-gray-100 tracking-wider">
+                Pobieranie danych...
+              </span>
+              </div>
+            </div>
+          </div>
           <div v-else class="w-full h-8 bg-webgencol bg-opacity-90 flex justify-end items-center pr-2">
             <div class="h-full w-12 p-1">
               <div
