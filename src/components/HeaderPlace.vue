@@ -350,36 +350,45 @@
         <div v-if="tab === 1"
           class="transition flex flex-col justify-start items-center flex-grow w-full cursor-default select-none h-3/4">
           <div class="w-full bg-gray-300 p-2 pb-3 pt-3">
-            <div class="w-full font-medium text-xs flex flex-col justify-start items-start text-gray-900 tracking-wider">
+            <div
+              class="w-full font-medium text-xs flex flex-col justify-start items-start text-gray-900 tracking-wider">
               <div class="flex justify-between items-start w-full h-full">
-                <div class="flex flex-col justify-start items-start h-full">
-              <p class="p-1 pt-0 pb-0 tracking-wider font-semibold">
-                Zalogowano jako:
-              </p>
-              <p class="p-1 pt-0.5 pb-px tracking-wider text-ellipsis overflow-hidden whitespace-nowrap w-52">
-                {{ userStor.user.email }}
-              </p>
-              </div>
-              <div class="flex flex-col justify-start items-end h-full">
-              <p class="p-2 pt-0 pb-0 tracking-wider font-semibold">Status:</p>
-              <p class="p-2 pt-0.5 pb-px tracking-wider text-ellipsis overflow-hidden whitespace-nowrap w-24">
-                {{ userStor.user.role == 'authenticated' ? "zalogowano" : '' }} 
-              </p>
-              </div>
+                <div class="flex flex-col justify-start items-start h-full w-2/3">
+                  <p class="p-1 pt-0 pb-0 tracking-wider font-semibold">
+                    Zalogowano jako:
+                  </p>
+                  <p class="p-1 pt-0.5 pb-px tracking-wider text-ellipsis overflow-hidden whitespace-nowrap w-full">
+                    {{ userStor.user.email }}
+                  </p>
+                </div>
+                <div class="flex flex-col justify-start items-end h-full w-1/3 pr-1">
+                  <p class="pt-0 pb-0 tracking-wider font-semibold ">Status:</p>
+                  <p class="pt-0.5 pb-px tracking-wider text-right text-ellipsis overflow-hidden whitespace-nowrap w-full">
+                    {{ userStor.user.role == 'authenticated' ? "zalogowano" : '???' }}
+                  </p>
+                </div>
               </div>
               <p class="p-1 pt-1 pb-0.5 tracking-wider font-semibold">Chmura:</p>
               <p class="p-1 pt-0.5 pb-1 tracking-wider">
-                Ilość zapisanych plików <span class="bg-gray-600 bg-opacity-90 p-px pr-1 pl-1 text-white font-normal">{{ dateStor.diagnostics.storageFiles }}</span>
+                Ilość zapisanych plików <span class="bg-gray-600 bg-opacity-90 p-px pr-1 pl-1 text-white font-normal">{{
+                    dateStor.diagnostics.storageFiles
+                }}</span>
               </p>
               <p class="p-1 pt-0.5 pb-1.5 tracking-wider">
-                Zajęta pamięć <span class="bg-gray-600 bg-opacity-90 p-px pr-1 pl-1 text-white font-normal">{{ (dateStor.diagnostics.storageFileMemory / 10).toFixed(2) }} %</span> ({{ dateStor.diagnostics.storageFileMemory }} mb  / 1 gb)
+                Zajęta pamięć <span class="bg-gray-600 bg-opacity-90 p-px pr-1 pl-1 text-white font-normal">{{
+                    (dateStor.diagnostics.storageFileMemory / 10).toFixed(2)
+                }} %</span> ({{
+    dateStor.diagnostics.storageFileMemory
+}} mb / 1 gb)
               </p>
               <div class="w-full h-full pr-1 pl-1">
-              <div class="w-full h-2 flex justify-end items-center text-xs tracking-wider bg-webgencol relative overflow-hidden">
-              
-                <div class="h-full bg-red-700 opacity-80 absolute left-0" :style="{ width:  dateStor.diagnostics.storageFileMemory / 10 + '%' }">
+                <div
+                  class="w-full h-2 flex justify-end items-center text-xs tracking-wider bg-webgencol relative overflow-hidden">
+
+                  <div class="h-full bg-red-700 opacity-80 absolute left-0"
+                    :style="{ width: dateStor.diagnostics.storageFileMemory / 10 + '%' }">
+                  </div>
                 </div>
-              </div>
               </div>
               <p @click="logOut"
                 class="underline tracking-wider cursor-pointer text-red-700 hover:opacity-60 transition p-1 pt-2 pb-0">
@@ -450,7 +459,8 @@
           <div
             class="flex flex-col w-full justify-center items-center mb-0 mt-0 font-normal bg-gray-600 text-gray-50 tracking-wide h-18">
             <div class="w-full pr-4 pl-7 2xl:pl-4 pb-3 pt-3 flex justify-center items-center">
-              <div class="flex flex-col justify-start items-center w-full text-2sm 2xl:text-sm font-light tracking-widewide">
+              <div
+                class="flex flex-col justify-start items-center w-full text-2sm 2xl:text-sm font-light tracking-wider">
                 <div class="flex justify-end items-center w-full h-full pl-0">
                   <p class="cursor-default select-none">dzisiaj jest</p>
                   <p class="cursor-default select-none ml-1">{{ infoTerm }}</p>
@@ -458,10 +468,11 @@
                   <p class="cursor-default select-none ml-1">{{ infoYear }}</p>
                 </div>
                 <div class="flex justify-end items-center w-full h-full pl-5">
-                  <p class="cursor-default select-none mr-2">{{ infoDay }}</p>
-                  <p class="cursor-default select-none w-13 mr-2 tracking-widest">
+                  <p class="cursor-default w-14 select-none mr-2 tracking-widest">
                     {{ infoTime }}
                   </p>
+                  <p class="cursor-default select-none mr-0">{{ infoDay }}</p>
+                  
                 </div>
               </div>
             </div>
@@ -487,55 +498,66 @@
               </div>
             </div>
           </div>
-          <div  v-if="dateStor.fixing" class="w-full h-8 bg-gray-300 bg-opacity-90 flex justify-end items-center">
+          <div v-if="dateStor.fixing" class="w-full h-8 bg-gray-300 bg-opacity-90 flex justify-end items-center">
             <div class="w-full h-full  flex justify-between items-center overflow-hidden">
               <div class="bg-yellow-600 bg-opacity-80 flex justify-center items-center">
-              <span class="text-xl p-1 pr-2.5 pl-2.5 grayscale invert opacity-100">🛠</span>
+                <span class="text-xl p-1 pr-2.5 pl-2.5 grayscale invert opacity-100">🛠</span>
               </div>
               <div class="bg-gray-700 bg-opacity-90 w-full h-full pr-2">
-              <span class="text-sm pr-2 flex justify-end items-center h-full font-normal text-gray-200 tracking-wider">
-                Naprawianie rzeczy..
-              </span>
+                <span
+                  class="text-sm pr-2 flex justify-end items-center h-full font-normal text-gray-200 tracking-wider">
+                  Naprawianie rzeczy..
+                </span>
               </div>
             </div>
           </div>
-          <div v-else-if="dateStor.processing" class="w-full h-8 bg-gray-300 bg-opacity-90 flex justify-end items-center">
+          <div v-else-if="dateStor.processing"
+            class="w-full h-8 bg-gray-300 bg-opacity-90 flex justify-end items-center">
             <div class="w-full h-full  flex justify-between items-center overflow-hidden">
               <div class="bg-sky-600 bg-opacity-70 flex justify-center items-center">
-              <span class="text-lg p-1 pr-2 pl-2 grayscale brightness-150 opacity-80">📥</span>
+                <span class="text-lg p-1 pr-2 pl-2 grayscale brightness-150 opacity-80">📥</span>
               </div>
               <div class="bg-gray-700 bg-opacity-90  w-full h-full pr-2">
-              <span class="text-sm pr-2 flex justify-end items-center h-full font-normal text-gray-200 tracking-wider">
-                Pobieranie danych...
-              </span>
+                <span
+                  class="text-sm pr-2 flex justify-end items-center h-full font-normal text-gray-200 tracking-wider">
+                  Pobieranie danych...
+                </span>
               </div>
             </div>
           </div>
-          <div v-else class="w-full h-8 bg-webgencol bg-opacity-90 flex justify-end items-center pr-1">
-            <div class="h-full w-12 p-1">
-              <div
-                class="h-full w-full bg-gray-300 rounded-2xl flex justify-center items-center transition text-sm opacity-60 cursor-not-allowed">
-                📃
-              </div>
+          <div v-else
+            class="w-full h-8 bg-webgencol bg-opacity-90 flex justify-between items-center pr-1 overflow-hidden">
+            <div v-if="dateStor.check" class="bg-orange-400 bg-opacity-80 flex justify-center items-center">
+              <span class="text-lg p-1 pr-3 pl-3 grayscale brightness-150 opacity-70">❕</span>
             </div>
-            <div class="h-full w-12 p-1">
-              <div v-if="tab === 1" @click="tabHandler(1)"
-                class="h-full w-full bg-gray-200 rounded-2xl flex justify-center items-center transition text-sm opacity-80">
-                🔍
-              </div>
-              <div v-else @click="tabHandler(1)"
-                class="h-full w-full bg-gray-300 opacity-60 rounded-2xl hover:opacity-80 cursor-pointer flex justify-center items-center transition text-sm">
-                🔍
-              </div>
+            <div v-else class="">
             </div>
-            <div class="h-full w-12 p-1">
-              <div v-if="tab === 0" @click="tabHandler(0)"
-                class="h-full w-full bg-gray-200 rounded-2xl transition flex justify-center items-center font-semibold text-sm opacity-80">
-                📆
+            <div class="flex justify-end items-center pr-1">
+              <div class="h-full w-12 p-1">
+                <div
+                  class="h-full w-full bg-gray-300 rounded-2xl flex justify-center items-center transition text-sm opacity-60 cursor-not-allowed">
+                  📃
+                </div>
               </div>
-              <div v-else @click="tabHandler(0)"
-                class="h-full w-full bg-gray-300 opacity-60 rounded-2xl transition hover:opacity-80 flex justify-center items-center font-semibold cursor-pointer text-sm">
-                📆
+              <div class="h-full w-12 p-1">
+                <div v-if="tab === 1" @click="tabHandler(1)"
+                  class="h-full w-full bg-gray-200 rounded-2xl flex justify-center items-center transition text-sm opacity-80">
+                  🔍
+                </div>
+                <div v-else @click="tabHandler(1)"
+                  class="h-full w-full bg-gray-300 opacity-60 rounded-2xl hover:opacity-80 cursor-pointer flex justify-center items-center transition text-sm">
+                  🔍
+                </div>
+              </div>
+              <div class="h-full w-12 p-1">
+                <div v-if="tab === 0" @click="tabHandler(0)"
+                  class="h-full w-full bg-gray-200 rounded-2xl transition flex justify-center items-center font-semibold text-sm opacity-80">
+                  📆
+                </div>
+                <div v-else @click="tabHandler(0)"
+                  class="h-full w-full bg-gray-300 opacity-60 rounded-2xl transition hover:opacity-80 flex justify-center items-center font-semibold cursor-pointer text-sm">
+                  📆
+                </div>
               </div>
             </div>
           </div>

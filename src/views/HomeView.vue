@@ -16,7 +16,6 @@
 </template>
 
 <script lang="ts">
-import { ref } from "vue";
 import { supabase } from "../supabase/init.js";
 import { defineComponent } from "vue";
 import { computed } from "vue";
@@ -27,10 +26,6 @@ import Workplace from "../components/WorkPlace.vue";
 export default defineComponent({
   name: "HomeView",
   setup() {
-    const dataNotes = ref<unknown[] | null>([]);
-    const dataTasks = ref<unknown[] | null>([]);
-    const dataTabs = ref<unknown[] | null>([]);
-
     const dateStor: any = dataStore();
     const userStor: any = userStore();
 
@@ -51,7 +46,7 @@ export default defineComponent({
     checkData();
     dateStor.getData();
 
-    return { user, dataNotes, dataTasks, dataTabs };
+    return { user };
   },
   components: { Headerplace, Workplace },
 });
