@@ -460,15 +460,15 @@
             class="flex flex-col w-full justify-center items-center mb-0 mt-0 font-normal bg-gray-600 text-gray-50 tracking-wide h-18">
             <div class="w-full pr-4 pl-7 2xl:pl-4 pb-3 pt-3 flex justify-center items-center">
               <div
-                class="flex flex-col justify-start items-center w-full text-2sm 2xl:text-sm font-light tracking-wider">
-                <div class="flex justify-end items-center w-full h-full pl-0">
-                  <p class="cursor-default select-none">dzisiaj jest</p>
-                  <p class="cursor-default select-none ml-1">{{ infoTerm }}</p>
+                class="flex flex-col-reverse justify-start items-center w-full text-2sm 2xl:text-sm font-light tracking-wider">
+                <div class="flex justify-end items-center w-full h-full pl-0 uppercase">
+                  <!-- <p class="cursor-default select-none mr-1">jest</p> -->
+                  <p class="cursor-default select-none ml-1 upper">{{ infoTerm }}</p>
                   <p class="cursor-default select-none ml-1">{{ infoMonth }}</p>
                   <p class="cursor-default select-none ml-1">{{ infoYear }}</p>
                 </div>
-                <div class="flex justify-end items-center w-full h-full pl-5">
-                  <p class="cursor-default w-14 select-none mr-2 tracking-widest">
+                <div class="flex justify-end items-center w-full h-full pl-5 uppercase">
+                  <p class="cursor-default w-14 select-none mr-2 2xl:mr-3 tracking-widest">
                     {{ infoTime }}
                   </p>
                   <p class="cursor-default select-none mr-0">{{ infoDay }}</p>
