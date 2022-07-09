@@ -25,7 +25,7 @@
                           DO WERYFIKACJI
                         </div>
                         <div v-else-if="task.task_color === 5"
-                          class="bg-blue-600 w-3/4 text-2xs 2xl:text-2xs 3xl:text-xs text-white p-0.5 pl-2">
+                          class="bg-sky-600 w-3/4 text-2xs 2xl:text-2xs 3xl:text-xs text-white p-0.5 pl-2">
                           W TRAKCIE REALIZACJI
                         </div>
                         <div v-else-if="task.task_color === 2"
@@ -41,7 +41,7 @@
                           ZROBIONE ZADANIE
                         </div>
                         <div v-else-if="task.task_color === 4"
-                          class="bg-purple-600 w-3/4 text-2xs 2xl:text-2xs 3xl:text-xs text-white p-0.5 pl-2">
+                          class="bg-purple-500 w-3/4 text-2xs 2xl:text-2xs 3xl:text-xs text-white p-0.5 pl-2">
                           AKTUALIZACJA DLA GRUPY
                         </div>
                         <div
@@ -75,7 +75,7 @@
                         DO WERYFIKACJI
                       </div>
                       <div v-else-if="task.task_color === 5"
-                        class="bg-blue-600 w-3/4 text-2xs 2xl:text-2xs 3xl:text-xs text-white p-0.5 pl-2">
+                        class="bg-sky-600 w-3/4 text-2xs 2xl:text-2xs 3xl:text-xs text-white p-0.5 pl-2">
                         W TRAKCIE REALIZACJI
                       </div>
                       <div v-else-if="task.task_color === 2"
@@ -303,13 +303,13 @@
                           " class="h-0.75 w-2.5 rounded-full bg-red-600 m-px text-2xs"></div>
                           <div v-else-if="
                             taskd.task_date === day && taskd.task_color === 3
-                          " class="h-0.75 w-2.5 rounded-full bg-yellow-600 m-px text-2xs"></div>
+                          " class="h-0.75 w-2.5 rounded-full bg-yellow-500 m-px text-2xs"></div>
                           <div v-else-if="
                             taskd.task_date === day && taskd.task_color === 4
-                          " class="h-0.75 w-2.5 rounded-full bg-purple-600 m-px text-2xs"></div>
+                          " class="h-0.75 w-2.5 rounded-full bg-purple-500 m-px text-2xs"></div>
                           <div v-else-if="
                             taskd.task_date === day && taskd.task_color === 5
-                          " class="h-0.75 w-2.5 rounded-full bg-blue-600 m-px text-2xs"></div>
+                          " class="h-0.75 w-2.5 rounded-full bg-sky-400 m-px text-2xs"></div>
                           <div v-else-if="
                             taskd.task_date === day && taskd.task_color === 6
                           " class="h-0.75 w-2.5 rounded-full bg-green-400 m-px text-2xs"></div>
@@ -383,7 +383,7 @@
               </div>
               <p @click="logOut"
                 class="underline tracking-wider cursor-pointer text-red-700 hover:opacity-60 transition p-1 pt-2 pb-0">
-                log out
+                wyloguj
               </p>
             </div>
           </div>
@@ -423,7 +423,7 @@
                 </p>
               </div>
               <div class="flex m-0.5 2xl:m-1 2xl:mb-2">
-                <div class="p-1 bg-blue-500 rounded-full ml-0.5 mr-0.5 hover:opacity-70"></div>
+                <div class="p-1 bg-sky-500 rounded-full ml-0.5 mr-0.5 hover:opacity-70"></div>
                 <p class="text-justify ml-2 text-2xs 2xl:text-xs 3xl:text-xs tracking-normal">
                   <span class="font-medium tracking-wider">ROZPOCZĘTO</span> Tą
                   etykietą oznaczamy zadania, które mają status aktywny.
@@ -487,25 +487,25 @@
               </div>
             </div>
           </div>
-          <div  v-if="dateStor.fixing" class="w-full h-8 bg-gray-600 bg-opacity-90 flex justify-end items-center">
+          <div  v-if="dateStor.fixing" class="w-full h-8 bg-gray-300 bg-opacity-90 flex justify-end items-center">
             <div class="w-full h-full  flex justify-between items-center overflow-hidden">
-              <div class="bg-yellow-400 bg-opacity-60 flex justify-center items-center">
-              <span class="text-xl p-1 pr-2 pl-2 grayscale invert opacity-90">🛠</span>
+              <div class="bg-yellow-600 bg-opacity-80 flex justify-center items-center">
+              <span class="text-xl p-1 pr-2.5 pl-2.5 grayscale invert opacity-100">🛠</span>
               </div>
-              <div class="bg-yellow-500 bg-opacity-50 w-full h-full pr-2">
-              <span class="text-sm pr-2 flex justify-end items-center h-full font-light text-gray-100 tracking-wider">
+              <div class="bg-gray-700 bg-opacity-90 w-full h-full pr-2">
+              <span class="text-sm pr-2 flex justify-end items-center h-full font-normal text-gray-200 tracking-wider">
                 Naprawianie rzeczy..
               </span>
               </div>
             </div>
           </div>
-          <div v-else-if="dateStor.processing" class="w-full h-8 bg-gray-600 bg-opacity-90 flex justify-end items-center">
+          <div v-else-if="dateStor.processing" class="w-full h-8 bg-gray-300 bg-opacity-90 flex justify-end items-center">
             <div class="w-full h-full  flex justify-between items-center overflow-hidden">
-              <div class="bg-sky-400 bg-opacity-70 flex justify-center items-center">
-              <span class="text-lg p-1 pr-2 pl-2 grayscale brightness-150 opacity-70">⌛</span>
+              <div class="bg-sky-600 bg-opacity-70 flex justify-center items-center">
+              <span class="text-lg p-1 pr-2 pl-2 grayscale brightness-150 opacity-80">📥</span>
               </div>
-              <div class="bg-sky-500 bg-opacity-50 w-full h-full pr-2">
-              <span class="text-sm pr-2 flex justify-end items-center h-full font-light text-gray-100 tracking-wider">
+              <div class="bg-gray-700 bg-opacity-90  w-full h-full pr-2">
+              <span class="text-sm pr-2 flex justify-end items-center h-full font-normal text-gray-200 tracking-wider">
                 Pobieranie danych...
               </span>
               </div>

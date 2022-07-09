@@ -293,7 +293,7 @@
             <div
               v-if="taskEditForm != task.id && tab.id === task.task_tabid"
               @mouseleave="taskHoverHandler(null)"
-              class="overflow-hidden flex bg-gray-50 shadow-md mb-1.5 mt-1 pt-0.5 transition-all duration-700"
+              class="overflow-hidden flex bg-gray-50 shadow-md mb-1.5 mt-1 pt-0.5 transition-all duration-700 bg"
             >
               <div
                 class="w-1.2 opacity-80"
@@ -301,8 +301,8 @@
                   'bg-gray-400': task.task_color === 1,
                   'bg-red-600': task.task_color === 2,
                   'bg-yellow-600': task.task_color === 3,
-                  'bg-purple-600': task.task_color === 4,
-                  'bg-blue-600': task.task_color === 5,
+                  'bg-purple-500': task.task_color === 4,
+                  'bg-sky-600': task.task_color === 5,
                   'bg-green-600': task.task_color === 6,
                 }"
               ></div>

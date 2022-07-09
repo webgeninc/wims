@@ -88,7 +88,7 @@ export const dataStore = defineStore({
                     images = data_images.filter((ell) => ell.name != ("" || ".emptyFolderPlaceholder"));
                     imagesMemory = data_images.map((item) => Object.values(item.metadata)[0]).reduce((it, a) => it + a);
                     this.diagnostics = {
-                        storageFiles: data_images.filter((ell) => ell.name != "").length,
+                        storageFiles: images.length,
                         storageFileMemory: toNumber((imagesMemory / 1010000).toFixed(1)),
                     };
                 }
