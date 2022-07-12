@@ -16,6 +16,9 @@ export const dataStore = defineStore({
     ready: null as number | null,
     diagnostics: {} as Object | null,
   }),
+
+  
+
   actions:{
     async getData() {
       this.processing = true;
@@ -42,13 +45,11 @@ export const dataStore = defineStore({
         setTimeout(() => {
           this.processing = false;
         }, 500);
-        
       } catch (error) {
         if (error instanceof Error) {
           console.warn(error.message);
         }
       }
-      
     },
     async resolve() {
       let images: any;
@@ -69,7 +70,7 @@ export const dataStore = defineStore({
               if (error instanceof Error) {
                 console.warn(error.message);
               }
-            }
+            }   
           }
         }
         if (this.fixing) {

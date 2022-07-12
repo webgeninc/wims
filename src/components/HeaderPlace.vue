@@ -363,7 +363,8 @@
                 </div>
                 <div class="flex flex-col justify-start items-end h-full w-1/3 pr-1">
                   <p class="pt-0 pb-0 tracking-wider font-semibold ">Status:</p>
-                  <p class="pt-0.5 pb-px tracking-wider text-right text-ellipsis overflow-hidden whitespace-nowrap w-full">
+                  <p
+                    class="pt-0.5 pb-px tracking-wider text-right text-ellipsis overflow-hidden whitespace-nowrap w-full">
                     {{ userStor.user.role == 'authenticated' ? "zalogowano" : '???' }}
                   </p>
                 </div>
@@ -472,7 +473,7 @@
                     {{ infoTime }}
                   </p>
                   <p class="cursor-default select-none mr-0">{{ infoDay }}</p>
-                  
+
                 </div>
               </div>
             </div>
@@ -601,6 +602,19 @@ export default defineComponent({
         ).getDate()
       )
     );
+
+    const cookieIntroSet = (val: boolean) => {
+      let date = new Date();
+      date.setTime(date.getTime() + (365 * 24 * 60 * 60 * 1000))
+      document.cookie =
+        "info=" + val +"; expires=" +
+        date.toUTCString();
+    }
+    
+    if (!document.cookie){
+      cookieIntroSet(true);
+    }
+
     const router = useRouter();
     const months = [
       "styczeń",
@@ -916,6 +930,7 @@ export default defineComponent({
     }, 1000);
     timeCalculator();
     monthAtStart();
+
     const logOut = async () => {
       await supabase.auth.signOut();
       setTimeout(() => {

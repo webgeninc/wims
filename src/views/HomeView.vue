@@ -6,6 +6,9 @@
     <div class="w-80 h-full">
       <Headerplace />
     </div>
+    <Information
+      class="absolute left-0 right-0 top-[20%] w-[700px] h-[500px] ml-auto mr-auto"
+    />
   </div>
   <div v-if="!user" class="h-screen w-screen flex overflow-hidden">
     <p class="p-5">
@@ -23,6 +26,7 @@ import { userStore } from "../stores/user.js";
 import { dataStore } from "../stores/data.js";
 import Headerplace from "../components/HeaderPlace.vue";
 import Workplace from "../components/WorkPlace.vue";
+import Information from "../components/infoLayer.vue";
 export default defineComponent({
   name: "HomeView",
   setup() {
@@ -42,12 +46,11 @@ export default defineComponent({
         .subscribe();
       return () => supabase.removeSubscription(subs);
     };
-
     checkData();
     dateStor.getData();
 
     return { user };
   },
-  components: { Headerplace, Workplace },
+  components: { Headerplace, Workplace, Information },
 });
 </script>
