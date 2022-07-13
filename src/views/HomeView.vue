@@ -7,7 +7,7 @@
       <Headerplace />
     </div>
     <div v-if="dateStor.intro">
-      <Information
+      <Changelog
         class="absolute left-0 right-0 top-[20%] w-[700px] h-[500px] ml-auto mr-auto"
       />
     </div>
@@ -28,7 +28,7 @@ import { userStore } from "../stores/user.js";
 import { dataStore } from "../stores/data.js";
 import Headerplace from "../components/HeaderPlace.vue";
 import Workplace from "../components/WorkPlace.vue";
-import Information from "../components/infoLayer.vue";
+import Changelog from "../components/changelogPreview.vue";
 export default defineComponent({
   name: "HomeView",
   setup() {
@@ -63,6 +63,6 @@ export default defineComponent({
 
     return { user, dateStor };
   },
-  components: { Headerplace, Workplace, Information },
+  components: { Headerplace, Workplace, Changelog },
 });
 </script>

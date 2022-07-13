@@ -347,7 +347,7 @@
             </div>
           </div>
         </div>
-        <div v-if="tab === 1"
+        <div v-else-if="tab === 1"
           class="transition flex flex-col justify-start items-center flex-grow w-full cursor-default select-none h-3/4">
           <div class="w-full bg-gray-300 p-2 pb-3 pt-3">
             <div
@@ -456,6 +456,15 @@
             </p>
           </div>
         </div>
+        <div v-else-if="tab === 2" class="flex-1 w-full">
+        <div class="flex justify-center items-center p-1  bg-gray-300 w-full">
+          <h2 class="font-medium uppercase text-2base p-0.5">Nowa faktura</h2>
+          
+          </div>
+          <div class="w-full h-full">
+            <Invoices />
+          </div>
+        </div>
         <div class="flex flex-col justify-end items-center w-full">
           <div
             class="flex flex-col w-full justify-center items-center mb-0 mt-0 font-normal bg-gray-600 text-gray-50 tracking-wide h-18">
@@ -463,7 +472,6 @@
               <div
                 class="flex flex-col-reverse justify-start items-center w-full text-2sm 2xl:text-sm font-light tracking-wider">
                 <div class="flex justify-end items-center w-full h-full pl-0 uppercase">
-                  <!-- <p class="cursor-default select-none mr-1">jest</p> -->
                   <p class="cursor-default select-none ml-1 upper">{{ infoTerm }}</p>
                   <p class="cursor-default select-none ml-1">{{ infoMonth }}</p>
                   <p class="cursor-default select-none ml-1">{{ infoYear }}</p>
@@ -531,13 +539,18 @@
             <div v-if="dateStor.check" class="bg-orange-400 bg-opacity-80 flex justify-center items-center">
               <span class="text-lg p-1 pr-3 pl-3 grayscale brightness-150 opacity-70">❕</span>
             </div>
-            <div v-else @click="openIntro" class="bg-green-300 bg-opacity-40 flex justify-center items-center cursor-pointer hover:bg-opacity-60">
+            <div v-else @click="openIntro"
+              class="bg-green-300 bg-opacity-40 flex justify-center items-center cursor-pointer hover:bg-opacity-60">
               <span class="text-lg p-1 pr-2 pl-2 grayscale brightness-125 opacity-80">💡</span>
             </div>
             <div class="flex justify-end items-center pr-1">
               <div class="h-full w-12 p-1">
-                <div
-                  class="h-full w-full bg-gray-300 rounded-2xl flex justify-center items-center transition text-sm opacity-60 cursor-not-allowed">
+                <div v-if="tab === 2" @click="tabHandler(2)"
+                  class="h-full w-full bg-gray-200 rounded-2xl flex justify-center items-center transition text-sm opacity-80">
+                  📃
+                </div>
+                <div v-else @click="tabHandler(2)"
+                  class="h-full w-full bg-gray-300 opacity-60 rounded-2xl hover:opacity-80 cursor-pointer flex justify-center items-center transition text-sm">
                   📃
                 </div>
               </div>
@@ -575,6 +588,8 @@ import { dataStore } from "@/stores/data.js";
 import { userStore } from "@/stores/user.js";
 import { supabase } from "../supabase/init.js";
 import { useRouter } from "vue-router";
+import Invoices from "../components/invoiceTab.vue";
+
 export default defineComponent({
   name: "HeaderPlace",
   setup() {
@@ -963,5 +978,6 @@ export default defineComponent({
       openIntro,
     };
   },
+  components: { Invoices},
 })
 </script>

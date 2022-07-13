@@ -27,7 +27,7 @@ import { defineComponent } from "vue";
 import { dataStore } from "@/stores/data.js";
 
 export default defineComponent({
-  name: "HeaderPlace",
+  name: "ChangelogPreview",
   setup() {
     const dateStor: any = dataStore();
 
