@@ -77,7 +77,10 @@
               {{ helpText[1] }} &nbsp;
             </p> -->
 
-            <p class="transition-all duration-700">
+            <p
+              class="transition-all duration-700"
+              :class="{ 'animate-priority': tab.isPriority }"
+            >
               <span v-if="tab.isPriority">🔥 </span>{{ tab.tab_name
               }}<span class="text-2xs font-light p-0 ml-1 text-gray-400">{{
                 tab.order

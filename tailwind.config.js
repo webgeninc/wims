@@ -66,8 +66,16 @@ module.exports = {
         "spin-reverse": "spin-slow-reverse 2s linear infinite",
         "spin-reverse-twice": "spin-slow-reverse-twice 3s linear infinite",
         "header-on": "header-on 1s linear 1",
+        "priority": "priority-on 5s ease-in-out infinite",
       },
       keyframes: {
+        "priority-on": {
+          "0%": { transform: "scale(1) ", opacity: 1},
+          "5%": { transform: "scale(1.01)",  opacity: 0.8},
+          "10%": { transform: "scale(1.05)",  opacity: 0.4, filter: "blur(2px)"},
+          "20%": { transform: "scale(1)", opacity: 1,  filter: "blur(0px)"},
+          "100%": { transform: "scale(1)", opacity: 1},
+        },
         "header-on": {
           "0%": { opacity: 1 },
           "10%": { opacity: 0 },
