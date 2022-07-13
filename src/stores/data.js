@@ -14,8 +14,16 @@ export const dataStore = defineStore({
         check: false,
         ready: null,
         diagnostics: {},
+        intro: true,
     }),
     actions: {
+        introRefresh() {
+            if (localStorage.getItem("intro") == "false") {
+                this.intro = false;
+            }
+            else
+                this.intro = true;
+        },
         async getData() {
             this.processing = true;
             try {

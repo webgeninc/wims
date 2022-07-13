@@ -531,7 +531,8 @@
             <div v-if="dateStor.check" class="bg-orange-400 bg-opacity-80 flex justify-center items-center">
               <span class="text-lg p-1 pr-3 pl-3 grayscale brightness-150 opacity-70">❕</span>
             </div>
-            <div v-else class="">
+            <div v-else @click="openIntro" class="bg-green-300 bg-opacity-40 flex justify-center items-center cursor-pointer hover:bg-opacity-60">
+              <span class="text-lg p-1 pr-2 pl-2 grayscale brightness-125 opacity-80">💡</span>
             </div>
             <div class="flex justify-end items-center pr-1">
               <div class="h-full w-12 p-1">
@@ -603,16 +604,9 @@ export default defineComponent({
       )
     );
 
-    const cookieIntroSet = (val: boolean) => {
-      let date = new Date();
-      date.setTime(date.getTime() + (365 * 24 * 60 * 60 * 1000))
-      document.cookie =
-        "info=" + val +"; expires=" +
-        date.toUTCString();
-    }
-    
-    if (!document.cookie){
-      cookieIntroSet(true);
+    const openIntro = () => {
+      localStorage.setItem("intro", "true");
+      dateStor.introRefresh();
     }
 
     const router = useRouter();
@@ -966,6 +960,7 @@ export default defineComponent({
       reallyNow,
       reallyNowDay,
       logOut,
+      openIntro,
     };
   },
 })

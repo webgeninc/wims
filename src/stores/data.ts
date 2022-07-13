@@ -15,11 +15,15 @@ export const dataStore = defineStore({
     check: false as boolean,
     ready: null as number | null,
     diagnostics: {} as Object | null,
+    intro: true as boolean,
   }),
 
-  
-
   actions:{
+    introRefresh() {
+      if (localStorage.getItem("intro") == "false") {
+        this.intro = false;
+      } else this.intro = true;
+    },
     async getData() {
       this.processing = true;
       try {

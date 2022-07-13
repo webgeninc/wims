@@ -6,9 +6,11 @@
     <div class="w-80 h-full">
       <Headerplace />
     </div>
-    <Information
-      class="absolute left-0 right-0 top-[20%] w-[700px] h-[500px] ml-auto mr-auto"
-    />
+    <div v-if="dateStor.intro">
+      <Information
+        class="absolute left-0 right-0 top-[20%] w-[700px] h-[500px] ml-auto mr-auto"
+      />
+    </div>
   </div>
   <div v-if="!user" class="h-screen w-screen flex overflow-hidden">
     <p class="p-5">
@@ -35,6 +37,16 @@ export default defineComponent({
 
     const user = computed(() => userStor.user);
 
+    const localStorageIntroSet = (val: boolean) => {
+      localStorage.setItem("intro", "" + val);
+    };
+
+    if (localStorage.getItem("intro") == null) {
+      localStorageIntroSet(true);
+    }
+
+    dateStor.introRefresh();
+
     const checkData = () => {
       const subs = supabase
         .from("*")
@@ -49,7 +61,7 @@ export default defineComponent({
     checkData();
     dateStor.getData();
 
-    return { user };
+    return { user, dateStor };
   },
   components: { Headerplace, Workplace, Information },
 });
