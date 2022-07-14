@@ -2,7 +2,7 @@
   <div @mouseleave="todayInfoTasks"
     class="bg-gradient-to-b from-gray-700 via-gray-700 to-gray-800 w-full h-full max-h-full shadow-2xl flex flex-row justify-center font-montserrat">
     <div class="h-full w-full flex flex-col justify-start items-center">
-      <div v-if="tab === 0" class="flex justify-start items-center w-full h-full">
+      <div v-if="tab === 0" class="flex justify-start items-center w-full flex-1">
         <div class="flex flex-col justify-start items-center w-full h-full">
           <div class="flex h-full flex-col justify-start items-center bg-gray-100 w-full pt-0 pb-0">
             <div class="w-full h-full text-sm flex flex-col justify-start items-center">
@@ -12,7 +12,7 @@
                 </p>
               </div>
               <div
-                class="w-full h-10 flex flex-col justify-start items-start shrink p-2 scrollbar-thumb-gray-300 scrollbar-thin scrollbar-track-gray-100 grow">
+                class="w-full flex-1 flex flex-col justify-start items-start p-2 scrollbar-thumb-gray-300 scrollbar-thin scrollbar-track-gray-100 grow">
                 <p v-if="infoTasks!.length == 0" class="p-3">
                   Nie ma żadnych zadań
                 </p>
@@ -348,7 +348,7 @@
           </div>
         </div>
         <div v-else-if="tab === 1"
-          class="transition flex flex-col justify-start items-center flex-grow w-full cursor-default select-none h-3/4">
+          class="transition flex flex-col justify-start items-center flex-grow w-full cursor-default select-none">
           <div class="w-full bg-gray-300 p-2 pb-3 pt-3">
             <div
               class="w-full font-medium text-xs flex flex-col justify-start items-start text-gray-900 tracking-wider">
@@ -379,8 +379,8 @@
                 Zajęta pamięć <span class="bg-gray-600 bg-opacity-90 p-px pr-1 pl-1 text-white font-normal">{{
                     (dateStor.diagnostics.storageFileMemory / 10).toFixed(2)
                 }} %</span> ({{
-    dateStor.diagnostics.storageFileMemory
-}} mb / 1 gb)
+                  dateStor.diagnostics.storageFileMemory
+                }} mb / 1 gb)
               </p>
               <div class="w-full h-full pr-1 pl-1">
                 <div
@@ -456,18 +456,17 @@
             </p>
           </div>
         </div>
-        <div v-else-if="tab === 2" class="flex-1 w-full">
-        <div class="flex justify-center items-center p-1  bg-gray-300 w-full">
-          <h2 class="font-medium uppercase text-2base p-0.5">Nowa faktura</h2>
-          
+        <div v-else-if="tab === 2" class="flex flex-col justify-start items-center w-full overflow-y-scroll flex-1 scrollbar-thumb-gray-400 scrollbar-thin scrollbar-track-gray-50">
+          <div class="flex justify-center items-center p-1 pt-1.5 bg-gray-600 w-full">
+            <h2 class="font-normal uppercase text-2base p-0.5 text-white">Nowa faktura</h2>
           </div>
-          <div class="w-full h-full">
-            <Invoices />
+          <div class="w-full">
+            <Invoices class="w-full" />
           </div>
         </div>
-        <div class="flex flex-col justify-end items-center w-full">
+        <div class="flex flex-col justify-end items-center w-full h-18.5%">
           <div
-            class="flex flex-col w-full justify-center items-center mb-0 mt-0 font-normal bg-gray-600 text-gray-50 tracking-wide h-18">
+            class="flex flex-col w-full justify-center items-center mb-0 mt-0 font-normal bg-gray-600 text-gray-50 tracking-wide min-h-0">
             <div class="w-full pr-4 pl-7 2xl:pl-4 pb-3 pt-3 flex justify-center items-center">
               <div
                 class="flex flex-col-reverse justify-start items-center w-full text-2sm 2xl:text-sm font-light tracking-wider">
@@ -477,7 +476,7 @@
                   <p class="cursor-default select-none ml-1">{{ infoYear }}</p>
                 </div>
                 <div class="flex justify-end items-center w-full h-full pl-5 uppercase">
-                  <p class="cursor-default w-14 select-none mr-2 2xl:mr-3 tracking-widest">
+                  <p class="cursor-default select-none mr-2 tracking-widest">
                     {{ infoTime }}
                   </p>
                   <p class="cursor-default select-none mr-0">{{ infoDay }}</p>
@@ -486,7 +485,7 @@
               </div>
             </div>
           </div>
-          <div class="w-full h-22 bg-gray-100">
+          <div class="w-full h-22 min-h-0 bg-gray-100">
             <div class="flex justify-center items-center rounded-full w-full h-full">
               <div
                 class="h-32 w-32 relative bg-gray-100 rounded-full flex justify-center items-center animate-spin-slow"
@@ -507,7 +506,7 @@
               </div>
             </div>
           </div>
-          <div v-if="dateStor.fixing" class="w-full h-8 bg-gray-300 bg-opacity-90 flex justify-end items-center">
+          <div v-if="dateStor.fixing" class="w-full  min-h-0 h-8 bg-gray-300 bg-opacity-90 flex justify-end items-center">
             <div class="w-full h-full  flex justify-between items-center overflow-hidden">
               <div class="bg-yellow-600 bg-opacity-80 flex justify-center items-center">
                 <span class="text-xl p-1 pr-2.5 pl-2.5 grayscale invert opacity-100">🛠</span>
@@ -521,7 +520,7 @@
             </div>
           </div>
           <div v-else-if="dateStor.processing"
-            class="w-full h-8 bg-gray-300 bg-opacity-90 flex justify-end items-center">
+            class="w-full h-8  min-h-0 bg-gray-300 bg-opacity-90 flex justify-end items-center">
             <div class="w-full h-full  flex justify-between items-center overflow-hidden">
               <div class="bg-sky-600 bg-opacity-70 flex justify-center items-center">
                 <span class="text-lg p-1 pr-2 pl-2 grayscale brightness-150 opacity-80">📥</span>
@@ -535,7 +534,7 @@
             </div>
           </div>
           <div v-else
-            class="w-full h-8 bg-webgencol bg-opacity-90 flex justify-between items-center pr-1 overflow-hidden">
+            class="w-full h-8 min-h-0 bg-webgencol bg-opacity-90 flex justify-between items-center pr-1 overflow-hidden">
             <div v-if="dateStor.check" class="bg-orange-400 bg-opacity-80 flex justify-center items-center">
               <span class="text-lg p-1 pr-3 pl-3 grayscale brightness-150 opacity-70">❕</span>
             </div>
@@ -978,6 +977,6 @@ export default defineComponent({
       openIntro,
     };
   },
-  components: { Invoices},
+  components: { Invoices },
 })
 </script>

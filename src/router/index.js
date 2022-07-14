@@ -4,7 +4,7 @@ import HomeView from "../views/HomeView.vue";
 import LoginPage from "../views/LoginPage.vue";
 const routes = [
     {
-        path: "/",
+        path: "",
         name: "LoginPage",
         component: LoginPage,
         // meta: {
