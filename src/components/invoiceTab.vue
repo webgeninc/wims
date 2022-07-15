@@ -224,16 +224,20 @@
                   <p>{{ item.number }}</p>
                   <p class="pl-3">{{ item.name }}</p>
                 </div>
-                <p class="pl-3">{{ item.grossValue }} PLN</p>
+                <p class="pl-3">
+                  ({{ item.netValue }}) {{ item.grossValue }} PLN
+                </p>
               </div>
             </div>
             <div
               class="pt-0.5 pb-1 mt-5 w-full flex flex-col justify-center items-start"
             >
               <div class="flex justify-between items-center w-full pt-0.5 pb-1">
-                <label class="p-1 pl-0 pr-4 text-sm"
-                  >{{ services.length + 1 }}.
-                </label>
+                <div class="p-0.75 pr-1 pl-1 mr-1 text-sm rounded-lg m-0.5">
+                  <span class="w-full h-full flex justify-center items-center"
+                    >{{ services.length + 1 }}.</span
+                  >
+                </div>
                 <input
                   v-model="servItem.name"
                   autocomplete="off"
@@ -258,7 +262,7 @@
                   autocomplete="off"
                   maxlength="80"
                   class="ml-1 pl-1.5 p-1 flex-1 w-full border-gray-200 border focus:outline-none focus:border-gray-300 resize-none rounded-lg"
-                  type="text"
+                  type="number"
                   placeholder="Ilość"
                 />
                 <input
@@ -266,7 +270,7 @@
                   autocomplete="off"
                   maxlength="80"
                   class="ml-1 pl-1.5 p-1 flex-1 w-full border-gray-200 border focus:outline-none focus:border-gray-300 resize-none rounded-lg"
-                  type="text"
+                  type="number"
                   placeholder="Cena netto"
                 />
               </div>
@@ -276,7 +280,7 @@
                   autocomplete="off"
                   maxlength="80"
                   class="p-1 pl-1.5 flex-1 w-full border-gray-200 border focus:outline-none focus:border-gray-300 resize-none rounded-lg"
-                  type="text"
+                  type="number"
                   placeholder="VAT"
                 />
                 <input
@@ -284,7 +288,7 @@
                   autocomplete="off"
                   maxlength="80"
                   class="ml-1 pl-1.5 p-1 flex-1 w-full border-gray-200 border focus:outline-none focus:border-gray-300 resize-none rounded-lg"
-                  type="text"
+                  type="number"
                   placeholder="Cena brutto"
                 />
               </div>
@@ -294,7 +298,7 @@
                   autocomplete="off"
                   maxlength="80"
                   class="p-1 pl-1.5 flex-1 w-full border-gray-200 border focus:outline-none focus:border-gray-300 resize-none rounded-lg"
-                  type="text"
+                  type="number"
                   placeholder="Wartość netto"
                 />
                 <input
@@ -302,7 +306,7 @@
                   autocomplete="off"
                   maxlength="80"
                   class="ml-1 pl-1.5 p-1 flex-1 w-full border-gray-200 border focus:outline-none focus:border-gray-300 resize-none rounded-lg"
-                  type="text"
+                  type="number"
                   placeholder="Wartość brutto"
                 />
               </div>
@@ -360,33 +364,264 @@
         </div>
       </form>
     </div>
+    <div
+      v-if="invoiceView"
+      class="bg-white absolute top-[5%] right-[30%] h-[842px] w-[595px] p-10 pt-14 pb-14"
+    >
+      <div class="w-full flex justify-end items-center mb-3 p-1">
+        <img src="../assets/wg_small.png" class="w-48" />
+      </div>
+      <div class="w-full flex justify-end items-center mb-4 p-1">
+        <div class="w-full flex flex-col justify-start items-end">
+          <div
+            class="w-full flex flex-col justify-center items-start tracking-widewide"
+          >
+            <p class="text-2base font-medium">
+              Faktura nr:
+              <span class="font-normal pl-1">{{
+                invoiceData[0].invoiceNumber
+              }}</span>
+            </p>
+            <p class="text-xs font-medium">
+              Data wystawienia:
+              <span class="font-normal pl-1">{{
+                dateChanger(invoiceData[0].dateOfIssue)
+              }}</span>
+            </p>
+            <p class="text-xs font-medium">
+              Miejsce wystawienia:
+              <span class="font-normal pl-1">{{
+                invoiceData[0].placeOfIssue
+              }}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="w-full flex justify-evenly items-center tracking-widewide">
+        <div
+          class="w-full flex flex-col justify-start items-center border p-1 mr-1"
+        >
+          <p class="font-medium text-sm mb-1 mt-1">Sprzedawca</p>
+          <div
+            class="flex flex-col justify-center items-start text-xs w-full p-2"
+          >
+            <p class="pb-0.5">{{ invoiceData[0].invoicingName }}</p>
+            <p class="pb-0.5">{{ invoiceData[0].invoicingStreet }}</p>
+            <p class="pb-0.5">{{ invoiceData[0].invoicingAddress }}</p>
+            <p>{{ invoiceData[0].invoicingNip }}</p>
+          </div>
+        </div>
+        <div
+          class="w-full flex flex-col justify-start items-center border p-1 ml-1"
+        >
+          <p class="font-medium text-sm mb-1 mt-1">Nabywca</p>
+          <div
+            class="flex flex-col justify-center items-start text-xs w-full p-2"
+          >
+            <p class="pb-0.5">{{ invoiceData[0].receivingName }}</p>
+            <p class="pb-0.5">{{ invoiceData[0].receivingStreet }}</p>
+            <p class="pb-0.5">{{ invoiceData[0].receivingAddress }}</p>
+            <p>{{ invoiceData[0].receivingNip }}</p>
+          </div>
+        </div>
+      </div>
+      <div
+        class="w-full flex flex-col justify-start items-center tracking-widewide mt-5"
+      >
+        <div
+          class="w-full flex flex-col justify-start items-center border h-full"
+        >
+          <div
+            class="flex justify-start items-center text-2xs h-full w-full pt-0.5 pb-0.5"
+          >
+            <div
+              class="pr-1.5 pl-1.5 border-r flex justify-center items-center text-center h-full w-[3%]"
+            >
+              <p>P</p>
+            </div>
+            <div
+              class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full w-[41%]"
+            >
+              <p>Towar/usługa</p>
+            </div>
+            <div
+              class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full w-[7%]"
+            >
+              <p>jm</p>
+            </div>
+            <div
+              class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full w-[7%]"
+            >
+              <p>Ilość</p>
+            </div>
+            <div
+              class="pr-1.5 pl-1.5 border-r text-center flex justify-center items-center h-full w-[9%]"
+            >
+              <p>Cena netto</p>
+            </div>
+            <div
+              class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full w-[6%]"
+            >
+              <p>VAT</p>
+            </div>
+            <div
+              class="pr-1.5 pl-1.5 border-r text-center flex justify-center items-center h-full w-[9%]"
+            >
+              <p>Cena brutto</p>
+            </div>
+            <div
+              class="pr-1.5 pl-1.5 border-r text-center flex justify-center items-center h-full w-[9%]"
+            >
+              <p>Wart. netto</p>
+            </div>
+            <div
+              class="pr-1.5 pl-1.5 text-center flex justify-center items-center h-full w-[9%]"
+            >
+              <p>Wart. brutto</p>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full flex flex-col justify-center items-center border-b border-r border-l pt-0.5 pb-0.5"
+        >
+          <div
+            v-for="(it, index) in services"
+            :key="index"
+            class="flex justify-evenly items-center text-2xs h-full w-full pt-px pb-px"
+          >
+            <div
+              class="pr-1.5 pl-1.5 border-r flex justify-center items-center text-center h-full w-[3%]"
+            >
+              <p>{{ it.number }}</p>
+            </div>
+            <div
+              class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full w-[41%]"
+            >
+              <p>{{ it.name }}</p>
+            </div>
+            <div
+              class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full w-[7%]"
+            >
+              <p>{{ it.jm }}</p>
+            </div>
+            <div
+              class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full w-[7%]"
+            >
+              <p>{{ it.amount }}</p>
+            </div>
+            <div
+              class="pr-1.5 pl-1.5 border-r text-center flex justify-center items-center h-full w-[9%]"
+            >
+              <p>{{ it.netPrice }}</p>
+            </div>
+            <div
+              class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full w-[6%]"
+            >
+              <p>{{ it.vat }}</p>
+            </div>
+            <div
+              class="pr-1.5 pl-1.5 border-r text-center flex justify-center items-center h-full w-[9%]"
+            >
+              <p>{{ it.grossPrice }}</p>
+            </div>
+            <div
+              class="pr-1.5 pl-1.5 border-r text-center flex justify-center items-center h-full w-[9%]"
+            >
+              <p>{{ it.netValue }}</p>
+            </div>
+            <div
+              class="pr-1.5 pl-1.5 text-center flex justify-center items-center h-full w-[9%]"
+            >
+              <p>{{ it.grossValue }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="w-full flex flex-col justify-start items-end tracking-widewide mt-5"
+      >
+        <div class="">
+          <p class="text-xs tracking-widewide normal">
+            SUMA WEDŁUG STAWEK VAT W PLN
+          </p>
+        </div>
+        <div class="w-1/2 flex flex-col justify-center items-center h-full">
+          <div
+            class="flex justify-start items-center text-2xs w-full h-6 border"
+          >
+            <div
+              class="pr-1.5 pl-1.5 border-r flex justify-center items-center text-center h-full flex-1"
+            >
+              <p>Netto</p>
+            </div>
+            <div
+              class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full flex-1"
+            >
+              <p>VAT</p>
+            </div>
+            <div
+              class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full flex-[2]"
+            >
+              <p>Kwota VAT</p>
+            </div>
+            <div
+              class="pr-1.5 pl-1.5 flex justify-center text-center items-center h-full flex-1"
+            >
+              <p>Brutto</p>
+            </div>
+          </div>
+          <div
+            class="flex justify-start items-center text-2xs w-full border-b border-r border-l h-10"
+          >
+            <div
+              class="pr-1.5 pl-1.5 border-r flex justify-center items-center text-center h-full flex-1"
+            >
+              <p>{{ invoiceSummary[0].sumNet }}</p>
+            </div>
+            <div
+              class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full flex-1"
+            >
+              <p>{{ invoiceSummary[0].vatPerc }}</p>
+            </div>
+            <div
+              class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full flex-[2]"
+            >
+              <p>{{ invoiceSummary[0].vatAm }}</p>
+            </div>
+            <div
+              class="pr-1.5 pl-1.5 flex justify-center text-center items-center h-full flex-1"
+            >
+              <p>{{ invoiceSummary[0].sumGross }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { ref } from "vue";
 import { defineComponent } from "vue";
-import { dataStore } from "@/stores/data.js";
 
 export default defineComponent({
   name: "InvoiceTab",
   setup() {
-    const dateStor: any = dataStore();
-
+    const invoiceView = ref<boolean>(false);
     const invoiceData = ref<any[]>([]);
+    const invoiceSummary = ref<any[]>([]);
     const services = ref<any[]>([]);
-
     const service = ref<any[]>([]);
 
     const serviceAdd = (
-      nam: any,
-      j: any,
-      am: any,
-      netpr: any,
-      va: any,
-      grosspr: any,
-      netva: any,
-      grossva: any
+      nam: string,
+      j: string,
+      am: number,
+      netpr: number,
+      va: number,
+      grosspr: number,
+      netva: number,
+      grossva: number
     ) => {
       services.value.push({
         number: services.value.length + 1,
@@ -437,8 +672,32 @@ export default defineComponent({
     };
 
     const invoiceCreate = () => {
+      invoiceView.value = true;
+      let sumnet = services.value
+        .map((item: any) => item.netValue)
+        .reduce((a: number, b: number) => a + b);
+      let sumgross = services.value
+        .map((item: any) => item.grossValue)
+        .reduce((a: number, b: number) => a + b);
+      invoiceSummary.value = [];
+      invoiceSummary.value.push({
+        sumNet: sumnet,
+        sumGross: sumgross,
+        vatPerc: 0,
+        vatAm: 0,
+      });
       console.log(invoiceData.value);
       console.log(services.value);
+    };
+
+    const dateChanger = (date: string) => {
+      if (date !== null) {
+        let dy = date.charAt(8) + date.charAt(9);
+        let mon = date.charAt(5) + date.charAt(6);
+        let yrr =
+          date.charAt(0) + date.charAt(1) + date.charAt(2) + date.charAt(3);
+        return dy + "." + mon + "." + yrr;
+      } else return "Bez daty";
     };
 
     return {
@@ -448,6 +707,9 @@ export default defineComponent({
       invoiceFormHandler,
       invoiceData,
       invoiceCreate,
+      invoiceView,
+      invoiceSummary,
+      dateChanger,
     };
   },
 });
