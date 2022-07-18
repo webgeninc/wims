@@ -149,7 +149,7 @@
             <label class="p-1 pl-0">Termin i forma płatności</label>
             <div class="flex justify-between items-center w-full">
               <input
-                v-model="invItem.dateOfpayment"
+                v-model="invItem.dateOfPayment"
                 autocomplete="off"
                 maxlength="80"
                 minlength="2"
@@ -163,8 +163,8 @@
                 minlength="2"
                 class="ml-1 p-1 flex-1 w-full pr-2 border-gray-200 border focus:outline-none focus:border-gray-300 resize-none rounded-lg"
               >
-                <option value="">Przelew</option>
-                <option value="">Gotówka</option>
+                <option value="Przelew">Przelew</option>
+                <option value="Gotówka">Gotówka</option>
               </select>
             </div>
           </div>
@@ -184,7 +184,7 @@
                 type="text"
               />
               <input
-                v-model="invItem.invoiceDate"
+                v-model="invItem.dateOfService"
                 autocomplete="off"
                 maxlength="80"
                 minlength="2"
@@ -431,9 +431,7 @@
         <div
           class="w-full flex flex-col justify-start items-center border h-full"
         >
-          <div
-            class="flex justify-start items-center text-2xs h-full w-full pt-0.5 pb-0.5"
-          >
+          <div class="flex justify-start items-center text-2xs h-9 w-full">
             <div
               class="pr-1.5 pl-1.5 border-r flex justify-center items-center text-center h-full w-[3%]"
             >
@@ -482,12 +480,17 @@
           </div>
         </div>
         <div
-          class="w-full flex flex-col justify-center items-center border-b border-r border-l pt-0.5 pb-0.5"
+          class="w-full flex flex-col justify-center items-center border-b border-r border-l"
         >
           <div
             v-for="(it, index) in services"
             :key="index"
-            class="flex justify-evenly items-center text-2xs h-full w-full pt-px pb-px"
+            class="flex justify-evenly items-center text-2xs w-full"
+            :class="{
+              'h-12': it.name.length > 72,
+              'h-8': it.name.length > 35,
+              'h-6': it.name.length < 36,
+            }"
           >
             <div
               class="pr-1.5 pl-1.5 border-r flex justify-center items-center text-center h-full w-[3%]"
@@ -537,64 +540,92 @@
           </div>
         </div>
       </div>
-      <div
-        class="w-full flex flex-col justify-start items-end tracking-widewide mt-5"
-      >
-        <div class="">
-          <p class="text-xs tracking-widewide normal">
-            SUMA WEDŁUG STAWEK VAT W PLN
-          </p>
-        </div>
-        <div class="w-1/2 flex flex-col justify-center items-center h-full">
+      <div class="w-full flex justify-end items-end tracking-widewide mt-5">
+        <div class="w-1/2 flex justify-end items-end tracking-widewide h-full">
           <div
-            class="flex justify-start items-center text-2xs w-full h-6 border"
+            class="w-full flex flex-col justify-center items-start tracking-widewide h-full"
           >
-            <div
-              class="pr-1.5 pl-1.5 border-r flex justify-center items-center text-center h-full flex-1"
-            >
-              <p>Netto</p>
-            </div>
-            <div
-              class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full flex-1"
-            >
-              <p>VAT</p>
-            </div>
-            <div
-              class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full flex-[2]"
-            >
-              <p>Kwota VAT</p>
-            </div>
-            <div
-              class="pr-1.5 pl-1.5 flex justify-center text-center items-center h-full flex-1"
-            >
-              <p>Brutto</p>
-            </div>
-          </div>
-          <div
-            class="flex justify-start items-center text-2xs w-full border-b border-r border-l h-10"
-          >
-            <div
-              class="pr-1.5 pl-1.5 border-r flex justify-center items-center text-center h-full flex-1"
-            >
-              <p>{{ invoiceSummary[0].sumNet }}</p>
-            </div>
-            <div
-              class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full flex-1"
-            >
-              <p>{{ invoiceSummary[0].vatPerc }}</p>
-            </div>
-            <div
-              class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full flex-[2]"
-            >
-              <p>{{ invoiceSummary[0].vatAm }}</p>
-            </div>
-            <div
-              class="pr-1.5 pl-1.5 flex justify-center text-center items-center h-full flex-1"
-            >
-              <p>{{ invoiceSummary[0].sumGross }}</p>
-            </div>
+            <p class="text-xs font-medium">
+              Forma płatności:
+              <span class="font-normal pl-1">{{
+                invoiceData[0].formOfPayment
+              }}</span>
+            </p>
+            <p class="text-xs font-medium">
+              Termin płatności:
+              <span class="font-normal pl-1">{{
+                dateChanger(invoiceData[0].dateOfPayment)
+              }}</span>
+            </p>
           </div>
         </div>
+        <div
+          class="w-1/2 flex flex-col justify-center items-center tracking-widewide"
+        >
+          <div class="">
+            <p class="text-2xs tracking-widewide normal mb-1">
+              SUMA WEDŁUG STAWEK VAT W PLN
+            </p>
+          </div>
+          <div class="w-full flex flex-col justify-center items-center h-full">
+            <div
+              class="flex justify-start items-center text-2xs w-full h-6 border"
+            >
+              <div
+                class="pr-1.5 pl-1.5 border-r flex justify-center items-center text-center h-full flex-1"
+              >
+                <p>Netto</p>
+              </div>
+              <div
+                class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full flex-1"
+              >
+                <p>VAT</p>
+              </div>
+              <div
+                class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full flex-[2]"
+              >
+                <p>Kwota VAT</p>
+              </div>
+              <div
+                class="pr-1.5 pl-1.5 flex justify-center text-center items-center h-full flex-1"
+              >
+                <p>Brutto</p>
+              </div>
+            </div>
+            <div
+              class="flex justify-start items-center text-2xs w-full border-b border-r border-l h-10"
+            >
+              <div
+                class="pr-1.5 pl-1.5 border-r flex justify-center items-center text-center h-full flex-1"
+              >
+                <p>{{ invoiceSummary[0].sumNet }}</p>
+              </div>
+              <div
+                class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full flex-1"
+              >
+                <p>{{ invoiceSummary[0].vatPerc }}</p>
+              </div>
+              <div
+                class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full flex-[2]"
+              >
+                <p>{{ invoiceSummary[0].vatAm }}</p>
+              </div>
+              <div
+                class="pr-1.5 pl-1.5 flex justify-center text-center items-center h-full flex-1"
+              >
+                <p>{{ invoiceSummary[0].sumGross }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="w-full mb-5">
+        <p class="text-xs font-medium">
+          Data zakończenia usługi:
+          <span class="font-normal pl-1">{{
+            dateChanger(invoiceData[0].dateOfService)
+          }}</span>
+        </p>
       </div>
     </div>
   </div>
@@ -651,7 +682,7 @@ export default defineComponent({
         receivingNip: "",
         placeOfIssue: "",
         dateOfIssue: "",
-        dateOfpayment: "",
+        dateOfPayment: "",
         formOfPayment: "",
         invoiceNumber: "",
         invoiceDate: "",
