@@ -180,7 +180,7 @@
                                 24
                               ) <= 7
                             " class="flex flex-wrap justify-end items-end">
-                              {{
+                              zostało {{
                                   Math.ceil(
                                     (new Date(
                                       task.task_date.replace(/\./g, "/")

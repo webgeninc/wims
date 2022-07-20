@@ -326,12 +326,24 @@
         <div class="text-2sm bg-gray-100 bg-opacity-50 p-4 w-full">
           <div class="flex justify-between items-center">
             <h3 class="text-2base tracking-wide">Suma</h3>
-            <span class="text-2base"> 320<span> PLN</span></span>
+            <span class="text-2base p-1">
+              {{ invoiceSummary[0] ? invoiceSummary[0].sumGross : 0
+              }}<span> PLN</span></span
+            >
           </div>
           <div
             class="flex flex-col justify-center items-start w-full mt-1 mb-1 pt-1 pb-1"
           >
-            <div class="flex mt-1 justify-center items-center w-full">
+            <input
+              v-model="invItem.inWords"
+              autocomplete="off"
+              maxlength="80"
+              minlength="2"
+              class="p-1 pl-1.5 w-full border-gray-200 border focus:outline-none focus:border-gray-300 resize-none rounded-lg"
+              type="text"
+              placeholder="Razem słownie"
+            />
+            <div class="flex mt-2 justify-center items-center w-full">
               <p class="pr-4 text-sm tracking-wide">Wpłata na konto</p>
               <input
                 v-model="invItem.bankName"
@@ -349,7 +361,7 @@
               maxlength="80"
               minlength="2"
               class="p-1 mt-2 pl-1.5 flex-1 w-full 2 border-gray-200 border focus:outline-none focus:border-gray-300 resize-none rounded-lg"
-              type="number"
+              type="text"
               placeholder="Numer konta"
             />
           </div>
@@ -366,266 +378,382 @@
     </div>
     <div
       v-if="invoiceView"
-      class="bg-white absolute top-[5%] right-[30%] h-[842px] w-[595px] p-10 pt-14 pb-14"
+      class="bg-white absolute top-[5%] right-[30%] h-[842px] w-[595px] p-10"
     >
-      <div class="w-full flex justify-end items-center mb-3 p-1">
-        <img src="../assets/wg_small.png" class="w-48" />
-      </div>
-      <div class="w-full flex justify-end items-center mb-4 p-1">
-        <div class="w-full flex flex-col justify-start items-end">
+      <div class="flex flex-col justify-start items-center w-full h-full">
+        <div class="flex flex-col justify-start items-center flex-1">
+          <div class="w-full flex justify-end items-center mb-3 p-1">
+            <img src="../assets/wg_small.png" class="w-48" />
+          </div>
+          <div class="w-full flex justify-end items-center mb-2 p-1">
+            <div class="w-full flex flex-col justify-start items-end">
+              <div
+                class="w-full flex flex-col justify-center items-start tracking-widewide"
+              >
+                <p class="text-2base font-medium">
+                  Faktura nr:
+                  <span class="font-normal pl-1">{{
+                    invoiceData[0].invoiceNumber
+                  }}</span>
+                </p>
+                <p class="text-xs font-medium">
+                  Data wystawienia:
+                  <span class="font-normal pl-1">{{
+                    dateChanger(invoiceData[0].dateOfIssue)
+                  }}</span>
+                </p>
+                <p class="text-xs font-medium">
+                  Miejsce wystawienia:
+                  <span class="font-normal pl-1">{{
+                    invoiceData[0].placeOfIssue
+                  }}</span>
+                </p>
+              </div>
+            </div>
+          </div>
           <div
-            class="w-full flex flex-col justify-center items-start tracking-widewide"
+            class="w-full flex justify-evenly items-center tracking-widewide"
           >
-            <p class="text-2base font-medium">
-              Faktura nr:
-              <span class="font-normal pl-1">{{
-                invoiceData[0].invoiceNumber
-              }}</span>
-            </p>
+            <div
+              class="w-full flex flex-col justify-start items-center border border-gray-300 p-0.5 mr-1"
+            >
+              <p class="font-medium text-sm mb-0.5 mt-0.5">Sprzedawca</p>
+              <div
+                class="flex flex-col justify-center items-start text-xs w-full p-1.5 pt-0.5"
+              >
+                <p class="pb-0.5">{{ invoiceData[0].invoicingName }}</p>
+                <p class="pb-0.5">{{ invoiceData[0].invoicingStreet }}</p>
+                <p class="pb-0.5">{{ invoiceData[0].invoicingAddress }}</p>
+                <p>{{ invoiceData[0].invoicingNip }}</p>
+              </div>
+            </div>
+            <div
+              class="w-full flex flex-col justify-start items-center border border-gray-300 p-0.5 ml-1"
+            >
+              <p class="font-medium text-sm mb-0.5 mt-0.5">Nabywca</p>
+              <div
+                class="flex flex-col justify-center items-start text-xs w-full p-1.5 pt-0.5"
+              >
+                <p class="pb-0.5">{{ invoiceData[0].receivingName }}</p>
+                <p class="pb-0.5">{{ invoiceData[0].receivingStreet }}</p>
+                <p class="pb-0.5">{{ invoiceData[0].receivingAddress }}</p>
+                <p>{{ invoiceData[0].receivingNip }}</p>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full flex flex-col justify-start items-center tracking-widewide mt-4"
+          >
+            <div
+              class="w-full flex flex-col justify-start items-center border border-gray-300 h-full"
+            >
+              <div class="flex justify-start items-center text-2xs h-9 w-full">
+                <div
+                  class="pr-1.5 pl-1.5 border-r border-gray-300 flex justify-center items-center text-center h-full w-[3%]"
+                >
+                  <p>P</p>
+                </div>
+                <div
+                  class="pr-1.5 pl-1.5 border-r border-gray-300 flex justify-center text-center items-center h-full w-[41%]"
+                >
+                  <p>Towar/usługa</p>
+                </div>
+                <div
+                  class="pr-1.5 pl-1.5 border-r border-gray-300 flex justify-center text-center items-center h-full w-[7%]"
+                >
+                  <p>jm</p>
+                </div>
+                <div
+                  class="pr-1.5 pl-1.5 border-r border-gray-300 flex justify-center text-center items-center h-full w-[7%]"
+                >
+                  <p>Ilość</p>
+                </div>
+                <div
+                  class="pr-1.5 pl-1.5 border-r border-gray-300 text-center flex justify-center items-center h-full w-[9%]"
+                >
+                  <p>Cena netto</p>
+                </div>
+                <div
+                  class="pr-1.5 pl-1.5 border-r border-gray-300 flex justify-center text-center items-center h-full w-[6%]"
+                >
+                  <p>VAT</p>
+                </div>
+                <div
+                  class="pr-1.5 pl-1.5 border-r border-gray-300 text-center flex justify-center items-center h-full w-[9%]"
+                >
+                  <p>Cena brutto</p>
+                </div>
+                <div
+                  class="pr-1.5 pl-1.5 border-r border-gray-300 text-center flex justify-center items-center h-full w-[9%]"
+                >
+                  <p>Wart. netto</p>
+                </div>
+                <div
+                  class="pr-1.5 pl-1.5 text-center flex justify-center items-center h-full w-[9%]"
+                >
+                  <p>Wart. brutto</p>
+                </div>
+              </div>
+            </div>
+            <div
+              class="w-full flex flex-col justify-center items-center border-b border-r border-l border-gray-300"
+            >
+              <div
+                v-for="(it, index) in services"
+                :key="index"
+                class="flex justify-evenly items-center text-2xs w-full"
+                :class="{
+                  'h-12': it.name.length > 72,
+                  'h-8': it.name.length > 35,
+                  'h-6': it.name.length < 36,
+                }"
+              >
+                <div
+                  class="pr-1.5 pl-1.5 border-r border-gray-300 flex justify-center items-center text-center h-full w-[3%]"
+                >
+                  <p>{{ it.number }}</p>
+                </div>
+                <div
+                  class="pr-1.5 pl-1.5 border-r border-gray-300 flex justify-center text-center items-center h-full w-[41%]"
+                >
+                  <p>{{ it.name }}</p>
+                </div>
+                <div
+                  class="pr-1.5 pl-1.5 border-r border-gray-300 flex justify-center text-center items-center h-full w-[7%]"
+                >
+                  <p>{{ it.jm }}</p>
+                </div>
+                <div
+                  class="pr-1.5 pl-1.5 border-r border-gray-300 flex justify-center text-center items-center h-full w-[7%]"
+                >
+                  <p>{{ it.amount }}</p>
+                </div>
+                <div
+                  class="pr-1.5 pl-1.5 border-r border-gray-300 text-center flex justify-center items-center h-full w-[9%]"
+                >
+                  <p>{{ it.netPrice }}</p>
+                </div>
+                <div
+                  class="pr-1.5 pl-1.5 border-r border-gray-300 flex justify-center text-center items-center h-full w-[6%]"
+                >
+                  <p>{{ it.vat }}</p>
+                </div>
+                <div
+                  class="pr-1.5 pl-1.5 border-r border-gray-300 text-center flex justify-center items-center h-full w-[9%]"
+                >
+                  <p>{{ it.grossPrice }}</p>
+                </div>
+                <div
+                  class="pr-1.5 pl-1.5 border-r border-gray-300 text-center flex justify-center items-center h-full w-[9%]"
+                >
+                  <p>{{ it.netValue }}</p>
+                </div>
+                <div
+                  class="pr-1.5 pl-1.5 text-center flex justify-center items-center h-full w-[9%]"
+                >
+                  <p>{{ it.grossValue }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="w-full flex justify-end items-end tracking-widewide mt-4">
+            <div
+              class="w-1/2 flex justify-end items-end tracking-widewide h-full"
+            >
+              <div
+                class="w-full flex flex-col justify-end items-start tracking-widewide h-full"
+              >
+                <p class="text-xs font-medium">
+                  Forma płatności:
+                  <span class="font-normal pl-1">{{
+                    invoiceData[0].formOfPayment
+                  }}</span>
+                </p>
+                <p class="text-xs font-medium">
+                  Termin płatności:
+                  <span class="font-normal pl-1">{{
+                    dateChanger(invoiceData[0].dateOfPayment)
+                  }}</span>
+                </p>
+              </div>
+            </div>
+            <div
+              class="w-1/2 flex flex-col justify-center items-center tracking-widewide"
+            >
+              <div class="flex justify-end items-center w-full">
+                <p class="text-2xs tracking-widewide normal mb-1">
+                  SUMA WEDŁUG STAWEK VAT W PLN
+                </p>
+              </div>
+              <div
+                class="w-full flex flex-col justify-center items-center h-full"
+              >
+                <div
+                  class="flex justify-start items-center text-2xs w-full h-6 border"
+                >
+                  <div
+                    class="pr-1.5 pl-1.5 border-r flex justify-center items-center text-center h-full flex-1"
+                  >
+                    <p>Netto</p>
+                  </div>
+                  <div
+                    class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full flex-1"
+                  >
+                    <p>VAT</p>
+                  </div>
+                  <div
+                    class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full flex-[2]"
+                  >
+                    <p>Kwota VAT</p>
+                  </div>
+                  <div
+                    class="pr-1.5 pl-1.5 flex justify-center text-center items-center h-full flex-1"
+                  >
+                    <p>Brutto</p>
+                  </div>
+                </div>
+                <div
+                  class="flex justify-start items-center text-2xs w-full border-b border-r border-l h-7"
+                >
+                  <div
+                    class="pr-1.5 pl-1.5 border-r flex justify-center items-center text-center h-full flex-1"
+                  >
+                    <p>{{ invoiceSummary[0].sumNet }}</p>
+                  </div>
+                  <div
+                    class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full flex-1"
+                  >
+                    <p>{{ invoiceSummary[0].vatPerc }}</p>
+                  </div>
+                  <div
+                    class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full flex-[2]"
+                  >
+                    <p>{{ invoiceSummary[0].vatAm }}</p>
+                  </div>
+                  <div
+                    class="pr-1.5 pl-1.5 flex justify-center text-center items-center h-full flex-1"
+                  >
+                    <p>{{ invoiceSummary[0].sumGross }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="w-full">
             <p class="text-xs font-medium">
-              Data wystawienia:
+              Data zakończenia usługi:
               <span class="font-normal pl-1">{{
-                dateChanger(invoiceData[0].dateOfIssue)
-              }}</span>
-            </p>
-            <p class="text-xs font-medium">
-              Miejsce wystawienia:
-              <span class="font-normal pl-1">{{
-                invoiceData[0].placeOfIssue
+                dateChanger(invoiceData[0].dateOfService)
               }}</span>
             </p>
           </div>
-        </div>
-      </div>
-      <div class="w-full flex justify-evenly items-center tracking-widewide">
-        <div
-          class="w-full flex flex-col justify-start items-center border p-1 mr-1"
-        >
-          <p class="font-medium text-sm mb-1 mt-1">Sprzedawca</p>
-          <div
-            class="flex flex-col justify-center items-start text-xs w-full p-2"
-          >
-            <p class="pb-0.5">{{ invoiceData[0].invoicingName }}</p>
-            <p class="pb-0.5">{{ invoiceData[0].invoicingStreet }}</p>
-            <p class="pb-0.5">{{ invoiceData[0].invoicingAddress }}</p>
-            <p>{{ invoiceData[0].invoicingNip }}</p>
-          </div>
-        </div>
-        <div
-          class="w-full flex flex-col justify-start items-center border p-1 ml-1"
-        >
-          <p class="font-medium text-sm mb-1 mt-1">Nabywca</p>
-          <div
-            class="flex flex-col justify-center items-start text-xs w-full p-2"
-          >
-            <p class="pb-0.5">{{ invoiceData[0].receivingName }}</p>
-            <p class="pb-0.5">{{ invoiceData[0].receivingStreet }}</p>
-            <p class="pb-0.5">{{ invoiceData[0].receivingAddress }}</p>
-            <p>{{ invoiceData[0].receivingNip }}</p>
-          </div>
-        </div>
-      </div>
-      <div
-        class="w-full flex flex-col justify-start items-center tracking-widewide mt-5"
-      >
-        <div
-          class="w-full flex flex-col justify-start items-center border h-full"
-        >
-          <div class="flex justify-start items-center text-2xs h-9 w-full">
+          <div class="w-full flex justify-end items-end tracking-widewide">
             <div
-              class="pr-1.5 pl-1.5 border-r flex justify-center items-center text-center h-full w-[3%]"
+              class="w-1/2 flex justify-end items-end tracking-widewide h-full"
             >
-              <p>P</p>
+              <div
+                class="w-full flex flex-col justify-end items-start tracking-widewide h-full"
+              >
+                <p class="text-xs font-medium">Wpłata na konto:</p>
+                <p class="text-xs font-normal">
+                  {{ invoiceData[0].bankName }}
+                </p>
+                <p class="text-xs font-normal">
+                  {{ invoiceData[0].accountNumber }}
+                </p>
+              </div>
             </div>
-            <div
-              class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full w-[41%]"
-            >
-              <p>Towar/usługa</p>
-            </div>
-            <div
-              class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full w-[7%]"
-            >
-              <p>jm</p>
-            </div>
-            <div
-              class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full w-[7%]"
-            >
-              <p>Ilość</p>
-            </div>
-            <div
-              class="pr-1.5 pl-1.5 border-r text-center flex justify-center items-center h-full w-[9%]"
-            >
-              <p>Cena netto</p>
-            </div>
-            <div
-              class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full w-[6%]"
-            >
-              <p>VAT</p>
-            </div>
-            <div
-              class="pr-1.5 pl-1.5 border-r text-center flex justify-center items-center h-full w-[9%]"
-            >
-              <p>Cena brutto</p>
-            </div>
-            <div
-              class="pr-1.5 pl-1.5 border-r text-center flex justify-center items-center h-full w-[9%]"
-            >
-              <p>Wart. netto</p>
-            </div>
-            <div
-              class="pr-1.5 pl-1.5 text-center flex justify-center items-center h-full w-[9%]"
-            >
-              <p>Wart. brutto</p>
+            <div class="w-1/2 flex flex-col justify-end items-center">
+              <div class="flex justify-end items-center w-full">
+                <p class="text-2xs tracking-widewide normal mb-1">
+                  SUMA DO ZAPŁATY
+                </p>
+              </div>
+              <div
+                class="w-full flex flex-col justify-center items-center h-full"
+              >
+                <div
+                  class="flex justify-start items-center text-2xs w-full h-6 border"
+                >
+                  <div
+                    class="pr-1.5 pl-1.5 border-r flex justify-center items-center text-center h-full flex-1"
+                  >
+                    <p>Zapłacono</p>
+                  </div>
+                  <div
+                    class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full flex-1"
+                  >
+                    <p>Do zapłaty</p>
+                  </div>
+                  <div
+                    class="pr-1.5 pl-1.5 flex justify-center text-center items-center h-full flex-1"
+                  >
+                    <p>Waluta</p>
+                  </div>
+                </div>
+                <div
+                  class="flex justify-start items-center text-2xs w-full border-b border-r border-l h-7"
+                >
+                  <div
+                    class="pr-1.5 pl-1.5 border-r flex justify-center items-center text-center h-full flex-1"
+                  >
+                    <p>0</p>
+                  </div>
+                  <div
+                    class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full flex-1"
+                  >
+                    <p>{{ invoiceSummary[0].sumGross }}</p>
+                  </div>
+                  <div
+                    class="pr-1.5 pl-1.5 flex justify-center text-center items-center h-full flex-1"
+                  >
+                    <p>PLN</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        <div
-          class="w-full flex flex-col justify-center items-center border-b border-r border-l"
-        >
           <div
-            v-for="(it, index) in services"
-            :key="index"
-            class="flex justify-evenly items-center text-2xs w-full"
-            :class="{
-              'h-12': it.name.length > 72,
-              'h-8': it.name.length > 35,
-              'h-6': it.name.length < 36,
-            }"
+            class="w-full flex justify-end items-start tracking-widewide mt-3"
           >
-            <div
-              class="pr-1.5 pl-1.5 border-r flex justify-center items-center text-center h-full w-[3%]"
-            >
-              <p>{{ it.number }}</p>
-            </div>
-            <div
-              class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full w-[41%]"
-            >
-              <p>{{ it.name }}</p>
-            </div>
-            <div
-              class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full w-[7%]"
-            >
-              <p>{{ it.jm }}</p>
-            </div>
-            <div
-              class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full w-[7%]"
-            >
-              <p>{{ it.amount }}</p>
-            </div>
-            <div
-              class="pr-1.5 pl-1.5 border-r text-center flex justify-center items-center h-full w-[9%]"
-            >
-              <p>{{ it.netPrice }}</p>
-            </div>
-            <div
-              class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full w-[6%]"
-            >
-              <p>{{ it.vat }}</p>
-            </div>
-            <div
-              class="pr-1.5 pl-1.5 border-r text-center flex justify-center items-center h-full w-[9%]"
-            >
-              <p>{{ it.grossPrice }}</p>
-            </div>
-            <div
-              class="pr-1.5 pl-1.5 border-r text-center flex justify-center items-center h-full w-[9%]"
-            >
-              <p>{{ it.netValue }}</p>
-            </div>
-            <div
-              class="pr-1.5 pl-1.5 text-center flex justify-center items-center h-full w-[9%]"
-            >
-              <p>{{ it.grossValue }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="w-full flex justify-end items-end tracking-widewide mt-5">
-        <div class="w-1/2 flex justify-end items-end tracking-widewide h-full">
-          <div
-            class="w-full flex flex-col justify-center items-start tracking-widewide h-full"
-          >
-            <p class="text-xs font-medium">
-              Forma płatności:
-              <span class="font-normal pl-1">{{
-                invoiceData[0].formOfPayment
-              }}</span>
+            <p class="w-full text-xs font-medium">
+              Razem słownie:
+              <span class="font-normal pl-1"
+                >{{ invoiceData[0].inWords }} PLN</span
+              >
             </p>
-            <p class="text-xs font-medium">
-              Termin płatności:
-              <span class="font-normal pl-1">{{
-                dateChanger(invoiceData[0].dateOfPayment)
-              }}</span>
+          </div>
+          <div
+            class="w-full flex justify-center items-center text-2xs font-normal border-t border-gray-300 mt-3 tracking-wide"
+          >
+            <p class="pt-1">
+              Dostawa towarów lub świadczenie usług zwolnionych od podatku VAT
+              na podstawie art. 113 ust. 1 i 9 ustawy o VAT.
             </p>
           </div>
         </div>
         <div
-          class="w-1/2 flex flex-col justify-center items-center tracking-widewide"
+          class="w-full mt-5 flex flex-col justify-center items-center self-end"
         >
-          <div class="">
-            <p class="text-2xs tracking-widewide normal mb-1">
-              SUMA WEDŁUG STAWEK VAT W PLN
-            </p>
-          </div>
-          <div class="w-full flex flex-col justify-center items-center h-full">
+          <div class="flex justify-around items-center w-full">
             <div
-              class="flex justify-start items-center text-2xs w-full h-6 border"
+              class="flex flex-col justify-center items-center text-xs font-normal widewide"
             >
-              <div
-                class="pr-1.5 pl-1.5 border-r flex justify-center items-center text-center h-full flex-1"
-              >
-                <p>Netto</p>
-              </div>
-              <div
-                class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full flex-1"
-              >
-                <p>VAT</p>
-              </div>
-              <div
-                class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full flex-[2]"
-              >
-                <p>Kwota VAT</p>
-              </div>
-              <div
-                class="pr-1.5 pl-1.5 flex justify-center text-center items-center h-full flex-1"
-              >
-                <p>Brutto</p>
-              </div>
+              <p class="tracking-widetest mb-1">
+                ............................................
+              </p>
+              <p>fakturę wystawił</p>
             </div>
             <div
-              class="flex justify-start items-center text-2xs w-full border-b border-r border-l h-10"
+              class="flex flex-col justify-center items-center text-xs font-normal widewide"
             >
-              <div
-                class="pr-1.5 pl-1.5 border-r flex justify-center items-center text-center h-full flex-1"
-              >
-                <p>{{ invoiceSummary[0].sumNet }}</p>
-              </div>
-              <div
-                class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full flex-1"
-              >
-                <p>{{ invoiceSummary[0].vatPerc }}</p>
-              </div>
-              <div
-                class="pr-1.5 pl-1.5 border-r flex justify-center text-center items-center h-full flex-[2]"
-              >
-                <p>{{ invoiceSummary[0].vatAm }}</p>
-              </div>
-              <div
-                class="pr-1.5 pl-1.5 flex justify-center text-center items-center h-full flex-1"
-              >
-                <p>{{ invoiceSummary[0].sumGross }}</p>
-              </div>
+              <p class="tracking-widetest mb-1">
+                ............................................
+              </p>
+              <p>fakturę odebrał</p>
             </div>
           </div>
         </div>
-      </div>
-      <div class="w-full mb-5">
-        <p class="text-xs font-medium">
-          Data zakończenia usługi:
-          <span class="font-normal pl-1">{{
-            dateChanger(invoiceData[0].dateOfService)
-          }}</span>
-        </p>
       </div>
     </div>
   </div>
@@ -686,6 +814,7 @@ export default defineComponent({
         formOfPayment: "",
         invoiceNumber: "",
         invoiceDate: "",
+        inWords: "",
         bankName: "",
         accountNumber: "",
       });
