@@ -456,14 +456,6 @@
             </p>
           </div>
         </div>
-        <div v-else-if="tab === 2" class="flex flex-col justify-start items-center w-full overflow-y-scroll flex-1 scrollbar-thumb-gray-400 scrollbar-thin scrollbar-track-gray-50">
-          <div class="flex justify-center items-center p-1 pt-1.5 bg-gray-600 w-full">
-            <h2 class="font-normal uppercase text-2base p-0.5 text-white">Nowa faktura</h2>
-          </div>
-          <div class="w-full">
-            <Invoices class="w-full" />
-          </div>
-        </div>
         <div class="flex flex-col justify-end items-center w-full h-18.5%">
           <div
             class="flex flex-col w-full justify-center items-center mb-0 mt-0 font-normal bg-gray-600 text-gray-50 tracking-wide min-h-0">
@@ -544,16 +536,6 @@
             </div>
             <div class="flex justify-end items-center pr-1">
               <div class="h-full w-12 p-1">
-                <div v-if="tab === 2" @click="tabHandler(2)"
-                  class="h-full w-full bg-gray-200 rounded-2xl flex justify-center items-center transition text-sm opacity-80">
-                  📃
-                </div>
-                <div v-else @click="tabHandler(2)"
-                  class="h-full w-full bg-gray-300 opacity-60 rounded-2xl hover:opacity-80 cursor-pointer flex justify-center items-center transition text-sm">
-                  📃
-                </div>
-              </div>
-              <div class="h-full w-12 p-1">
                 <div v-if="tab === 1" @click="tabHandler(1)"
                   class="h-full w-full bg-gray-200 rounded-2xl flex justify-center items-center transition text-sm opacity-80">
                   🔍
@@ -587,7 +569,6 @@ import { dataStore } from "@/stores/data.js";
 import { userStore } from "@/stores/user.js";
 import { supabase } from "../supabase/init.js";
 import { useRouter } from "vue-router";
-import Invoices from "../components/invoiceTab.vue";
 
 export default defineComponent({
   name: "HeaderPlace",
@@ -977,6 +958,5 @@ export default defineComponent({
       openIntro,
     };
   },
-  components: { Invoices },
 })
 </script>
