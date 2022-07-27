@@ -37,16 +37,6 @@ export default defineComponent({
 
     const user = computed(() => userStor.user);
 
-    const localStorageIntroSet = (val: boolean) => {
-      localStorage.setItem("intro", "" + val);
-    };
-
-    if (localStorage.getItem("intro") == null) {
-      localStorageIntroSet(true);
-    }
-
-    dateStor.introRefresh();
-
     const checkData = () => {
       const subs = supabase
         .from("*")
