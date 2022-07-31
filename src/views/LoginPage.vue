@@ -1,15 +1,17 @@
 <template>
   <div
-    class="flex w-screen h-screen bg-white flex-grow xl:p-32 font-montserrat overflow-hidden select-none"
+    class="flex w-screen h-screen bg-white flex-grow font-montserrat overflow-hidden select-none"
   >
     <div
+      id="p5Canvas"
+      ref="p5Canvas"
       class="flex flex-col flex-grow h-full items-center justify-center xl:justify-center"
     >
       <div
-        class="bg-white w-full xl:w-1/2 2xl:w-1/2 3xl:w-2/5 flex flex-col h-full xl:h-auto"
+        class="bg-white w-full xl:w-1/2 2xl:w-1/2 3xl:w-2/5 flex flex-col h-full xl:h-auto absolute bg-transparent"
       >
         <div
-          class="xl:rounded-t-3xl xl:shadow-lg flex flex-col xl:border border-gray-100"
+          class="xl:rounded-t-3xl xl:shadow-lg flex flex-col xl:border border-gray-100 bg-white"
         >
           <div
             class="bg-gradient-to-tl from-gray-50 via-gray-50 to-gray-200 mb-7 xl:mb-2 rounded-none xl:rounded-t-3xl h-2/5 xl:h-36 2xl:h-40"
@@ -58,7 +60,7 @@
           </div>
           <form
             @submit.prevent="login"
-            class="flex flex-col justify-center items-center p-3 pt-5 xl:pr-10 xl:pl-10 3xl:pr-14 3xl:pl-14"
+            class="flex flex-col justify-center items-center p-5 pt-5 xl:pr-10 xl:pl-10 3xl:pr-14 3xl:pl-14"
           >
             <input
               required
@@ -122,7 +124,9 @@
             </div>
           </div> -->
         </div>
-        <div class="flex flex-col justify-around items-center mt-5 mb-5">
+        <div
+          class="flex flex-col justify-around items-center mt-5 mb-5 bg-transparent"
+        >
           <div
             v-if="niceMsg"
             class="flex justify-center items-center text-justify font-medium tracking-wider text-green-700 text-sm xl:text-xs mb-1"
@@ -153,11 +157,13 @@
   </div>
 </template>
 <script lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { supabase } from "../supabase/init.js";
 import { useRouter } from "vue-router";
 import { defineComponent } from "vue";
 import LoaderAnimation from "../components/LoaderAnimation.vue";
+// @ts-ignore
+import p5 from "p5";
 
 export default defineComponent({
   name: "LoginPage",
@@ -170,11 +176,79 @@ export default defineComponent({
     const niceMsgEng = ref<string>("Have a nice day :)");
     const router = useRouter();
     const loadingAnim = ref<boolean>(false);
+    const canvas = ref<any>(null);
+    const p5Canvas = ref<any>(null);
 
     interface Error {
       status?: number;
       message?: string;
     }
+
+    onMounted(() => {
+      const script = function (p5: any) {
+        class Drop {
+          //@ts-ignore
+          dropX!: number = Math.floor(Math.random() * innerWidth);
+          //@ts-ignore
+          dropY!: number = Math.floor(Math.random() * innerHeight) - 1200;
+          //@ts-ignore
+          dropYS!: number = Math.floor(Math.random() * 17) + 9;
+          // constructor(dropX: number, dropY: number, dropYS: number) {
+          //   this.dropX = dropX;
+          //   this.dropY = dropY;
+          //   this.dropYS = dropYS;
+          // }
+          fall = () => {
+            this.dropY = this.dropY + this.dropYS;
+            if (
+              this.dropY > innerHeight / 2 &&
+              this.dropX > innerWidth / 3 &&
+              this.dropX < (innerWidth * 2) / 3
+            ) {
+              this.dropY = Math.floor(Math.random() * innerHeight) - 1200;
+            }
+            if (this.dropY > innerHeight) {
+              this.dropY = Math.floor(Math.random() * innerHeight) - 1200;
+            }
+          };
+          show = () => {
+            p5.stroke(20, 80, 50);
+            p5.line(
+              this.dropX,
+              this.dropY,
+              this.dropX,
+              this.dropYS > 10
+                ? this.dropY + Math.floor(Math.random() * 8) + 1
+                : this.dropY + Math.floor(Math.random() * 3) + 1
+            );
+          };
+        }
+
+        p5.windowResized = () => {
+          p5.resizeCanvas(innerWidth, innerHeight);
+        };
+
+        p5.setup = () => {
+          let canvas = p5.createCanvas(innerWidth, innerHeight);
+          canvas.parent("p5Canvas");
+        };
+
+        let drops = new Array();
+        for (let i = 0; i < 300; i++) {
+          drops[i] = new Drop();
+        }
+
+        p5.draw = () => {
+          p5.background(258);
+          for (let i = 0; i < drops.length; i++) {
+            drops[i].fall();
+            drops[i].show();
+          }
+        };
+      };
+
+      new p5(script);
+    });
 
     const login = async () => {
       loadingAnim.value = true;
@@ -224,6 +298,8 @@ export default defineComponent({
       niceMsgEng,
       errorMsgEng,
       loadingAnim,
+      canvas,
+      p5Canvas,
     };
   },
   components: { LoaderAnimation },
