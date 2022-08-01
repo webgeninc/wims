@@ -527,10 +527,10 @@
           </div>
           <div v-else
             class="w-full h-8 min-h-0 bg-webgencol bg-opacity-90 flex justify-between items-center pr-1 overflow-hidden">
-            <div v-if="dateStor.check" class="bg-orange-400 bg-opacity-80 flex justify-center items-center">
-              <span class="text-lg p-1 pr-3 pl-3 grayscale brightness-150 opacity-70">❕</span>
+            <div v-if="dateStor.check" class="bg-teal-700 bg-opacity-50 flex justify-center items-center">
+              <span class="text-base p-1 pr-2 pl-2  brightness-150 opacity-70">🚩</span>
             </div>
-            <div class="flex justify-end items-center pr-1">
+            <div class="flex justify-end items-center pr-1 w-full">
               <div class="h-full w-12 p-1">
                 <div v-if="tab === 1" @click="tabHandler(1)"
                   class="h-full w-full bg-gray-200 rounded-2xl flex justify-center items-center transition text-sm opacity-80">
