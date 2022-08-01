@@ -108,6 +108,18 @@ export const dataStore = defineStore({
           console.log("Storage inaccuracies")
           console.log(...result)
         }
+        if (result[0] == "undefined"){
+          try {
+            const { error } = await supabase.storage
+              .from("images")
+              .remove(['undefined']);
+            if (error instanceof Error) throw error;
+          } catch (error) {
+            if (error instanceof Error) {
+              console.warn(error.message);
+            }
+          }
+        }
       }
     }
   }

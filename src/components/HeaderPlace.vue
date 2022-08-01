@@ -527,7 +527,7 @@
           </div>
           <div v-else
             class="w-full h-8 min-h-0 bg-webgencol bg-opacity-90 flex justify-between items-center pr-1 overflow-hidden">
-            <div v-if="dateStor.check" class="bg-teal-700 bg-opacity-50 flex justify-center items-center">
+            <div v-if="dateStor.check" class="bg-indigo-300 bg-opacity-100 flex justify-center items-center">
               <span class="text-base p-1 pr-2 pl-2  brightness-150 opacity-70">🚩</span>
             </div>
             <div class="flex justify-end items-center pr-1 w-full">
