@@ -4,14 +4,9 @@
 
 ## Introduction
 
-Simple and minimalistic project management system made with Vue.js, typescrtipt and new cli.
+Simple and minimalistic project/tasks management system made with Vue.js, typescrtipt and tailwindcss.\
+Supabase is used for storage and database.
 
-Since 2022
-
-
-
-**ambientroom** is a mp3 player with visual graphics and playlist component including many options to set.\
-It shows waveforms of current track as well as graphic animation based on frequencies of a current sound.
 
 ### Techstack
 * **vue.js: 3.2.33**
