@@ -14,7 +14,7 @@ Supabase is used for storage and database.
 * **tailwindcss: 3.0.24**
 * **pinia: 2.0.13**
 * **vue-router: 4.0.14**
-* **vue-tsc: 0.34."**
+* **vue-tsc: 0.34**
 * **supabase API: 1.35.3**
 
 
