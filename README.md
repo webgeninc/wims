@@ -4,8 +4,8 @@
 
 ## Introduction
 
-Simple and minimalistic project/tasks management system made with Vue.js, typescrtipt and tailwindcss.\
-Supabase is used for storage and database.
+Simple and minimalistic project/tasks management system made with Vue.js (js/ts), pinia, vue-router and tailwindcss.\
+Supabase is used for authorization, storage and database.
 
 
 ### Techstack
